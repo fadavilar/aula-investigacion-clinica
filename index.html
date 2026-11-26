@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula de investigación clínica</title>
+<meta name="description" content="Lectura crítica, revisiones sistemáticas con apoyo de IA, gestores de referencias y normas ofimáticas.">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#inicio"><span class="dot" aria-hidden="true"></span>Aula de investigación clínica</a>
+    <nav aria-label="Principal">
+      <a href="#contenidos">Contenidos</a>
+      <a href="#lectura">Lectura crítica</a>
+      <a href="#numeros">Números</a>
+      <a href="#revision">Revisión con IA</a>
+      <a href="#referencias">Referencias y Word</a>
+      <a href="#recursos">Recursos</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section id="inicio" class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Material de apoyo</p>
+      <h1>De la pregunta clínica al artículo publicable</h1>
+      <p class="lead" id="subtitulo"></p>
+      <div class="cta">
+        <a class="btn" href="#lectura">Empezar por lectura crítica</a>
+        <a class="btn ghost" href="#revision">Ir a revisiones con IA</a>
+      </div>
+      <p class="progress" id="progreso" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section id="contenidos" class="wrap block">
+    <h2>Contenidos y competencias</h2>
+    <p class="intro">Cada tema indica la competencia que desarrolla y sus fuentes. Filtra por palabra clave.</p>
+    <label class="search"><span class="sr">Filtrar temas</span><input id="filtro" type="search" placeholder="Filtrar: PRISMA, Mendeley, GRADE…"></label>
+    <div class="scroll"><table id="tabla"><thead><tr><th>Tema</th><th>Competencia a desarrollar</th><th>Fuentes</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section id="lectura" class="wrap block alt">
+    <h2>Lectura crítica: elige el diseño</h2>
+    <p class="intro">Cada diseño tiene su guía de reporte y su herramienta de evaluación. La guía dice qué debe contar el artículo; la herramienta dice cuánto confiar en lo que cuenta.</p>
+    <label class="field"><span>Diseño del estudio</span><select id="diseno"></select></label>
+    <div class="grid2" id="disenoOut"></div>
+    <h3>Ficha de lectura crítica en cinco pasos</h3>
+    <ol class="steps">
+      <li><b>Pregunta.</b> ¿Cuál es la población, la intervención o exposición, el comparador y el desenlace?</li>
+      <li><b>Diseño.</b> ¿Qué diseño es y qué guía de reporte le corresponde?</li>
+      <li><b>Validez interna.</b> ¿Qué sesgos podrían explicar el resultado?</li>
+      <li><b>Resultados.</b> ¿Qué tan grande y qué tan preciso es el efecto?</li>
+      <li><b>Aplicabilidad.</b> ¿Mi paciente se parece a los del estudio y el beneficio supera el daño?</li>
+    </ol>
+  </section>
+
+  <section id="numeros" class="wrap block">
+    <h2>Leer los números: calculadora de efecto</h2>
+    <p class="intro">Escribe los eventos y los totales de cada grupo. Los cálculos usan el método logarítmico para el intervalo de confianza del 95 %.</p>
+    <form id="calc" class="calc" autocomplete="off">
+      <fieldset><legend>Grupo tratado</legend>
+        <label>Eventos<input type="number" id="a" min="0" step="1" value="15"></label>
+        <label>Total<input type="number" id="n1" min="1" step="1" value="100"></label></fieldset>
+      <fieldset><legend>Grupo control</legend>
+        <label>Eventos<input type="number" id="c" min="0" step="1" value="20"></label>
+        <label>Total<input type="number" id="n2" min="1" step="1" value="100"></label></fieldset>
+    </form>
+    <div id="calcOut" class="cards" aria-live="polite"></div>
+    <p id="calcMsg" class="msg" aria-live="polite"></p>
+  </section>
+
+  <section id="revision" class="wrap block alt">
+    <h2>Revisiones sistemáticas con apoyo de IA</h2>
+    <p class="intro">La IA acelera tareas, pero las decisiones y la responsabilidad son del equipo revisor. Estas son las diez fases, qué hace cada parte y qué se entrega.</p>
+    <div class="stepper" id="stepper" role="tablist" aria-label="Fases de la revisión"></div>
+    <article class="phase" id="fase" aria-live="polite"></article>
+
+    <h3>Mejores prácticas</h3>
+    <ul class="bp" id="bp"></ul>
+
+    <h3>Generador de declaración de uso de IA</h3>
+    <p class="intro">Completa los campos y copia el texto para la sección de métodos. Es una plantilla: revísala con tu equipo y con las normas de la revista.</p>
+    <form id="decl" class="decl" autocomplete="off">
+      <label>Herramienta y versión<input id="d_herr" placeholder="Ej.: nombre del modelo y versión"></label>
+      <label>Fecha de uso<input id="d_fecha" type="date"></label>
+      <label>Fase de la revisión<select id="d_fase"></select></label>
+      <label>Para qué se usó<input id="d_prop" placeholder="Ej.: proponer sinónimos para la ecuación"></label>
+      <label>Cómo se verificó<input id="d_ver" placeholder="Ej.: dos revisores contrastaron con los artículos"></label>
+      <label>Responsables<input id="d_resp" placeholder="Ej.: autoras y autores del equipo"></label>
+    </form>
+    <pre id="declOut" class="out" tabindex="0"></pre>
+    <button class="btn small" id="copiar" type="button">Copiar texto</button>
+    <span class="msg" id="copiado" role="status"></span>
+
+    <h3>Qué necesitas en Claude</h3>
+    <div class="scroll"><table id="tools"><thead><tr><th>Tipo</th><th>Nombre</th><th>Para qué</th><th>Nota</th></tr></thead><tbody></tbody></table></div>
+    <p class="note">Sobre el reporte: la declaración conjunta de Cochrane, Campbell, JBI y CEE (2025) pide supervisión humana e informar con transparencia cualquier uso de IA que sugiera juicios. PRISMA-trAIce es una propuesta de lista de verificación y no una extensión oficial de PRISMA.</p>
+  </section>
+
+  <section id="referencias" class="wrap block">
+    <h2>Referencias y normas ofimáticas</h2>
+    <div class="grid2">
+      <article class="card"><h3>Mendeley en cinco pasos</h3>
+        <ol class="steps small">
+          <li>Crea tu cuenta y descarga <a href="https://www.mendeley.com/download-reference-manager/windows">Mendeley Reference Manager</a>.</li>
+          <li>Instálalo y, en el menú Tools, elige Install Mendeley Cite for Microsoft Word.</li>
+          <li>Importa el artículo con su DOI, su PDF o el Web Importer.</li>
+          <li>Crea una carpeta por trabajo.</li>
+          <li>En Word, abre Referencias, Mendeley Cite, inserta la cita y elige el estilo Vancouver.</li>
+        </ol>
+        <p class="note">Para páginas web sin DOI puedes usar <a href="https://chromewebstore.google.com/detail/mybib-free-citation-gener/phidhnmbkbkbkbknhldmpmnacgicphkf">MyBib</a>; revisa autor, fecha y URL antes de aceptar la cita.</p>
+      </article>
+      <article class="card"><h3>Estilo Vancouver</h3>
+        <ul id="vReglas"></ul>
+        <p class="ex" id="vEjemplo"></p>
+        <h4>Errores frecuentes</h4>
+        <ul id="vErrores"></ul>
+      </article>
+    </div>
+    <h3>Listas de verificación ofimática</h3>
+    <p class="intro">Marca lo que ya cumples; el progreso queda guardado en este navegador.</p>
+    <div class="grid3" id="ofi"></div>
+  </section>
+
+  <section id="recursos" class="wrap block alt">
+    <h2>Mapas mentales y herramientas</h2>
+    <div class="grid3" id="rec"></div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <p id="pie"></p>
+    <p>Contenido en construcción: verifica los enlaces y las guías vigentes antes de citar. Esta aula no sustituye el criterio clínico ni el de tu comité de ética.</p>
+  </div>
+</footer>
+<script src="data/contenidos.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula de investigación clínica</title>
+<meta name="description" content="Lectura crítica, revisiones sistemáticas con apoyo de IA, gestores de referencias y normas ofimáticas.">
+<style>
+:root{--ink:#1c2b2d;--muted:#51636a;--bg:#f6f8f7;--card:#fff;--line:#d6dedc;--brand:#0f5c63;--brand2:#0a4348;--accent:#c4651a;--ok:#1f7a4d}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:20}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+a{color:var(--brand);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,pre:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--brand2);text-decoration:none;display:flex;align-items:center;gap:8px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--accent);display:inline-block}
+nav{display:flex;gap:4px 14px;flex-wrap:wrap}
+nav a{text-decoration:none;color:var(--ink);padding:6px 2px;font-size:15px;border-bottom:2px solid transparent}
+nav a:hover{border-color:var(--accent)}
+.hero{background:linear-gradient(135deg,var(--brand2),var(--brand));color:#fff;padding:72px 0 56px}
+.hero .eyebrow{color:#ffd9b8}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent);margin:0 0 10px}
+h1{font:600 clamp(30px,5vw,50px)/1.1 Georgia,"Times New Roman",serif;margin:0 0 16px;max-width:18em}
+h2{font:600 clamp(24px,3.4vw,34px)/1.2 Georgia,"Times New Roman",serif;margin:0 0 10px;color:var(--brand2)}
+h3{font:600 21px/1.3 Georgia,serif;margin:34px 0 10px;color:var(--brand2)}
+h4{margin:18px 0 6px}
+.lead{font-size:20px;max-width:40em;margin:0 0 24px;color:#e8f3f2}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 20px;border-radius:10px;border:0;cursor:pointer;font-size:16px}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;border:2px solid #fff}
+.btn.small{padding:8px 14px;font-size:15px;margin-top:10px}
+.progress{margin:22px 0 0;color:#cfe5e3;font-size:15px}
+.block{padding:56px 20px}
+.alt{max-width:none;margin:0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-left:max(20px,calc((100% - 1040px)/2));padding-right:max(20px,calc((100% - 1040px)/2))}
+.intro{max-width:46em;color:var(--muted);margin:0 0 18px}
+.search input,.field select,.decl input,.decl select,.calc input{font:inherit;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;background:#fff;width:100%}
+.search{display:block;max-width:420px;margin-bottom:14px}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:15.5px}
+th{background:var(--brand2);color:#fff;text-align:left;padding:12px 14px;position:sticky;top:0}
+td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top}
+td ul{margin:0;padding-left:18px}
+.field{display:block;max-width:420px;margin:0 0 18px;font-weight:600}
+.field select{margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:16px 0}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.card h3,.card h4{margin-top:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:18px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.kpi small{display:block;color:var(--muted);font-size:13px}
+.kpi b{font:600 28px Georgia,serif;color:var(--brand2)}
+.kpi span{display:block;font-size:13px;color:var(--muted)}
+.steps{padding-left:22px}.steps li{margin:8px 0}
+.steps.small{font-size:16px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.calc fieldset{border:1px solid var(--line);border-radius:12px;background:var(--card);display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px 16px}
+.calc legend{font-weight:700;padding:0 6px}
+.calc label,.decl label{font-weight:600;font-size:15px;display:block}
+.calc input,.decl input,.decl select{margin-top:4px;font-weight:400}
+.msg{color:var(--muted);min-height:1.4em;font-size:15px}
+.stepper{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 18px}
+.stepper button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink)}
+.stepper button[aria-selected=true]{background:var(--brand);color:#fff;border-color:var(--brand)}
+.phase{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.phase .card h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+.phase .card p{margin:0}
+.phase .title{grid-column:1/-1;font:600 24px Georgia,serif;color:var(--brand2);margin:0}
+.bp{padding-left:20px}.bp li{margin:8px 0}
+.decl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.out{white-space:pre-wrap;background:#102a2d;color:#e8f3f2;padding:16px;border-radius:12px;margin:14px 0 0;font:15px/1.5 ui-monospace,Menlo,Consolas,monospace}
+.note{color:var(--muted);font-size:15px;margin-top:16px;max-width:52em}
+.ex{background:#eef3f2;border-left:4px solid var(--brand);padding:10px 14px;border-radius:6px;font-size:15px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:8px 0;font-size:16px}
+.chk input{margin-top:5px;width:18px;height:18px;accent-color:var(--ok)}
+.ofi h3{margin-top:0}
+.rec a{font-weight:700}
+footer{background:var(--brand2);color:#cfe5e3;padding:28px 0;font-size:14px}
+footer p{margin:4px 0}
+@media (max-width:640px){body{font-size:16px}.hero{padding:48px 0 36px}th{position:static}}
+@media print{.top,.cta,.btn{display:none}.alt{background:#fff}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#inicio"><span class="dot" aria-hidden="true"></span>Aula de investigación clínica</a>
+    <nav aria-label="Principal">
+      <a href="#contenidos">Contenidos</a>
+      <a href="#lectura">Lectura crítica</a>
+      <a href="#numeros">Números</a>
+      <a href="#revision">Revisión con IA</a>
+      <a href="#referencias">Referencias y Word</a>
+      <a href="#recursos">Recursos</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section id="inicio" class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Material de apoyo</p>
+      <h1>De la pregunta clínica al artículo publicable</h1>
+      <p class="lead" id="subtitulo"></p>
+      <div class="cta">
+        <a class="btn" href="#lectura">Empezar por lectura crítica</a>
+        <a class="btn ghost" href="#revision">Ir a revisiones con IA</a>
+      </div>
+      <p class="progress" id="progreso" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section id="contenidos" class="wrap block">
+    <h2>Contenidos y competencias</h2>
+    <p class="intro">Cada tema indica la competencia que desarrolla y sus fuentes. Filtra por palabra clave.</p>
+    <label class="search"><span class="sr">Filtrar temas</span><input id="filtro" type="search" placeholder="Filtrar: PRISMA, Mendeley, GRADE…"></label>
+    <div class="scroll"><table id="tabla"><thead><tr><th>Tema</th><th>Competencia a desarrollar</th><th>Fuentes</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section id="lectura" class="wrap block alt">
+    <h2>Lectura crítica: elige el diseño</h2>
+    <p class="intro">Cada diseño tiene su guía de reporte y su herramienta de evaluación. La guía dice qué debe contar el artículo; la herramienta dice cuánto confiar en lo que cuenta.</p>
+    <label class="field"><span>Diseño del estudio</span><select id="diseno"></select></label>
+    <div class="grid2" id="disenoOut"></div>
+    <h3>Ficha de lectura crítica en cinco pasos</h3>
+    <ol class="steps">
+      <li><b>Pregunta.</b> ¿Cuál es la población, la intervención o exposición, el comparador y el desenlace?</li>
+      <li><b>Diseño.</b> ¿Qué diseño es y qué guía de reporte le corresponde?</li>
+      <li><b>Validez interna.</b> ¿Qué sesgos podrían explicar el resultado?</li>
+      <li><b>Resultados.</b> ¿Qué tan grande y qué tan preciso es el efecto?</li>
+      <li><b>Aplicabilidad.</b> ¿Mi paciente se parece a los del estudio y el beneficio supera el daño?</li>
+    </ol>
+  </section>
+
+  <section id="numeros" class="wrap block">
+    <h2>Leer los números: calculadora de efecto</h2>
+    <p class="intro">Escribe los eventos y los totales de cada grupo. Los cálculos usan el método logarítmico para el intervalo de confianza del 95 %.</p>
+    <form id="calc" class="calc" autocomplete="off">
+      <fieldset><legend>Grupo tratado</legend>
+        <label>Eventos<input type="number" id="a" min="0" step="1" value="15"></label>
+        <label>Total<input type="number" id="n1" min="1" step="1" value="100"></label></fieldset>
+      <fieldset><legend>Grupo control</legend>
+        <label>Eventos<input type="number" id="c" min="0" step="1" value="20"></label>
+        <label>Total<input type="number" id="n2" min="1" step="1" value="100"></label></fieldset>
+    </form>
+    <div id="calcOut" class="cards" aria-live="polite"></div>
+    <p id="calcMsg" class="msg" aria-live="polite"></p>
+  </section>
+
+  <section id="revision" class="wrap block alt">
+    <h2>Revisiones sistemáticas con apoyo de IA</h2>
+    <p class="intro">La IA acelera tareas, pero las decisiones y la responsabilidad son del equipo revisor. Estas son las diez fases, qué hace cada parte y qué se entrega.</p>
+    <div class="stepper" id="stepper" role="tablist" aria-label="Fases de la revisión"></div>
+    <article class="phase" id="fase" aria-live="polite"></article>
+
+    <h3>Mejores prácticas</h3>
+    <ul class="bp" id="bp"></ul>
+
+    <h3>Generador de declaración de uso de IA</h3>
+    <p class="intro">Completa los campos y copia el texto para la sección de métodos. Es una plantilla: revísala con tu equipo y con las normas de la revista.</p>
+    <form id="decl" class="decl" autocomplete="off">
+      <label>Herramienta y versión<input id="d_herr" placeholder="Ej.: nombre del modelo y versión"></label>
+      <label>Fecha de uso<input id="d_fecha" type="date"></label>
+      <label>Fase de la revisión<select id="d_fase"></select></label>
+      <label>Para qué se usó<input id="d_prop" placeholder="Ej.: proponer sinónimos para la ecuación"></label>
+      <label>Cómo se verificó<input id="d_ver" placeholder="Ej.: dos revisores contrastaron con los artículos"></label>
+      <label>Responsables<input id="d_resp" placeholder="Ej.: autoras y autores del equipo"></label>
+    </form>
+    <pre id="declOut" class="out" tabindex="0"></pre>
+    <button class="btn small" id="copiar" type="button">Copiar texto</button>
+    <span class="msg" id="copiado" role="status"></span>
+
+    <h3>Qué necesitas en Claude</h3>
+    <div class="scroll"><table id="tools"><thead><tr><th>Tipo</th><th>Nombre</th><th>Para qué</th><th>Nota</th></tr></thead><tbody></tbody></table></div>
+    <p class="note">Sobre el reporte: la declaración conjunta de Cochrane, Campbell, JBI y CEE (2025) pide supervisión humana e informar con transparencia cualquier uso de IA que sugiera juicios. PRISMA-trAIce es una propuesta de lista de verificación y no una extensión oficial de PRISMA.</p>
+  </section>
+
+  <section id="referencias" class="wrap block">
+    <h2>Referencias y normas ofimáticas</h2>
+    <div class="grid2">
+      <article class="card"><h3>Mendeley en cinco pasos</h3>
+        <ol class="steps small">
+          <li>Crea tu cuenta y descarga <a href="https://www.mendeley.com/download-reference-manager/windows">Mendeley Reference Manager</a>.</li>
+          <li>Instálalo y, en el menú Tools, elige Install Mendeley Cite for Microsoft Word.</li>
+          <li>Importa el artículo con su DOI, su PDF o el Web Importer.</li>
+          <li>Crea una carpeta por trabajo.</li>
+          <li>En Word, abre Referencias, Mendeley Cite, inserta la cita y elige el estilo Vancouver.</li>
+        </ol>
+        <p class="note">Para páginas web sin DOI puedes usar <a href="https://chromewebstore.google.com/detail/mybib-free-citation-gener/phidhnmbkbkbkbknhldmpmnacgicphkf">MyBib</a>; revisa autor, fecha y URL antes de aceptar la cita.</p>
+      </article>
+      <article class="card"><h3>Estilo Vancouver</h3>
+        <ul id="vReglas"></ul>
+        <p class="ex" id="vEjemplo"></p>
+        <h4>Errores frecuentes</h4>
+        <ul id="vErrores"></ul>
+      </article>
+    </div>
+    <h3>Listas de verificación ofimática</h3>
+    <p class="intro">Marca lo que ya cumples; el progreso queda guardado en este navegador.</p>
+    <div class="grid3" id="ofi"></div>
+  </section>
+
+  <section id="recursos" class="wrap block alt">
+    <h2>Mapas mentales y herramientas</h2>
+    <div class="grid3" id="rec"></div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <p id="pie"></p>
+    <p>Contenido en construcción: verifica los enlaces y las guías vigentes antes de citar. Esta aula no sustituye el criterio clínico ni el de tu comité de ética.</p>
+  </div>
+</footer>
+<script>
+/* Contenidos de la aula. Edita este archivo para actualizar la app: no hay que tocar el código. */
+window.APP = {
+  meta: {
+    titulo: 'Aula de investigación clínica',
+    subtitulo: 'Lectura crítica, revisiones sistemáticas con apoyo de IA, gestores de referencias y normas ofimáticas',
+    version: '0.1.0',
+    actualizado: '2026-11-26',
+    autor: 'Fabian A. Dávila Ramírez'
+  },
+
+  /* Cada tema: competencia que desarrolla y fuentes. Verifica los enlaces al actualizar. */
+  contenidos: [
+    { tema: 'Pregunta de investigación: PICO y PCC', competencia: 'Formular preguntas estructuradas y elegir el esquema según el tipo de pregunta.', fuentes: [
+      { t: 'Mapa: El artículo de revisión', u: 'https://xmind.app/mindmap/el-art%C3%ADculo-de-revisi%C3%B3n/HkGMhD/?from=gallery' },
+      { t: 'Cochrane Handbook v6.5', u: 'https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current' },
+      { t: 'JBI, herramientas', u: 'https://jbi.global/critical-appraisal-tools' } ] },
+    { tema: 'Diseños de estudio y tipos de publicación', competencia: 'Identificar el diseño por lo que hicieron los investigadores y no por cómo lo nombra el título.', fuentes: [
+      { t: 'Mapa: Research method vs publication types', u: 'https://xmind.app/mindmap/research-method-vs-publication-types/rzCuWJ/?from=gallery' },
+      { t: 'Red EQUATOR', u: 'https://www.equator-network.org' } ] },
+    { tema: 'Muestreo y tamaño de muestra', competencia: 'Distinguir el muestreo probabilístico del no probabilístico y elegir el cálculo según el objetivo.', fuentes: [
+      { t: 'Mapa: Muestreo', u: 'https://xmind.app/mindmap/muestreo/zGNKSL/?from=gallery' } ] },
+    { tema: 'Epidemiología: definiciones y medidas', competencia: 'Calcular e interpretar incidencia, prevalencia y tasa de ataque, y distinguir brote, epidemia y pandemia.', fuentes: [
+      { t: 'Mapa: Epidemic definitions & measures', u: 'https://xmind.app/mindmap/epidemic-definitions-&-measures/7yZBsX/?from=gallery' } ] },
+    { tema: 'Lectura crítica según el diseño', competencia: 'Aplicar RoB 2, ROBINS-I, ROBINS-E, Newcastle-Ottawa, listas JBI, QUADAS-2 y AMSTAR 2 con juicios justificados por el texto.', fuentes: [
+      { t: 'riskofbias.info', u: 'https://www.riskofbias.info' },
+      { t: 'JBI', u: 'https://jbi.global/critical-appraisal-tools' },
+      { t: 'CASP', u: 'https://casp-uk.net' },
+      { t: 'Newcastle-Ottawa', u: 'https://www.ohri.ca/programs/clinical_epidemiology/oxford.asp' } ] },
+    { tema: 'Guías de reporte', competencia: 'Elegir y usar CONSORT 2025, STROBE, CARE, PROCESS, TREND, STARD 2015 y PRISMA 2020 como lista de verificación.', fuentes: [
+      { t: 'Red EQUATOR', u: 'https://www.equator-network.org' },
+      { t: 'CONSORT 2025 (BMJ 2025;389:e081123)', u: 'https://pubmed.ncbi.nlm.nih.gov/40228833/' } ] },
+    { tema: 'Interpretación de resultados', competencia: 'Leer RR, OR, HR, intervalos de confianza, reducción absoluta del riesgo y NNT, y separar significancia estadística de relevancia clínica.', fuentes: [
+      { t: 'Cochrane Handbook, cap. 6 y 10', u: 'https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current' } ] },
+    { tema: 'Estrategias de búsqueda', competencia: 'Construir ecuaciones con vocabulario controlado y operadores booleanos, y documentarlas para que otra persona las repita.', fuentes: [
+      { t: 'Mapa: Search strategies for systematic review', u: 'https://xmind.app/mindmap/search-strategies-for-systematic-review/67g2TW/?from=gallery' },
+      { t: 'PubMed', u: 'https://pubmed.ncbi.nlm.nih.gov' } ] },
+    { tema: 'Revisión sistemática y metanálisis', competencia: 'Planear una revisión con protocolo, flujo PRISMA 2020 con conteos reales y síntesis cuantitativa cuando los estudios son comparables.', fuentes: [
+      { t: 'Mapa: Systematic review and meta-analysis', u: 'https://xmind.app/mindmap/systematic-review-and-meta-analysis/MtpEBb/?from=gallery' },
+      { t: 'Cochrane Handbook v6.5', u: 'https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current' } ] },
+    { tema: 'Revisiones de alcance', competencia: 'Reconocer cuándo una revisión de alcance (PCC) es más adecuada que una sistemática y por qué no lleva metanálisis.', fuentes: [
+      { t: 'JBI', u: 'https://jbi.global/critical-appraisal-tools' } ] },
+    { tema: 'Certeza de la evidencia (GRADE) y CAT', competencia: 'Calificar la certeza de la evidencia y resumirla en un tema críticamente apreciado (CAT) de una a dos páginas.', fuentes: [
+      { t: 'Cochrane Handbook, cap. 14', u: 'https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current' } ] },
+    { tema: 'Evaluaciones económicas y acceso a medicamentos', competencia: 'Distinguir costo-efectividad, costo-utilidad, costo-beneficio e impacto presupuestal, y leer un manual metodológico.', fuentes: [
+      { t: 'Mapa: Evaluaciones económicas en salud y acceso a medicamentos', u: 'https://xmind.app/mindmap/evaluaciones-econ%C3%B3micas-en-salud-y-acceso-a-medicamentos/rCCPXw/?from=gallery' } ] },
+    { tema: 'Mapa del recorrido del paciente (patient journey)', competencia: 'Describir determinantes, sentimientos y actores a lo largo de la atención de un paciente.', fuentes: [
+      { t: 'Mapa: Marco de referencia Patient Journey Map', u: 'https://xmind.app/mindmap/marco-de-referencia-patient-journey-map/qTwUvX/?from=gallery' } ] },
+    { tema: 'Inteligencia artificial en la síntesis de evidencia', competencia: 'Usar IA con supervisión humana, declarar su uso y no delegarle juicios que le corresponden al equipo revisor.', fuentes: [
+      { t: 'Declaración conjunta Cochrane, Campbell, JBI y CEE 2025', u: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12594113/' },
+      { t: 'Cochrane: estándares para el uso responsable de IA', u: 'https://www.cochrane.org/about-us/news/setting-standards-responsible-ai-use-evidence-synthesis' },
+      { t: 'PRISMA-trAIce (propuesta, JMIR AI 2025)', u: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12694947/' } ] },
+    { tema: 'Gestores de referencias y estilo Vancouver', competencia: 'Mantener una biblioteca ordenada, citar desde Word con Mendeley Cite y producir una bibliografía Vancouver sin errores.', fuentes: [
+      { t: 'Mendeley Reference Manager (Windows)', u: 'https://www.mendeley.com/download-reference-manager/windows' },
+      { t: 'MyBib (extensión de Chrome)', u: 'https://chromewebstore.google.com/detail/mybib-free-citation-gener/phidhnmbkbkbkbknhldmpmnacgicphkf' },
+      { t: 'Recomendaciones del ICMJE', u: 'https://www.icmje.org/recommendations/' },
+      { t: 'Citing Medicine (NLM)', u: 'https://www.ncbi.nlm.nih.gov/books/NBK7256/' } ] },
+    { tema: 'Normas ofimáticas en artículos y tesis', competencia: 'Dar formato profesional a un manuscrito en Word, ordenar datos en Excel y presentar resultados en PowerPoint.', fuentes: [
+      { t: 'Recomendaciones del ICMJE', u: 'https://www.icmje.org/recommendations/' },
+      { t: 'Soporte de Microsoft', u: 'https://support.microsoft.com' } ] },
+    { tema: 'Redacción científica y ética de la publicación', competencia: 'Estructurar un manuscrito (IMRAD), respetar criterios de autoría y declarar el uso de IA.', fuentes: [
+      { t: 'Recomendaciones del ICMJE', u: 'https://www.icmje.org/recommendations/' } ] }
+  ],
+
+  /* Selector de diseño del capítulo de lectura crítica. */
+  disenos: [
+    { nombre: 'Reporte de caso', guia: 'CARE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para reportes de caso', herrUrl: 'https://jbi.global/critical-appraisal-tools',
+      preguntas: ['¿Se describe con claridad la historia clínica y la cronología?', '¿Se describen la intervención y los resultados?', '¿Se extraen lecciones aplicables?'] },
+    { nombre: 'Serie de casos', guia: 'PROCESS (series quirúrgicas)', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para series de casos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
+      preguntas: ['¿Se incluyeron los casos de forma consecutiva?', '¿Los criterios de inclusión son claros?', '¿La condición se midió de forma válida?'] },
+    { nombre: 'Casos y controles', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI o Newcastle-Ottawa', herrUrl: 'https://www.ohri.ca/programs/clinical_epidemiology/oxford.asp',
+      preguntas: ['¿Los controles vienen de la misma población que los casos?', '¿La exposición se midió igual en ambos grupos?', '¿Qué sesgo de recuerdo es posible?'] },
+    { nombre: 'Cohorte', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'ROBINS-E o Newcastle-Ottawa', herrUrl: 'https://www.riskofbias.info',
+      preguntas: ['¿Qué variables confusoras midieron y cuáles faltan?', '¿Cuántos pacientes se perdieron en el seguimiento?', '¿El seguimiento fue suficiente para el desenlace?'] },
+    { nombre: 'Cuasiexperimental', guia: 'TREND', guiaUrl: 'https://www.equator-network.org', herramienta: 'ROBINS-I', herrUrl: 'https://www.riskofbias.info',
+      preguntas: ['¿Cómo se asignó la intervención si no hubo aleatorización?', '¿Los grupos eran comparables al inicio?', '¿Hay un grupo de comparación?'] },
+    { nombre: 'Ensayo clínico aleatorizado', guia: 'CONSORT 2025', guiaUrl: 'https://pubmed.ncbi.nlm.nih.gov/40228833/', herramienta: 'RoB 2', herrUrl: 'https://www.riskofbias.info',
+      preguntas: ['¿Se generó y se ocultó bien la secuencia de aleatorización?', '¿Hubo desviaciones de la intervención asignada?', '¿Faltan datos del desenlace?', '¿Quien midió sabía el grupo?', '¿Se reportó lo que prometía el protocolo?'] },
+    { nombre: 'Prueba diagnóstica', guia: 'STARD 2015', guiaUrl: 'https://www.equator-network.org', herramienta: 'QUADAS-2', herrUrl: 'https://www.bristol.ac.uk/population-health-sciences/projects/quadas/quadas-2/',
+      preguntas: ['¿El espectro de pacientes es el de la práctica real?', '¿El estándar de referencia es adecuado?', '¿Se aplicó a todos los pacientes?'] },
+    { nombre: 'Revisión sistemática o metanálisis', guia: 'PRISMA 2020', guiaUrl: 'https://www.equator-network.org', herramienta: 'AMSTAR 2', herrUrl: 'https://amstar.ca',
+      preguntas: ['¿Hubo protocolo previo?', '¿La búsqueda fue exhaustiva y reproducible?', '¿Se evaluó el riesgo de sesgo de los estudios incluidos?', '¿Se explica la heterogeneidad?'] }
+  ],
+
+  /* Fases de una revisión sistemática con apoyo de IA. */
+  fases: [
+    { n: 1, nombre: 'Pregunta y protocolo', ia: 'Ayuda a refinar la pregunta PICO o PCC y a proponer sinónimos.', humano: 'Define los criterios de elegibilidad y registra el protocolo antes de buscar.', entregable: 'Protocolo registrado', riesgo: 'Cambiar la pregunta después de ver los resultados.' },
+    { n: 2, nombre: 'Estrategia de búsqueda', ia: 'Propone términos controlados y la sintaxis por base de datos.', humano: 'Valida la ecuación con una persona experta en búsqueda y con artículos que ya se conocen; registra fecha y conteo por base (PRISMA-S).', entregable: 'Ecuación por base', riesgo: 'Ecuaciones que no se pueden repetir.' },
+    { n: 3, nombre: 'Búsqueda y exportación', ia: 'Automatiza la exportación en bases que lo permiten, como PubMed.', humano: 'Guarda la ecuación exacta y el conteo real. Las plataformas que sancionan las búsquedas automatizadas, como LILACS/BVS, se consultan a mano.', entregable: 'Archivos exportados y conteos', riesgo: 'Conteos estimados en vez de reales.' },
+    { n: 4, nombre: 'Deduplicación', ia: 'Un script detecta duplicados probables.', humano: 'Revisa los casos dudosos y fija un orden de atribución por base.', entregable: 'Lista única de registros', riesgo: 'Perder registros únicos por coincidencias falsas.' },
+    { n: 5, nombre: 'Cribado de títulos y resúmenes', ia: 'Prioriza registros o actúa como segundo revisor, solo después de validarla en una muestra.', humano: 'Toma la decisión final de inclusión y resuelve discrepancias.', entregable: 'Decisiones registradas', riesgo: 'Delegar la inclusión a un modelo sin medir su desempeño.' },
+    { n: 6, nombre: 'Texto completo y extracción', ia: 'Prellena la tabla de extracción citando la frase de origen.', humano: 'Verifica cada cifra contra el artículo; todo dato extraído por IA queda marcado hasta que alguien lo confirme.', entregable: 'Tabla de extracción verificada', riesgo: 'Cifras inventadas o mal copiadas.' },
+    { n: 7, nombre: 'Riesgo de sesgo y calidad', ia: 'Sugiere un juicio y la frase que lo respalda.', humano: 'Emite el juicio final con la herramienta del diseño (RoB 2, ROBINS-I, Newcastle-Ottawa, listas de reporte EQUATOR).', entregable: 'Evaluación por estudio', riesgo: 'Juicios sin evidencia textual.' },
+    { n: 8, nombre: 'Síntesis y metanálisis', ia: 'Ejecuta scripts versionados (PyMARE para comparaciones por pares, netmeta para redes).', humano: 'Elige el modelo, revisa la heterogeneidad y valida el código contra software de referencia como metafor. No aplica a revisiones de alcance.', entregable: 'Forest plot y tablas', riesgo: 'Combinar estudios que no son comparables.' },
+    { n: 9, nombre: 'Certeza de la evidencia', ia: 'Redacta un borrador de la tabla de resumen de hallazgos.', humano: 'Califica la certeza con GRADE y justifica cada rebaja o aumento.', entregable: 'Tabla GRADE', riesgo: 'Certeza alta sin justificación.' },
+    { n: 10, nombre: 'Redacción y reporte', ia: 'Propone borradores y ajusta el estilo.', humano: 'Verifica que cada referencia exista (DOI o URL), genera el diagrama PRISMA con conteos reales y declara el uso de IA.', entregable: 'Manuscrito y declaración de IA', riesgo: 'Referencias inexistentes generadas por el modelo.' }
+  ],
+
+  mejoresPracticas: [
+    'Formula la pregunta (PICO o PCC) y registra el protocolo antes de buscar.',
+    'Documenta cada ecuación con base de datos, fecha y conteo real; nunca estimes un conteo.',
+    'Genera el diagrama PRISMA 2020 con el paquete PRISMA2020 (Haddaway et al., Campbell Syst Rev 2022;18:e1230) y cítalo al pie de la figura.',
+    'Verifica cada referencia con su DOI o URL; un modelo de lenguaje puede inventar citas que parecen reales.',
+    'Pon una aprobación humana entre fases: primero el protocolo, luego los datos, al final el análisis.',
+    'Marca como pendiente todo dato que extrajo una IA y verifícalo contra el artículo antes de usarlo.',
+    'Haz metanálisis solo con estudios comparables y un desenlace común; no lo hagas en una revisión de alcance.',
+    'Valida el código estadístico contra un software de referencia y guarda las versiones de los scripts.',
+    'Conserva el control de cambios y los comentarios con autoría humana en los documentos revisados.',
+    'Registra cada uso de IA: herramienta, versión, fecha, paso y cómo se verificó el resultado.'
+  ],
+
+  /* Qué necesitas en Claude para ejecutar el flujo. */
+  herramientasClaude: [
+    { tipo: 'Skill', nombre: 'revision-sistematica', paraQue: 'Guía el flujo PICO o PCC, ecuaciones por base, conteos PRISMA, extracción, calidad e informe en Word.', nota: 'Skill propia del autor; el repo documenta su especificación en docs/skills-y-plugins.md.' },
+    { tipo: 'Skill', nombre: 'metaanalisis', paraQue: 'Metanálisis por pares (PyMARE) y en red (netmeta) con scripts validados.', nota: 'Skill propia; se activa cuando los estudios son comparables.' },
+    { tipo: 'Skill', nombre: 'docx', paraQue: 'Leer y editar Word, con control de cambios y comentarios.', nota: 'Skill de documentos de Claude.' },
+    { tipo: 'Skill', nombre: 'xlsx', paraQue: 'Hojas de extracción y de cribado con fórmulas.', nota: 'Skill de hojas de cálculo de Claude.' },
+    { tipo: 'Skill', nombre: 'pptx y pdf', paraQue: 'Presentaciones de sustentación y lectura de PDF de texto completo.', nota: 'Skills de Claude.' },
+    { tipo: 'Conector', nombre: 'PubMed', paraQue: 'Buscar, leer metadatos y texto completo abierto.', nota: 'Conector MCP.' },
+    { tipo: 'Conector', nombre: 'Consensus y Scholar Gateway', paraQue: 'Búsqueda semántica complementaria; sus resultados se verifican con la fuente.', nota: 'Conectores MCP.' },
+    { tipo: 'Conector', nombre: 'ClinicalTrials.gov y bioRxiv', paraQue: 'Registros de ensayos y preprints para sesgo de publicación y literatura gris.', nota: 'Conectores MCP.' },
+    { tipo: 'Conector', nombre: 'Google Drive y Claude Docs', paraQue: 'Guardar protocolos, tablas e informes donde el equipo los revise.', nota: 'Conectores MCP.' },
+    { tipo: 'Entorno', nombre: 'Python con pandas y PyMARE', paraQue: 'Deduplicación, tablas y metanálisis por pares.', nota: 'Claude Code o el entorno de ejecución de código.' },
+    { tipo: 'Entorno', nombre: 'R con metafor, netmeta y PRISMA2020', paraQue: 'Validación, metanálisis en red y diagrama PRISMA.', nota: 'Claude Code o el entorno de ejecución de código.' },
+    { tipo: 'Fuera de Claude', nombre: 'Rayyan o Covidence', paraQue: 'Cribado por pares de revisores humanos.', nota: 'Herramientas externas.' },
+    { tipo: 'Fuera de Claude', nombre: 'LILACS/BVS y Embase', paraQue: 'Búsquedas manuales con la ecuación adaptada.', nota: 'Acceso y licencia propios; no automatizar.' },
+    { tipo: 'Fuera de Claude', nombre: 'Mendeley o Zotero', paraQue: 'Biblioteca y citas en Word.', nota: 'Gestor de referencias.' }
+  ],
+
+  recursos: [
+    { t: 'El artículo de revisión', d: 'PICO, criterios, fuentes y estructura del reporte.', u: 'https://xmind.app/mindmap/el-art%C3%ADculo-de-revisi%C3%B3n/HkGMhD/?from=gallery' },
+    { t: 'Research method vs publication types', d: 'Métodos de investigación frente a tipos de publicación.', u: 'https://xmind.app/mindmap/research-method-vs-publication-types/rzCuWJ/?from=gallery' },
+    { t: 'Muestreo', d: 'Probabilístico y no probabilístico.', u: 'https://xmind.app/mindmap/muestreo/zGNKSL/?from=gallery' },
+    { t: 'Systematic review and meta-analysis', d: 'Bases de datos, registros de protocolos y formación.', u: 'https://xmind.app/mindmap/systematic-review-and-meta-analysis/MtpEBb/?from=gallery' },
+    { t: 'Search strategies for systematic review', d: 'Vocabulario controlado, literatura gris y documentación.', u: 'https://xmind.app/mindmap/search-strategies-for-systematic-review/67g2TW/?from=gallery' },
+    { t: 'Evaluaciones económicas y acceso a medicamentos', d: 'Costo-efectividad, impacto presupuestal y manuales.', u: 'https://xmind.app/mindmap/evaluaciones-econ%C3%B3micas-en-salud-y-acceso-a-medicamentos/rCCPXw/?from=gallery' },
+    { t: 'Epidemic definitions & measures', d: 'Incidencia, prevalencia, tasa de ataque.', u: 'https://xmind.app/mindmap/epidemic-definitions-&-measures/7yZBsX/?from=gallery' },
+    { t: 'Marco de referencia Patient Journey Map', d: 'Determinantes, sentimientos y actores.', u: 'https://xmind.app/mindmap/marco-de-referencia-patient-journey-map/qTwUvX/?from=gallery' },
+    { t: 'Mendeley Reference Manager (Windows)', d: 'Descarga oficial del gestor de referencias.', u: 'https://www.mendeley.com/download-reference-manager/windows' },
+    { t: 'MyBib', d: 'Extensión de Chrome para generar citas desde una página web.', u: 'https://chromewebstore.google.com/detail/mybib-free-citation-gener/phidhnmbkbkbkbknhldmpmnacgicphkf' }
+  ],
+
+  ofimatica: {
+    Word: ['Usa estilos de título (Título 1, Título 2) para la jerarquía, no negritas manuales.', 'Genera la tabla de contenido de forma automática.', 'Numera tablas y figuras con Insertar título para que las referencias cruzadas se actualicen.', 'Inserta las citas con Mendeley Cite; no las escribas a mano.', 'Usa el control de cambios cuando otra persona revise el documento.', 'Aplica las márgenes, la fuente y el interlineado de la norma de la revista o de la institución.'],
+    Excel: ['Una fila por observación y una columna por variable, con encabezados sin celdas combinadas.', 'Conserva una hoja de datos crudos que no se modifica y trabaja los cálculos en otra.', 'Agrega una hoja de diccionario con el significado, la unidad y los valores de cada variable.', 'Usa validación de datos para evitar entradas fuera de rango.', 'Resume con tablas dinámicas y fórmulas en vez de cálculos a mano.'],
+    PowerPoint: ['Una idea por diapositiva y un título que diga la conclusión.', 'Texto legible desde el fondo de la sala.', 'Cada figura o tabla lleva su fuente.', 'Cierra con las referencias en el mismo estilo del manuscrito.']
+  },
+
+  vancouver: {
+    reglas: ['En el texto, un número entre paréntesis o en superíndice, en orden de primera mención.', 'En la lista, las referencias se ordenan por ese número.', 'Las revistas se abrevian según la Biblioteca Nacional de Medicina de EE. UU.'],
+    ejemplo: 'Hopewell S, Chan AW, Collins GS, et al. CONSORT 2025 statement: updated guideline for reporting randomised trials. BMJ. 2025;389:e081123. doi:10.1136/bmj-2024-081123',
+    errores: ['Referencias sin DOI o sin año.', 'Autores duplicados con nombres distintos.', 'Títulos en mayúsculas sostenidas.', 'Estilo equivocado (por ejemplo APA en vez de Vancouver).', 'Citas escritas a mano y no insertadas con el complemento.', 'Referencias en la lista que nadie cita en el texto.']
+  }
+};
+
+</script>
+<script>
+(function () {
+  'use strict';
+  var A = window.APP;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function link(o) { return '<a href="' + esc(o.u) + '" rel="noopener">' + esc(o.t) + '</a>'; }
+  var store = { get: function (k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } },
+                set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+
+  /* Cabecera y pie */
+  $('#subtitulo').textContent = A.meta.subtitulo;
+  $('#pie').textContent = A.meta.titulo + ' · versión ' + A.meta.version + ' · actualizado ' + A.meta.actualizado + ' · ' + A.meta.autor;
+
+  /* Contenidos */
+  function renderTabla(q) {
+    q = (q || '').toLowerCase();
+    var rows = A.contenidos.filter(function (c) {
+      var hay = (c.tema + ' ' + c.competencia + ' ' + c.fuentes.map(function (f) { return f.t; }).join(' ')).toLowerCase();
+      return hay.indexOf(q) !== -1;
+    }).map(function (c) {
+      return '<tr><td><b>' + esc(c.tema) + '</b></td><td>' + esc(c.competencia) + '</td><td><ul>' +
+        c.fuentes.map(function (f) { return '<li>' + link(f) + '</li>'; }).join('') + '</ul></td></tr>';
+    });
+    $('#tabla tbody').innerHTML = rows.join('') || '<tr><td colspan="3">Sin resultados para ese filtro.</td></tr>';
+  }
+  renderTabla('');
+  $('#filtro').addEventListener('input', function (e) { renderTabla(e.target.value); });
+
+  /* Lectura crítica */
+  var sel = $('#diseno');
+  sel.innerHTML = A.disenos.map(function (d, i) { return '<option value="' + i + '">' + esc(d.nombre) + '</option>'; }).join('');
+  function renderDiseno() {
+    var d = A.disenos[+sel.value];
+    $('#disenoOut').innerHTML =
+      '<article class="card"><h4>Guía de reporte</h4><p><b>' + esc(d.guia) + '</b></p><p><a href="' + esc(d.guiaUrl) + '" rel="noopener">Abrir la guía</a></p>' +
+      '<h4>Herramienta de evaluación crítica</h4><p><b>' + esc(d.herramienta) + '</b></p><p><a href="' + esc(d.herrUrl) + '" rel="noopener">Abrir la herramienta</a></p></article>' +
+      '<article class="card"><h4>Preguntas clave</h4><ul>' + d.preguntas.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul></article>';
+  }
+  sel.addEventListener('change', renderDiseno); renderDiseno();
+
+  /* Calculadora */
+  function f(x, d) { return isFinite(x) ? x.toFixed(d == null ? 2 : d).replace('.', ',') : '—'; }
+  function calcular() {
+    var a = +$('#a').value, n1 = +$('#n1').value, c = +$('#c').value, n2 = +$('#n2').value, out = $('#calcOut'), msg = $('#calcMsg');
+    if (!(n1 > 0 && n2 > 0) || a < 0 || c < 0 || a > n1 || c > n2 || a % 1 || c % 1 || n1 % 1 || n2 % 1) {
+      out.innerHTML = ''; msg.textContent = 'Revisa los datos: los eventos deben ser enteros y no pueden superar el total del grupo.'; return;
+    }
+    var r1 = a / n1, r0 = c / n2, rar = r0 - r1, rr = r1 / r0, or = (a / (n1 - a)) / (c / (n2 - c));
+    var ok = a > 0 && c > 0 && a < n1 && c < n2;
+    var z = 1.96, seRR = Math.sqrt(1 / a - 1 / n1 + 1 / c - 1 / n2), seOR = Math.sqrt(1 / a + 1 / (n1 - a) + 1 / c + 1 / (n2 - c));
+    var rrLo = Math.exp(Math.log(rr) - z * seRR), rrHi = Math.exp(Math.log(rr) + z * seRR);
+    var orLo = Math.exp(Math.log(or) - z * seOR), orHi = Math.exp(Math.log(or) + z * seOR);
+    var nnt = rar === 0 ? Infinity : 1 / Math.abs(rar);
+    function k(t, v, s) { return '<div class="kpi"><small>' + t + '</small><b>' + v + '</b><span>' + (s || '') + '</span></div>'; }
+    out.innerHTML = k('Riesgo tratados', f(r1 * 100, 1) + ' %') + k('Riesgo control', f(r0 * 100, 1) + ' %') +
+      k('Reducción absoluta', f(rar * 100, 1) + ' pts') +
+      k('RR', ok ? f(rr) : '—', ok ? 'IC 95 %: ' + f(rrLo) + ' a ' + f(rrHi) : 'Necesita eventos en ambos grupos') +
+      k('OR', ok ? f(or) : '—', ok ? 'IC 95 %: ' + f(orLo) + ' a ' + f(orHi) : '') +
+      k(rar >= 0 ? 'NNT' : 'NNH', nnt === Infinity ? '—' : String(Math.ceil(nnt - 1e-9)), 'Pacientes a tratar');
+    if (!ok) { msg.textContent = 'Con cero eventos o con todos los pacientes con evento, el intervalo no se calcula con este método.'; return; }
+    var cruza = rrLo <= 1 && rrHi >= 1;
+    msg.textContent = (cruza ? 'El intervalo del RR incluye 1: el estudio no demuestra diferencia, aunque el valor puntual sea ' + f(rr) + '. ' : 'El intervalo del RR no incluye 1: la diferencia es estadísticamente significativa. ') +
+      'Pregúntate también si la magnitud importa clínicamente.';
+  }
+  ['a', 'n1', 'c', 'n2'].forEach(function (id) { $('#' + id).addEventListener('input', calcular); });
+  calcular();
+
+  /* Fases de la revisión */
+  var stepper = $('#stepper');
+  stepper.innerHTML = A.fases.map(function (p, i) {
+    return '<button type="button" role="tab" aria-selected="' + (i === 0) + '" data-i="' + i + '">' + p.n + '. ' + esc(p.nombre) + '</button>';
+  }).join('');
+  function renderFase(i) {
+    var p = A.fases[i];
+    [].forEach.call(stepper.children, function (b, j) { b.setAttribute('aria-selected', j === i); });
+    $('#fase').innerHTML = '<h4 class="title">' + p.n + '. ' + esc(p.nombre) + '</h4>' +
+      '<div class="card"><h4>Qué puede hacer la IA</h4><p>' + esc(p.ia) + '</p></div>' +
+      '<div class="card"><h4>Qué hace el equipo</h4><p>' + esc(p.humano) + '</p></div>' +
+      '<div class="card"><h4>Entregable</h4><p>' + esc(p.entregable) + '</p></div>' +
+      '<div class="card"><h4>Riesgo a vigilar</h4><p>' + esc(p.riesgo) + '</p></div>';
+  }
+  stepper.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) renderFase(+b.dataset.i); });
+  renderFase(0);
+  $('#bp').innerHTML = A.mejoresPracticas.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
+
+  /* Declaración de uso de IA */
+  $('#d_fase').innerHTML = A.fases.map(function (p) { return '<option>' + esc(p.nombre) + '</option>'; }).join('');
+  function declaracion() {
+    var v = function (id, alt) { return ($('#' + id).value || '').trim() || alt; };
+    $('#declOut').textContent =
+      'Declaración de uso de inteligencia artificial. Se utilizó ' + v('d_herr', '[herramienta y versión]') +
+      ' (fecha de uso: ' + v('d_fecha', '[fecha]') + ') en la fase de ' + v('d_fase', '[fase]') +
+      ' para ' + v('d_prop', '[propósito]') + '. Los resultados se verificaron así: ' + v('d_ver', '[método de verificación]') +
+      '. La responsabilidad de las decisiones y del contenido final es de ' + v('d_resp', '[responsables]') +
+      ', y la IA no reemplazó el juicio del equipo.';
+  }
+  ['d_herr', 'd_fecha', 'd_fase', 'd_prop', 'd_ver', 'd_resp'].forEach(function (id) { $('#' + id).addEventListener('input', declaracion); });
+  declaracion();
+  $('#copiar').addEventListener('click', function () {
+    var t = $('#declOut').textContent, m = $('#copiado');
+    function ok() { m.textContent = 'Texto copiado.'; setTimeout(function () { m.textContent = ''; }, 2500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(ok, function () { m.textContent = 'Selecciona el texto y cópialo con Ctrl+C.'; }); }
+    else { m.textContent = 'Selecciona el texto y cópialo con Ctrl+C.'; }
+  });
+
+  /* Herramientas en Claude */
+  $('#tools tbody').innerHTML = A.herramientasClaude.map(function (h) {
+    return '<tr><td>' + esc(h.tipo) + '</td><td><b>' + esc(h.nombre) + '</b></td><td>' + esc(h.paraQue) + '</td><td>' + esc(h.nota) + '</td></tr>';
+  }).join('');
+
+  /* Vancouver */
+  $('#vReglas').innerHTML = A.vancouver.reglas.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
+  $('#vEjemplo').textContent = A.vancouver.ejemplo;
+  $('#vErrores').innerHTML = A.vancouver.errores.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
+
+  /* Listas de verificación con progreso */
+  var KEY = 'aula-ofimatica-v1', saved = store.get(KEY) || {};
+  var total = 0;
+  $('#ofi').innerHTML = Object.keys(A.ofimatica).map(function (k) {
+    return '<article class="card ofi"><h3>' + esc(k) + '</h3>' + A.ofimatica[k].map(function (t, i) {
+      var id = k + '-' + i; total++;
+      return '<label class="chk"><input type="checkbox" data-id="' + id + '"' + (saved[id] ? ' checked' : '') + '><span>' + esc(t) + '</span></label>';
+    }).join('') + '</article>';
+  }).join('');
+  function progreso() {
+    var n = Object.keys(saved).filter(function (k) { return saved[k]; }).length;
+    $('#progreso').textContent = 'Tu avance en las listas de verificación: ' + n + ' de ' + total + '.';
+  }
+  $('#ofi').addEventListener('change', function (e) { if (e.target.dataset.id) { saved[e.target.dataset.id] = e.target.checked; store.set(KEY, saved); progreso(); } });
+  progreso();
+
+  /* Recursos */
+  $('#rec').innerHTML = A.recursos.map(function (r) {
+    return '<article class="card rec"><h3 style="margin-top:0">' + link({ t: r.t, u: r.u }) + '</h3><p>' + esc(r.d) + '</p></article>';
+  }).join('');
+})();
+
+</script>
+</body>
+</html>
