@@ -44,4 +44,9 @@ El contenido es material didáctico en construcción. Verifica las guías y los 
 
 ## Licencia
 
-Pendiente de definir por el autor (por ejemplo, MIT para el código y CC BY 4.0 para el contenido).
+© 2026 Fabian Antonio Dávila Ramírez.
+
+- **Código** (`index.html`, `css/`, `js/`, `build/`): licencia MIT. Texto completo en [`LICENSE`](LICENSE).
+- **Contenido** (`data/contenidos.js`, `docs/` y los textos didácticos de la aplicación): licencia Creative Commons Atribución 4.0 Internacional (CC BY 4.0). Texto completo en [`LICENSE-CONTENT`](LICENSE-CONTENT).
+
+Puedes copiar, adaptar y redistribuir el material, incluso con fines comerciales, siempre que cites al autor, enlaces la licencia e indiques si hiciste cambios.
