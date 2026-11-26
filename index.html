@@ -1,154 +1,179 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-CO" data-app="aula-ic">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aula de investigación clínica</title>
-<meta name="description" content="Lectura crítica, revisiones sistemáticas con apoyo de IA, gestores de referencias y normas ofimáticas.">
-<link rel="stylesheet" href="css/styles.css">
+<meta name="description" content="De la pregunta clínica al artículo publicable: diseño del estudio, tamaño de muestra, lectura crítica, efecto, revisiones sistemáticas con IA, citas y formato.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233b3a8f'/%3E%3Cpath d='M18 46V20l14 10 14-10v26' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='48' r='4' fill='%23e07a55'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/motor.css?v=4">
+<link rel="stylesheet" href="css/aula.css?v=4">
+
+<meta property="og:title" content="Aula de investigación clínica">
+<meta property="og:description" content="De la pregunta clínica al artículo publicable: diseño, tamaño de muestra, lectura crítica, revisiones con IA, citas y formato.">
+<meta property="og:locale" content="es_CO">
+<meta property="og:type" content="website">
 </head>
 <body>
-<a class="skip" href="#main">Saltar al contenido</a>
-<header class="top">
-  <div class="wrap bar">
-    <a class="brand" href="#inicio"><span class="dot" aria-hidden="true"></span>Aula de investigación clínica</a>
-    <nav aria-label="Principal">
-      <a href="#contenidos">Contenidos</a>
-      <a href="#lectura">Lectura crítica</a>
-      <a href="#practica">Práctica</a>
-      <a href="#numeros">Números</a>
-      <a href="#revision">Revisión con IA</a>
-      <a href="#referencias">Referencias y Word</a>
-      <a href="#recursos">Recursos</a>
-    </nav>
-  </div>
-</header>
-<main id="main">
-  <section id="inicio" class="hero">
-    <div class="wrap">
-      <p class="eyebrow">Material de apoyo</p>
-      <h1>De la pregunta clínica al artículo publicable</h1>
-      <p class="lead" id="subtitulo"></p>
-      <div class="cta">
-        <a class="btn" href="#lectura">Empezar por lectura crítica</a>
-        <a class="btn ghost" href="#revision">Ir a revisiones con IA</a>
+
+<a href="#main" class="sr-only">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="container bar">
+    <button class="icon-btn toc-toggle" id="toc-toggle" type="button" aria-label="Abrir índice" aria-expanded="false" aria-controls="sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+    </button>
+    <div class="brand">
+      <span class="dot" aria-hidden="true"></span>
+      <span id="brand-title">Aula de investigación clínica</span>
+    </div>
+        <button class="search-trigger" id="search-trigger" type="button" aria-haspopup="dialog" aria-controls="search-panel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <span>Buscar…</span>
+      <kbd>/</kbd>
+    </button>
+    <div class="header-actions">
+      <button class="icon-btn" id="help-toggle" type="button" aria-label="Atajos de teclado" aria-haspopup="dialog" aria-controls="shortcuts-panel" title="Atajos de teclado (?)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.5 2.5 0 0 1 4.9.8c0 1.6-2.4 1.8-2.4 3.4"/><circle cx="12" cy="16.8" r=".4" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="icon-btn" id="focus-toggle" type="button" aria-label="Modo de lectura enfocada" aria-pressed="false" title="Modo de lectura enfocada">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>
+      </button>
+      <div class="text-size" id="text-size">
+        <button class="icon-btn" id="text-size-btn" type="button" aria-label="Tamaño del texto" aria-haspopup="true" aria-expanded="false" aria-controls="text-size-menu" title="Tamaño del texto (+ / −)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 19l3.6-9 3.6 9M3.9 15.6h4.4M11 19l5-13 5 13M12.9 14.5h6.2"/></svg>
+        </button>
+        <div class="text-size-menu" id="text-size-menu" role="group" aria-label="Tamaño del texto" hidden></div>
       </div>
-      <p class="progress" id="progreso" aria-live="polite"></p>
+      <button class="icon-btn theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar modo claro/oscuro" title="Modo claro / oscuro">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg>
+      </button>
     </div>
-  </section>
+  </div>
+  <nav class="breadcrumb" id="breadcrumb" aria-label="Ruta de navegación"></nav>
+</header>
 
-  <section id="contenidos" class="wrap block">
-    <h2>Contenidos y competencias</h2>
-    <p class="intro">Cada tema indica la competencia que desarrolla y sus fuentes. Filtra por palabra clave.</p>
-    <label class="search"><span class="sr">Filtrar temas</span><input id="filtro" type="search" placeholder="Filtrar: PRISMA, Mendeley, GRADE…"></label>
-    <div class="scroll"><table id="tabla"><thead><tr><th>Tema</th><th>Competencia a desarrollar</th><th>Fuentes</th></tr></thead><tbody></tbody></table></div>
-  </section>
-
-  <section id="lectura" class="wrap block alt">
-    <h2>Lectura crítica: elige el diseño</h2>
-    <p class="intro">Cada diseño tiene su guía de reporte y su herramienta de evaluación. La guía dice qué debe contar el artículo; la herramienta dice cuánto confiar en lo que cuenta.</p>
-    <h3>Árbol de decisión: clasifica tu estudio</h3>
-    <p class="intro">Responde sobre el artículo que tienes delante. Al final verás su diseño, su guía de reporte y su herramienta de evaluación.</p>
-    <div class="tree" id="arbol" aria-live="polite"></div>
-    <h3>O elige el diseño directamente</h3>
-    <label class="field"><span>Diseño del estudio</span><select id="diseno"></select></label>
-    <div class="grid2" id="disenoOut"></div>
-    <h3>Ficha de lectura crítica en cinco pasos</h3>
-    <ol class="steps">
-      <li><b>Pregunta.</b> ¿Cuál es la población, la intervención o exposición, el comparador y el desenlace?</li>
-      <li><b>Diseño.</b> ¿Qué diseño es y qué guía de reporte le corresponde?</li>
-      <li><b>Validez interna.</b> ¿Qué sesgos podrían explicar el resultado?</li>
-      <li><b>Resultados.</b> ¿Qué tan grande y qué tan preciso es el efecto?</li>
-      <li><b>Aplicabilidad.</b> ¿Mi paciente se parece a los del estudio y el beneficio supera el daño?</li>
-    </ol>
-  </section>
-
-  <section id="practica" class="wrap block">
-    <h2>Practica con preguntas de selección múltiple</h2>
-    <p class="intro">Doce preguntas de práctica con retroalimentación. No son las del examen: sirven para entrenar el criterio.</p>
-    <div class="quiz" id="quiz" aria-live="polite"></div>
-  </section>
-
-  <section id="numeros" class="wrap block">
-    <h2>Leer los números: calculadora de efecto</h2>
-    <p class="intro">Escribe los eventos y los totales de cada grupo. Los cálculos usan el método logarítmico para el intervalo de confianza del 95 %.</p>
-    <form id="calc" class="calc" autocomplete="off">
-      <fieldset><legend>Grupo tratado</legend>
-        <label>Eventos<input type="number" id="a" min="0" step="1" value="15"></label>
-        <label>Total<input type="number" id="n1" min="1" step="1" value="100"></label></fieldset>
-      <fieldset><legend>Grupo control</legend>
-        <label>Eventos<input type="number" id="c" min="0" step="1" value="20"></label>
-        <label>Total<input type="number" id="n2" min="1" step="1" value="100"></label></fieldset>
-    </form>
-    <div id="calcOut" class="cards" aria-live="polite"></div>
-    <p id="calcMsg" class="msg" aria-live="polite"></p>
-  </section>
-
-  <section id="revision" class="wrap block alt">
-    <h2>Revisiones sistemáticas con apoyo de IA</h2>
-    <p class="intro">La IA acelera tareas, pero las decisiones y la responsabilidad son del equipo revisor. Estas son las diez fases, qué hace cada parte y qué se entrega.</p>
-    <div class="stepper" id="stepper" role="tablist" aria-label="Fases de la revisión"></div>
-    <article class="phase" id="fase" aria-live="polite"></article>
-
-    <h3>Mejores prácticas</h3>
-    <ul class="bp" id="bp"></ul>
-
-    <h3>Generador de declaración de uso de IA</h3>
-    <p class="intro">Completa los campos y copia el texto para la sección de métodos. Es una plantilla: revísala con tu equipo y con las normas de la revista.</p>
-    <form id="decl" class="decl" autocomplete="off">
-      <label>Herramienta y versión<input id="d_herr" placeholder="Ej.: nombre del modelo y versión"></label>
-      <label>Fecha de uso<input id="d_fecha" type="date"></label>
-      <label>Fase de la revisión<select id="d_fase"></select></label>
-      <label>Para qué se usó<input id="d_prop" placeholder="Ej.: proponer sinónimos para la ecuación"></label>
-      <label>Cómo se verificó<input id="d_ver" placeholder="Ej.: dos revisores contrastaron con los artículos"></label>
-      <label>Responsables<input id="d_resp" placeholder="Ej.: autoras y autores del equipo"></label>
-    </form>
-    <pre id="declOut" class="out" tabindex="0"></pre>
-    <button class="btn small" id="copiar" type="button">Copiar texto</button>
-    <span class="msg" id="copiado" role="status"></span>
-
-    <h3>Qué necesitas en Claude</h3>
-    <div class="scroll"><table id="tools"><thead><tr><th>Tipo</th><th>Nombre</th><th>Para qué</th><th>Nota</th></tr></thead><tbody></tbody></table></div>
-    <p class="note">Sobre el reporte: la declaración conjunta de Cochrane, Campbell, JBI y CEE (2025) pide supervisión humana e informar con transparencia cualquier uso de IA que sugiera juicios. PRISMA-trAIce es una propuesta de lista de verificación y no una extensión oficial de PRISMA.</p>
-  </section>
-
-  <section id="referencias" class="wrap block">
-    <h2>Referencias y normas ofimáticas</h2>
-    <div class="grid2">
-      <article class="card"><h3>Mendeley en cinco pasos</h3>
-        <ol class="steps small">
-          <li>Crea tu cuenta y descarga <a href="https://www.mendeley.com/download-reference-manager/windows">Mendeley Reference Manager</a>.</li>
-          <li>Instálalo y, en el menú Tools, elige Install Mendeley Cite for Microsoft Word.</li>
-          <li>Importa el artículo con su DOI, su PDF o el Web Importer.</li>
-          <li>Crea una carpeta por trabajo.</li>
-          <li>En Word, abre Referencias, Mendeley Cite, inserta la cita y elige el estilo Vancouver.</li>
-        </ol>
-        <p class="note">Para páginas web sin DOI puedes usar <a href="https://chromewebstore.google.com/detail/mybib-free-citation-gener/phidhnmbkbkbkbknhldmpmnacgicphkf">MyBib</a>; revisa autor, fecha y URL antes de aceptar la cita.</p>
-      </article>
-      <article class="card"><h3>Estilo Vancouver</h3>
-        <ul id="vReglas"></ul>
-        <p class="ex" id="vEjemplo"></p>
-        <h4>Errores frecuentes</h4>
-        <ul id="vErrores"></ul>
-      </article>
+<!-- Search overlay -->
+<div class="search-panel" id="search-panel" role="dialog" aria-modal="true" aria-label="Buscar en el documento" hidden>
+  <div class="search-panel-inner">
+    <div class="search-input-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="search-input" placeholder="Diseño, fórmula, fase, término…" autocomplete="off" aria-label="Texto de búsqueda" aria-controls="search-results" aria-expanded="false" role="combobox" aria-autocomplete="list">
+      <button class="icon-btn" id="search-close" type="button" aria-label="Cerrar búsqueda (Esc)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
     </div>
-    <h3>Listas de verificación ofimática</h3>
-    <p class="intro">Marca lo que ya cumples; el progreso queda guardado en este navegador.</p>
-    <div class="grid3" id="ofi"></div>
-  </section>
+    <ul class="search-results" id="search-results" role="listbox" aria-label="Resultados de búsqueda"></ul>
+    <p class="search-hint">↑ / ↓ para navegar · Enter para ir · Esc para cerrar</p>
+  </div>
+</div>
 
-  <section id="recursos" class="wrap block alt">
-    <h2>Mapas mentales y herramientas</h2>
-    <div class="grid3" id="rec"></div>
-  </section>
-</main>
-<footer>
-  <div class="wrap">
-    <p id="pie"></p>
-    <p>Contenido en construcción: verifica los enlaces y las guías vigentes antes de citar. Esta aula no sustituye el criterio clínico ni el de tu comité de ética.</p>
+<!-- Keyboard shortcuts help -->
+<div class="shortcuts-panel" id="shortcuts-panel" role="dialog" aria-modal="true" aria-label="Atajos de teclado" hidden>
+  <div class="shortcuts-panel-inner">
+    <div class="shortcuts-head">
+      <h2>Atajos de teclado</h2>
+      <button class="icon-btn" id="shortcuts-close" type="button" aria-label="Cerrar (Esc)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <dl class="shortcuts-list">
+      <div><dt><kbd>/</kbd></dt><dd>Abrir el buscador</dd></div>
+      <div><dt><kbd>Esc</kbd></dt><dd>Cerrar buscador, ayuda o índice móvil</dd></div>
+      <div><dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Moverse entre resultados de búsqueda</dd></div>
+      <div><dt><kbd>Enter</kbd></dt><dd>Ir al resultado resaltado</dd></div>
+      <div><dt><kbd>?</kbd></dt><dd>Abrir/cerrar esta ayuda</dd></div>
+      <div><dt><kbd>+</kbd> <kbd>−</kbd></dt><dd>Agrandar o reducir el tamaño del texto</dd></div>
+    </dl>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="sidebar-scrim" id="sidebar-scrim" hidden></div>
+  <aside class="sidebar" id="sidebar" aria-label="Índice de contenidos">
+    <nav class="toc" id="toc" aria-label="Secciones"></nav>
+    <div class="sidebar-footer">
+      <button class="btn sources-panel-btn" id="sources-panel-btn" type="button">Panel de fuentes</button>
+    </div>
+  </aside>
+
+  <main id="main">
+    <div class="container">
+      <section class="hero">
+        <span class="eyebrow" id="hero-framework">Material didáctico</span>
+        <span class="eyebrow" id="hero-period" style="background:transparent;padding-left:0"></span>
+        <h1 id="hero-title"></h1>
+        <p class="lede" id="hero-lede"></p>
+        <div class="wip-banner" role="note"><span class="wip-badge">En construcción</span><p id="wip-text"></p></div>
+        <p class="byline" id="byline"></p>
+        <div class="stat-grid" id="stat-grid"></div>
+      </section>
+
+      <!-- Botón de exportar duplicado al inicio y al final — mismo control global,
+           nunca uno por sección (ver references/arquitectura-js.md, "Exportar a PDF"). -->
+      <section class="export-panel export-panel-top" aria-labelledby="export-panel-top-title">
+        <h2 id="export-panel-top-title">Exportar</h2>
+        <p class="export-panel-intro">¿Quieres guardar este documento? Expande las secciones que te interesen (o "Expandir todo" abajo) y usa este botón —o el que está al final de la página— para exportarlas a PDF.</p>
+        <button class="btn btn-primary js-export-pdf" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>
+          Exportar a PDF (secciones visibles)
+        </button>
+        <p class="export-panel-hint">En algunos navegadores integrados (el de LinkedIn, Instagram o Facebook, por ejemplo) el diálogo de impresión no se abre — si no pasa nada al tocar el botón, abre este enlace directamente en Chrome o Safari.</p>
+      </section>
+
+      <div class="toolbar">
+        <span class="hint" id="section-count-hint"></span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="collapse-all" type="button">Colapsar todo</button>
+          <button class="btn btn-primary" id="expand-all" type="button">Expandir todo</button>
+        </div>
+      </div>
+
+      <!-- El motor llena este contenedor a partir de SECTIONS -->
+      <div class="accordion" id="accordion"></div>
+
+      <section class="export-panel" aria-labelledby="export-panel-title">
+        <h2 id="export-panel-title">Exportar</h2>
+        <p class="export-panel-intro">Exporta a PDF las secciones que tengas expandidas ahora mismo (las colapsadas no se incluyen). Usa "Expandir todo" arriba si quieres exportar el documento completo.</p>
+        <button class="btn btn-primary js-export-pdf" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>
+          Exportar a PDF (secciones visibles)
+        </button>
+        <p class="export-panel-hint">En algunos navegadores integrados (el de LinkedIn, Instagram o Facebook, por ejemplo) el diálogo de impresión no se abre — si no pasa nada al tocar el botón, abre este enlace directamente en Chrome o Safari.</p>
+      </section>
+
+      <section class="sources-panel" id="sources-panel" aria-labelledby="sources-panel-title" hidden>
+        <h2 id="sources-panel-title">Panel de fuentes</h2>
+        <p class="sources-panel-intro">Todas las fuentes con URL pública verificable citadas en este documento, en un solo lugar.</p>
+        <div id="sources-panel-body"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<button class="scroll-top" id="scroll-top" type="button" aria-label="Volver arriba" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="disclaimer" id="footer-disclaimer"></div>
+    <p id="footer-author"></p>
+    <p>© <span id="year"></span> · Contenido publicado con fines académicos y de divulgación. <a href="#sources-panel" class="js-open-sources">Panel de fuentes</a></p>
+    <div class="cc-block">
+      <a class="cc-badge" id="cc-badge" href="#" target="_blank" rel="license noopener noreferrer"></a>
+      <p id="footer-license-text"></p>
+    </div>
   </div>
 </footer>
-<script src="data/contenidos.js"></script>
-<script src="js/app.js"></script>
+
+<!-- Subir ?v=N en cada cambio publicado -->
+<script src="data/contenidos.js?v=4"></script>
+<script src="js/contenido.js?v=4"></script>
+<script src="js/motor.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
 </body>
 </html>

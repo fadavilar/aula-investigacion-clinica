@@ -3,9 +3,9 @@ window.APP = {
   meta: {
     titulo: 'Aula de investigación clínica',
     subtitulo: 'Lectura crítica, revisiones sistemáticas con apoyo de IA, gestores de referencias y normas ofimáticas',
-    version: '0.2.0',
+    version: '0.3.0',
     actualizado: '2026-11-26',
-    autor: 'Fabian A. Dávila Ramírez'
+    autor: 'Fabian Antonio Dávila Ramírez'
   },
 
   /* Cada tema: competencia que desarrolla y fuentes. Verifica los enlaces al actualizar. */
@@ -77,7 +77,7 @@ window.APP = {
       preguntas: ['¿Se generó y se ocultó bien la secuencia de aleatorización?', '¿Hubo desviaciones de la intervención asignada?', '¿Faltan datos del desenlace?', '¿Quien midió sabía el grupo?', '¿Se reportó lo que prometía el protocolo?'] },
     { nombre: 'Estudio transversal analítico', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para estudios transversales analíticos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
       preguntas: ['¿Se definieron con claridad los criterios de inclusión y el entorno?', '¿La exposición y el desenlace se midieron de forma válida y fiable?', '¿Se identificaron y manejaron los factores de confusión?'] },
-    { nombre: 'Prueba diagnóstica', guia: 'STARD 2015', guiaUrl: 'https://www.equator-network.org', herramienta: 'QUADAS-2', herrUrl: 'https://www.bristol.ac.uk/population-health-sciences/projects/quadas/quadas-2/',
+    { nombre: 'Prueba diagnóstica', guia: 'STARD 2015', guiaUrl: 'https://www.equator-network.org', herramienta: 'QUADAS-2', herrUrl: 'https://www.bristol.ac.uk/population-health-sciences/projects/quadas/',
       preguntas: ['¿El espectro de pacientes es el de la práctica real?', '¿El estándar de referencia es adecuado?', '¿Se aplicó a todos los pacientes?'] },
     { nombre: 'Revisión sistemática o metanálisis', guia: 'PRISMA 2020', guiaUrl: 'https://www.equator-network.org', herramienta: 'AMSTAR 2', herrUrl: 'https://amstar.ca',
       preguntas: ['¿Hubo protocolo previo?', '¿La búsqueda fue exhaustiva y reproducible?', '¿Se evaluó el riesgo de sesgo de los estudios incluidos?', '¿Se explica la heterogeneidad?'] }
@@ -87,21 +87,22 @@ window.APP = {
   arbol: {
     inicio: 'q1',
     nodos: {
-      q1: { p: '¿El estudio mide qué tan bien una prueba detecta una enfermedad, comparándola con un estándar de referencia?',
+      /* c: rótulo corto para el diagrama del árbol */
+      q1: { c: '¿Valida una prueba?', p: '¿El estudio mide qué tan bien una prueba detecta una enfermedad, comparándola con un estándar de referencia?',
             o: [{ t: 'Sí', a: 'Prueba diagnóstica' }, { t: 'No', a: 'q2' }] },
-      q2: { p: '¿Reúne e integra los resultados de varios estudios con una búsqueda sistemática?',
+      q2: { c: '¿Reúne varios estudios?', p: '¿Reúne e integra los resultados de varios estudios con una búsqueda sistemática?',
             o: [{ t: 'Sí', a: 'Revisión sistemática o metanálisis' }, { t: 'No', a: 'q3' }] },
-      q3: { p: '¿Los investigadores asignaron la intervención a los participantes?',
+      q3: { c: '¿Asignaron la intervención?', p: '¿Los investigadores asignaron la intervención a los participantes?',
             o: [{ t: 'Sí', a: 'q3a' }, { t: 'No, solo observaron', a: 'q4' }] },
-      q3a: { p: '¿La asignación fue al azar?',
+      q3a: { c: '¿Al azar?', p: '¿La asignación fue al azar?',
              o: [{ t: 'Sí, al azar', a: 'Ensayo clínico aleatorizado' }, { t: 'No, sin azar', a: 'Cuasiexperimental' }] },
-      q4: { p: '¿Compara grupos de participantes?',
+      q4: { c: '¿Compara grupos?', p: '¿Compara grupos de participantes?',
             o: [{ t: 'Sí', a: 'q4a' }, { t: 'No, describe casos', a: 'q5' }] },
-      q4a: { p: '¿Cómo se formaron los grupos y cuándo se midió?',
-             o: [{ t: 'Se parte de quienes tienen el desenlace y de quienes no, y se mira atrás la exposición', a: 'Casos y controles' },
-                 { t: 'Se parte de la exposición y se sigue a los participantes hasta el desenlace', a: 'Cohorte' },
-                 { t: 'Exposición y desenlace se miden en el mismo momento', a: 'Estudio transversal analítico' }] },
-      q5: { p: '¿Cuántos pacientes describe?',
+      q4a: { c: '¿Cómo se formaron?', p: '¿Cómo se formaron los grupos y cuándo se midió?',
+             o: [{ t: 'Se parte de quienes tienen el desenlace y de quienes no, y se mira atrás la exposición', c: 'Desde el desenlace', a: 'Casos y controles' },
+                 { t: 'Se parte de la exposición y se sigue a los participantes hasta el desenlace', c: 'Desde la exposición', a: 'Cohorte' },
+                 { t: 'Exposición y desenlace se miden en el mismo momento', c: 'Al mismo tiempo', a: 'Estudio transversal analítico' }] },
+      q5: { c: '¿Cuántos pacientes?', p: '¿Cuántos pacientes describe?',
             o: [{ t: 'Uno', a: 'Reporte de caso' }, { t: 'Varios', a: 'Serie de casos' }] }
     }
   },
@@ -203,6 +204,53 @@ window.APP = {
     { t: 'Mendeley Reference Manager (Windows)', d: 'Descarga oficial del gestor de referencias.', u: 'https://www.mendeley.com/download-reference-manager/windows' },
     { t: 'MyBib', d: 'Extensión de Chrome para generar citas desde una página web.', u: 'https://chromewebstore.google.com/detail/mybib-free-citation-gener/phidhnmbkbkbkbknhldmpmnacgicphkf' }
   ],
+
+  /* Tamaño de muestra: las seis hojas del libro Muestreo.xlsx del autor (CAFI, CAIN, NUFI, NUIN, COCA, CONU),
+     con sus fórmulas y sus valores de ejemplo. Las fórmulas se reproducen en js/app.js y se comprueban contra el Excel. */
+  muestreo: {
+    excel: 'https://docs.google.com/spreadsheets/d/1FjVKZDhr-GG2F2hjnFx0iw-6b7HbKPUk/edit?usp=sharing',
+    video: 'https://youtu.be/zJSNGKfw71E',
+    videoTitulo: 'Tamaño de muestra - Probabilístico',
+    mapa: 'https://xmind.app/mindmap/muestreo/zGNKSL/?from=gallery',
+    objetivos: [
+      { id: 'frecuencia', t: 'Estimar una frecuencia', d: 'Qué proporción de la población tiene una condición (prevalencia, cobertura, uso).' },
+      { id: 'promedio', t: 'Estimar un promedio', d: 'Cuál es el valor medio de una medida continua (presión, glucemia, días de estancia).' },
+      { id: 'dosFrecuencias', t: 'Comparar dos frecuencias', d: 'Si una proporción difiere entre dos grupos.' },
+      { id: 'dosPromedios', t: 'Comparar dos promedios', d: 'Si un valor medio difiere entre dos grupos.' }
+    ],
+    /* p: parámetros que escribe quien calcula. v: valor de ejemplo del Excel. */
+    calculadoras: [
+      { hoja: 'CAFI', objetivo: 'frecuencia', marco: true, t: 'Tamaño de la muestra para la estimación de frecuencias (marco muestral conocido)',
+        p: [ { k: 'N', s: 'N', l: 'Marco muestral (tamaño de la población)', v: 10000, min: 50, max: 1000000, step: 1, tipo: 'entero' },
+             { k: 'alfa', s: 'α', l: 'Alfa (máximo error tipo I)', v: 0.05, min: 0.01, max: 0.10, step: 0.01, tipo: 'pct' },
+             { k: 'p', s: 'p', l: 'Prevalencia esperada', v: 0.5, min: 0.01, max: 0.99, step: 0.01, tipo: 'prop' },
+             { k: 'd', s: 'd', l: 'Precisión (error absoluto aceptado)', v: 0.05, min: 0.01, max: 0.20, step: 0.005, tipo: 'prop' } ] },
+      { hoja: 'CAIN', objetivo: 'frecuencia', marco: false, t: 'Tamaño de la muestra para la estimación de frecuencias (marco muestral desconocido)',
+        p: [ { k: 'alfa', s: 'α', l: 'Alfa (máximo error tipo I)', v: 0.05, min: 0.01, max: 0.10, step: 0.01, tipo: 'pct' },
+             { k: 'p', s: 'p', l: 'Prevalencia esperada', v: 0.5, min: 0.01, max: 0.99, step: 0.01, tipo: 'prop' },
+             { k: 'd', s: 'd', l: 'Precisión (error absoluto aceptado)', v: 0.05, min: 0.01, max: 0.20, step: 0.005, tipo: 'prop' } ] },
+      { hoja: 'NUFI', objetivo: 'promedio', marco: true, t: 'Tamaño de la muestra para la estimación de promedios (marco muestral conocido)',
+        p: [ { k: 'N', s: 'N', l: 'Marco muestral (tamaño de la población)', v: 500000, min: 50, max: 1000000, step: 1, tipo: 'entero' },
+             { k: 'alfa', s: 'α', l: 'Alfa (máximo error tipo I)', v: 0.05, min: 0.01, max: 0.10, step: 0.01, tipo: 'pct' },
+             { k: 's', s: 's', l: 'Desviación estándar esperada', v: 1.1, min: 0.01, max: 1000, step: 0.01, tipo: 'dec' },
+             { k: 'd', s: 'd', l: 'Precisión (en las unidades de la medida)', v: 0.11, min: 0.001, max: 1000, step: 0.01, tipo: 'dec' } ] },
+      { hoja: 'NUIN', objetivo: 'promedio', marco: false, t: 'Tamaño de la muestra para la estimación de promedios (marco muestral desconocido)',
+        p: [ { k: 'alfa', s: 'α', l: 'Alfa (máximo error tipo I)', v: 0.05, min: 0.01, max: 0.10, step: 0.01, tipo: 'pct' },
+             { k: 's', s: 's', l: 'Desviación estándar esperada', v: 2.6, min: 0.01, max: 1000, step: 0.01, tipo: 'dec' },
+             { k: 'd', s: 'd', l: 'Precisión (en las unidades de la medida)', v: 0.26, min: 0.001, max: 1000, step: 0.01, tipo: 'dec' } ] },
+      { hoja: 'COCA', objetivo: 'dosFrecuencias', t: 'Tamaño de la muestra para comparar frecuencias en dos grupos',
+        p: [ { k: 'alfa', s: 'α', l: 'Alfa (máximo error tipo I)', v: 0.05, min: 0.01, max: 0.10, step: 0.01, tipo: 'pct' },
+             { k: 'beta', s: 'β', l: 'Beta (máximo error tipo II)', v: 0.20, min: 0.05, max: 0.50, step: 0.01, tipo: 'pct' },
+             { k: 'p1', s: 'p₁', l: 'Prevalencia en el primer grupo', v: 0.5, min: 0.01, max: 0.99, step: 0.01, tipo: 'prop' },
+             { k: 'p2', s: 'p₂', l: 'Prevalencia en el segundo grupo', v: 0.1, min: 0.01, max: 0.99, step: 0.01, tipo: 'prop' } ] },
+      { hoja: 'CONU', objetivo: 'dosPromedios', t: 'Tamaño de la muestra para comparar promedios en dos grupos',
+        p: [ { k: 'alfa', s: 'α', l: 'Alfa (máximo error tipo I)', v: 0.05, min: 0.01, max: 0.10, step: 0.01, tipo: 'pct' },
+             { k: 'beta', s: 'β', l: 'Beta (máximo error tipo II)', v: 0.20, min: 0.05, max: 0.50, step: 0.01, tipo: 'pct' },
+             { k: 'v1', s: 's₁²', l: 'Varianza del grupo 1', v: 23.2, min: 0.01, max: 100000, step: 0.1, tipo: 'dec' },
+             { k: 'v2', s: 's₂²', l: 'Varianza del grupo 2', v: 23.2, min: 0.01, max: 100000, step: 0.1, tipo: 'dec' },
+             { k: 'dif', s: 'x̄₁ − x̄₂', l: 'Diferencia propuesta entre los promedios', v: 2.5, min: 0.001, max: 100000, step: 0.1, tipo: 'dec' } ] }
+    ]
+  },
 
   ofimatica: {
     Word: ['Usa estilos de título (Título 1, Título 2) para la jerarquía, no negritas manuales.', 'Genera la tabla de contenido de forma automática.', 'Numera tablas y figuras con Insertar título para que las referencias cruzadas se actualicen.', 'Inserta las citas con Mendeley Cite; no las escribas a mano.', 'Usa el control de cambios cuando otra persona revise el documento.', 'Aplica las márgenes, la fuente y el interlineado de la norma de la revista o de la institución.'],
