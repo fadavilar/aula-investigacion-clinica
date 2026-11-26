@@ -3,7 +3,7 @@ window.APP = {
   meta: {
     titulo: 'Aula de investigación clínica',
     subtitulo: 'Lectura crítica, revisiones sistemáticas con apoyo de IA, gestores de referencias y normas ofimáticas',
-    version: '0.1.0',
+    version: '0.2.0',
     actualizado: '2026-11-26',
     autor: 'Fabian A. Dávila Ramírez'
   },
@@ -75,10 +75,75 @@ window.APP = {
       preguntas: ['¿Cómo se asignó la intervención si no hubo aleatorización?', '¿Los grupos eran comparables al inicio?', '¿Hay un grupo de comparación?'] },
     { nombre: 'Ensayo clínico aleatorizado', guia: 'CONSORT 2025', guiaUrl: 'https://pubmed.ncbi.nlm.nih.gov/40228833/', herramienta: 'RoB 2', herrUrl: 'https://www.riskofbias.info',
       preguntas: ['¿Se generó y se ocultó bien la secuencia de aleatorización?', '¿Hubo desviaciones de la intervención asignada?', '¿Faltan datos del desenlace?', '¿Quien midió sabía el grupo?', '¿Se reportó lo que prometía el protocolo?'] },
+    { nombre: 'Estudio transversal analítico', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para estudios transversales analíticos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
+      preguntas: ['¿Se definieron con claridad los criterios de inclusión y el entorno?', '¿La exposición y el desenlace se midieron de forma válida y fiable?', '¿Se identificaron y manejaron los factores de confusión?'] },
     { nombre: 'Prueba diagnóstica', guia: 'STARD 2015', guiaUrl: 'https://www.equator-network.org', herramienta: 'QUADAS-2', herrUrl: 'https://www.bristol.ac.uk/population-health-sciences/projects/quadas/quadas-2/',
       preguntas: ['¿El espectro de pacientes es el de la práctica real?', '¿El estándar de referencia es adecuado?', '¿Se aplicó a todos los pacientes?'] },
     { nombre: 'Revisión sistemática o metanálisis', guia: 'PRISMA 2020', guiaUrl: 'https://www.equator-network.org', herramienta: 'AMSTAR 2', herrUrl: 'https://amstar.ca',
       preguntas: ['¿Hubo protocolo previo?', '¿La búsqueda fue exhaustiva y reproducible?', '¿Se evaluó el riesgo de sesgo de los estudios incluidos?', '¿Se explica la heterogeneidad?'] }
+  ],
+
+  /* Árbol de decisión: cada nodo es una pregunta o una hoja que apunta a un diseño por su nombre. */
+  arbol: {
+    inicio: 'q1',
+    nodos: {
+      q1: { p: '¿El estudio mide qué tan bien una prueba detecta una enfermedad, comparándola con un estándar de referencia?',
+            o: [{ t: 'Sí', a: 'Prueba diagnóstica' }, { t: 'No', a: 'q2' }] },
+      q2: { p: '¿Reúne e integra los resultados de varios estudios con una búsqueda sistemática?',
+            o: [{ t: 'Sí', a: 'Revisión sistemática o metanálisis' }, { t: 'No', a: 'q3' }] },
+      q3: { p: '¿Los investigadores asignaron la intervención a los participantes?',
+            o: [{ t: 'Sí', a: 'q3a' }, { t: 'No, solo observaron', a: 'q4' }] },
+      q3a: { p: '¿La asignación fue al azar?',
+             o: [{ t: 'Sí, al azar', a: 'Ensayo clínico aleatorizado' }, { t: 'No, sin azar', a: 'Cuasiexperimental' }] },
+      q4: { p: '¿Compara grupos de participantes?',
+            o: [{ t: 'Sí', a: 'q4a' }, { t: 'No, describe casos', a: 'q5' }] },
+      q4a: { p: '¿Cómo se formaron los grupos y cuándo se midió?',
+             o: [{ t: 'Se parte de quienes tienen el desenlace y de quienes no, y se mira atrás la exposición', a: 'Casos y controles' },
+                 { t: 'Se parte de la exposición y se sigue a los participantes hasta el desenlace', a: 'Cohorte' },
+                 { t: 'Exposición y desenlace se miden en el mismo momento', a: 'Estudio transversal analítico' }] },
+      q5: { p: '¿Cuántos pacientes describe?',
+            o: [{ t: 'Uno', a: 'Reporte de caso' }, { t: 'Varios', a: 'Serie de casos' }] }
+    }
+  },
+
+  /* Preguntas de práctica (se pueden publicar con su respuesta). Las del examen no van en este archivo. */
+  practica: [
+    { q: 'Se asignan al azar 200 pacientes con insuficiencia cardíaca a dos esquemas de diurético y se miden las hospitalizaciones. ¿Qué guía de reporte y qué herramienta de evaluación corresponden?',
+      o: ['CONSORT 2025 y RoB 2', 'STROBE y Newcastle-Ottawa', 'STARD 2015 y QUADAS-2', 'PRISMA 2020 y AMSTAR 2'], r: 0,
+      e: 'Es un ensayo aleatorizado: se reporta con CONSORT y se evalúa el riesgo de sesgo con RoB 2.' },
+    { q: 'Se sigue durante 10 años a 1.500 fumadores y 1.500 no fumadores para comparar la incidencia de EPOC. ¿Qué diseño es?',
+      o: ['Casos y controles', 'Cohorte', 'Transversal', 'Ensayo clínico'], r: 1,
+      e: 'Se parte de la exposición y se sigue a los participantes hasta el desenlace: es una cohorte.' },
+    { q: 'Se compara a 80 pacientes con cáncer de páncreas con 160 pacientes sin él y se pregunta por una exposición previa. ¿Qué diseño es?',
+      o: ['Cohorte', 'Serie de casos', 'Casos y controles', 'Cuasiexperimental'], r: 2,
+      e: 'Se parte del desenlace (con y sin cáncer) y se mira hacia atrás la exposición: casos y controles.' },
+    { q: '¿Qué dice una guía de reporte como STROBE o CONSORT?',
+      o: ['Qué información debe contener el artículo', 'Cuánto confiar en el resultado', 'Qué prueba estadística usar', 'Si el estudio se debe publicar'], r: 0,
+      e: 'La guía de reporte dice qué debe contar el artículo; la herramienta de evaluación crítica dice cuánto confiar en lo que cuenta.' },
+    { q: 'Un estudio compara una troponina de alta sensibilidad con la coronariografía como estándar de referencia. ¿Qué herramienta de evaluación crítica se usa?',
+      o: ['RoB 2', 'ROBINS-E', 'QUADAS-2', 'AMSTAR 2'], r: 2,
+      e: 'Los estudios de validación de pruebas diagnósticas se evalúan con QUADAS-2 y se reportan con STARD 2015.' },
+    { q: 'Un ensayo reporta un RR de 0,80 con IC 95 % de 0,60 a 1,05. ¿Cómo se interpreta?',
+      o: ['El tratamiento reduce el riesgo de forma significativa', 'El intervalo incluye 1, así que no se demuestra diferencia', 'El tratamiento aumenta el riesgo', 'El resultado es válido porque el RR es menor de 1'], r: 1,
+      e: 'Un intervalo que incluye 1 es compatible con ausencia de efecto, aunque el valor puntual sea menor de 1.' },
+    { q: 'El riesgo del evento es 20 % en el grupo control y 15 % en el tratado. ¿Cuál es el NNT?',
+      o: ['5', '10', '20', '25'], r: 2,
+      e: 'La reducción absoluta es 5 puntos (0,05); el NNT es 1 / 0,05 = 20.' },
+    { q: 'En un ensayo, 18 % de los pacientes del grupo tratado y 6 % del control no tienen dato del desenlace. ¿Qué dominio de RoB 2 se afecta?',
+      o: ['Proceso de aleatorización', 'Desviaciones de la intervención', 'Datos faltantes del desenlace', 'Selección del resultado reportado'], r: 2,
+      e: 'Las pérdidas altas y desiguales amenazan el dominio de datos faltantes del desenlace.' },
+    { q: 'Los investigadores asignan la intervención según la sala del hospital, sin azar. ¿Qué diseño es y qué herramienta se usa?',
+      o: ['Cohorte; ROBINS-E', 'Cuasiexperimental; ROBINS-I', 'Ensayo aleatorizado; RoB 2', 'Serie de casos; lista de JBI'], r: 1,
+      e: 'Hay asignación por los investigadores pero sin azar: cuasiexperimental, con TREND y ROBINS-I.' },
+    { q: 'Una revisión sistemática con metanálisis se reporta con PRISMA 2020. ¿Qué herramienta evalúa su calidad metodológica?',
+      o: ['AMSTAR 2', 'QUADAS-2', 'RoB 2', 'Newcastle-Ottawa'], r: 0,
+      e: 'AMSTAR 2 evalúa la calidad de las revisiones sistemáticas; PRISMA dice cómo reportarlas.' },
+    { q: 'En GRADE, ¿qué puede disminuir la certeza de la evidencia de un conjunto de ensayos?',
+      o: ['Solo el tamaño de la muestra', 'Riesgo de sesgo, inconsistencia, imprecisión, evidencia indirecta o sesgo de publicación', 'Que el estudio sea reciente', 'Que el IC 95 % sea estrecho'], r: 1,
+      e: 'Los cinco motivos para bajar la certeza son esos; un IC estrecho no la baja.' },
+    { q: '¿Desde dónde se instala Mendeley Cite para Word?',
+      o: ['Desde Mendeley Reference Manager: Tools, Install Mendeley Cite for Microsoft Word', 'Desde el menú Revisar de Word', 'Desde PubMed', 'No se instala: Word lo trae'], r: 0,
+      e: 'Se instala desde Reference Manager, con Word cerrado, y usa la biblioteca en la nube.' }
   ],
 
   /* Fases de una revisión sistemática con apoyo de IA. */

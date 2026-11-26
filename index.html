@@ -15,6 +15,7 @@
     <nav aria-label="Principal">
       <a href="#contenidos">Contenidos</a>
       <a href="#lectura">Lectura crítica</a>
+      <a href="#practica">Práctica</a>
       <a href="#numeros">Números</a>
       <a href="#revision">Revisión con IA</a>
       <a href="#referencias">Referencias y Word</a>
@@ -46,6 +47,10 @@
   <section id="lectura" class="wrap block alt">
     <h2>Lectura crítica: elige el diseño</h2>
     <p class="intro">Cada diseño tiene su guía de reporte y su herramienta de evaluación. La guía dice qué debe contar el artículo; la herramienta dice cuánto confiar en lo que cuenta.</p>
+    <h3>Árbol de decisión: clasifica tu estudio</h3>
+    <p class="intro">Responde sobre el artículo que tienes delante. Al final verás su diseño, su guía de reporte y su herramienta de evaluación.</p>
+    <div class="tree" id="arbol" aria-live="polite"></div>
+    <h3>O elige el diseño directamente</h3>
     <label class="field"><span>Diseño del estudio</span><select id="diseno"></select></label>
     <div class="grid2" id="disenoOut"></div>
     <h3>Ficha de lectura crítica en cinco pasos</h3>
@@ -56,6 +61,12 @@
       <li><b>Resultados.</b> ¿Qué tan grande y qué tan preciso es el efecto?</li>
       <li><b>Aplicabilidad.</b> ¿Mi paciente se parece a los del estudio y el beneficio supera el daño?</li>
     </ol>
+  </section>
+
+  <section id="practica" class="wrap block">
+    <h2>Practica con preguntas de selección múltiple</h2>
+    <p class="intro">Doce preguntas de práctica con retroalimentación. No son las del examen: sirven para entrenar el criterio.</p>
+    <div class="quiz" id="quiz" aria-live="polite"></div>
   </section>
 
   <section id="numeros" class="wrap block">

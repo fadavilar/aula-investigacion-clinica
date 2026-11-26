@@ -38,6 +38,63 @@
   }
   sel.addEventListener('change', renderDiseno); renderDiseno();
 
+
+  /* Árbol de decisión */
+  var arb = $('#arbol'), trail = [];
+  function dis(nombre) { return A.disenos.filter(function (d) { return d.nombre === nombre; })[0]; }
+  function renderArbol(id) {
+    var n = A.arbol.nodos[id];
+    var ruta = trail.length ? '<p class="trail">Tus respuestas: ' + trail.map(function (t) { return esc(t); }).join(' → ') + '</p>' : '';
+    arb.innerHTML = ruta + '<p class="q">' + esc(n.p) + '</p><div class="opts">' + n.o.map(function (o, i) {
+      return '<button type="button" class="opt" data-i="' + i + '">' + esc(o.t) + '</button>'; }).join('') + '</div>' +
+      (trail.length ? '<div class="tools-row"><button type="button" class="btn small alt2" id="arbAtras">Volver atrás</button> <button type="button" class="btn small alt2" id="arbReiniciar">Empezar de nuevo</button></div>' : '');
+    arb.dataset.node = id;
+  }
+  function resultadoArbol(d) {
+    arb.innerHTML = '<p class="trail">Tus respuestas: ' + trail.map(function (t) { return esc(t); }).join(' → ') + '</p>' +
+      '<p class="q">Tu estudio es: ' + esc(d.nombre) + '</p><div class="grid2">' +
+      '<article class="card"><h4>Guía de reporte</h4><p><b>' + esc(d.guia) + '</b></p><p><a href="' + esc(d.guiaUrl) + '" rel="noopener">Abrir la guía</a></p>' +
+      '<h4>Herramienta de evaluación crítica</h4><p><b>' + esc(d.herramienta) + '</b></p><p><a href="' + esc(d.herrUrl) + '" rel="noopener">Abrir la herramienta</a></p></article>' +
+      '<article class="card"><h4>Preguntas clave</h4><ul>' + d.preguntas.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul></article></div>' +
+      '<p class="note">Si el artículo se declara de un diseño distinto del que muestra el árbol (por ejemplo, un estudio observacional llamado ensayo), la clasificación correcta es la que describe su método.</p>' +
+      '<div class="tools-row"><button type="button" class="btn small alt2" id="arbAtras">Volver atrás</button> <button type="button" class="btn small alt2" id="arbReiniciar">Clasificar otro estudio</button></div>';
+  }
+  var history = [];
+  arb.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'arbReiniciar') { trail = []; history = []; renderArbol(A.arbol.inicio); return; }
+    if (b.id === 'arbAtras') { var prev = history.pop(); trail.pop(); renderArbol(prev || A.arbol.inicio); return; }
+    if (!b.classList.contains('opt')) return;
+    var id = arb.dataset.node, o = A.arbol.nodos[id].o[+b.dataset.i];
+    trail.push(o.t); history.push(id);
+    if (A.arbol.nodos[o.a]) renderArbol(o.a); else { var d = dis(o.a); if (d) resultadoArbol(d); }
+  });
+  renderArbol(A.arbol.inicio);
+
+  /* Práctica de selección múltiple */
+  var qz = $('#quiz'), qi = 0, puntos = 0, contestada = false;
+  function renderQuiz() {
+    if (qi >= A.practica.length) {
+      qz.innerHTML = '<p class="q">Terminaste: ' + puntos + ' de ' + A.practica.length + ' respuestas correctas.</p><p>Repasa las explicaciones de las que fallaste y vuelve a intentarlo.</p><div class="tools-row"><button type="button" class="btn small alt2" id="qzReiniciar">Repetir la práctica</button></div>';
+      return;
+    }
+    var q = A.practica[qi]; contestada = false;
+    qz.innerHTML = '<p class="trail">Pregunta ' + (qi + 1) + ' de ' + A.practica.length + ' · aciertos: ' + puntos + '</p><p class="q">' + esc(q.q) + '</p><div class="opts">' +
+      q.o.map(function (t, i) { return '<button type="button" class="opt" data-i="' + i + '">' + esc(t) + '</button>'; }).join('') + '</div><div id="qzFb"></div>';
+  }
+  qz.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'qzReiniciar') { qi = 0; puntos = 0; renderQuiz(); return; }
+    if (b.id === 'qzSig') { qi++; renderQuiz(); return; }
+    if (!b.classList.contains('opt') || contestada) return;
+    contestada = true;
+    var q = A.practica[qi], i = +b.dataset.i;
+    if (i === q.r) puntos++;
+    [].forEach.call(qz.querySelectorAll('.opt'), function (x, k) { x.disabled = true; if (k === q.r) x.classList.add('ok'); else if (k === i) x.classList.add('bad'); });
+    $('#qzFb').innerHTML = '<p class="fb"><b>' + (i === q.r ? 'Correcto. ' : 'No es esa. ') + '</b>' + esc(q.e) + '</p><div class="tools-row"><button type="button" class="btn small alt2" id="qzSig">' + (qi + 1 < A.practica.length ? 'Siguiente pregunta' : 'Ver resultado') + '</button></div>';
+  });
+  renderQuiz();
+
   /* Calculadora */
   function f(x, d) { return isFinite(x) ? x.toFixed(d == null ? 2 : d).replace('.', ',') : '—'; }
   function calcular() {

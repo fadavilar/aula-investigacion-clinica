@@ -75,5 +75,18 @@ td ul{margin:0;padding-left:18px}
 .rec a{font-weight:700}
 footer{background:var(--brand2);color:#cfe5e3;padding:28px 0;font-size:14px}
 footer p{margin:4px 0}
+
+.tree,.quiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:10px 0}
+.tree .q,.quiz .q{font:600 19px/1.4 Georgia,serif;color:var(--brand2);margin:0 0 12px}
+.opts{display:grid;gap:10px}
+.opt{display:block;text-align:left;width:100%;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:12px 14px;font:inherit;cursor:pointer;color:var(--ink)}
+.opt:hover{border-color:var(--brand)}
+.opt.ok{border-color:var(--ok);background:#eaf6ef}
+.opt.bad{border-color:#b3261e;background:#fdecea}
+.opt:disabled{cursor:default}
+.trail{font-size:14px;color:var(--muted);margin:0 0 10px}
+.fb{margin-top:12px;padding:10px 14px;border-left:4px solid var(--brand);background:#eef3f2;border-radius:6px;font-size:15px}
+.tools-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn.alt2{background:var(--brand)}
 @media (max-width:640px){body{font-size:16px}.hero{padding:48px 0 36px}th{position:static}}
 @media print{.top,.cta,.btn{display:none}.alt{background:#fff}}
