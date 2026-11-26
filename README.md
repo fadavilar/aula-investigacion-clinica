@@ -1,6 +1,6 @@
 # Aula de investigación clínica
 
-Aplicación web estática para estudiantes y docentes: lectura crítica por diseño de estudio, calculadora de efecto (RR, OR, NNT), un capítulo de revisiones sistemáticas con apoyo de inteligencia artificial, gestores de referencias (Mendeley, MyBib), estilo Vancouver y listas de verificación ofimática.
+Aplicación web estática para estudiantes y docentes: lectura crítica por diseño de estudio con árbol de decisión, práctica de preguntas de selección múltiple, calculadora de efecto (RR, OR, NNT), un capítulo de revisiones sistemáticas con apoyo de inteligencia artificial, gestores de referencias (Mendeley, MyBib), estilo Vancouver y listas de verificación ofimática.
 
 No tiene dependencias ni paso de compilación: abre `index.html` en el navegador o publícala con GitHub Pages.
 
@@ -12,6 +12,8 @@ Todo el contenido está en `data/contenidos.js`. Edita ese archivo y no necesita
 |---|---|
 | `contenidos` | Tabla de temas, competencias y fuentes |
 | `disenos` | Selector de diseño: guía de reporte, herramienta y preguntas clave |
+| `arbol` | Árbol de decisión: preguntas y hojas que apuntan a un diseño por su nombre |
+| `practica` | Preguntas de práctica con respuesta y explicación (públicas; las de examen no van aquí) |
 | `fases` | Las diez fases de una revisión sistemática con IA |
 | `mejoresPracticas` | Lista de buenas prácticas |
 | `herramientasClaude` | Skills, conectores y entornos que se necesitan |
