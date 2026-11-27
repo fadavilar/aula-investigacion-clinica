@@ -65,7 +65,7 @@ function descargar(obj, nombre){
   if(obj.app === "aula-ic") setTimeout(()=> abreCorreo(obj, nombre), 600);
 }
 /* Correo de entrega: abre el programa de correo con asunto y resumen; el estudiante adjunta el archivo descargado. */
-const TIPOS = { evaluacion:"Preguntas", diagnostico:"Diagnóstico", ficha:"Ficha de lectura crítica", practica:"Árbol y Mendeley", coevaluacion:"Coevaluación", proyecto:"Entregables del proyecto" };
+const TIPOS = { evaluacion:"Preguntas", diagnostico:"Diagnóstico", ficha:"Ficha de lectura crítica", practica:"Árbol y Mendeley", coevaluacion:"Coevaluación", proyecto:"Entregables del proyecto", pregunta:"Pregunta, título y objetivos", entregable:"Base de datos con histograma" };
 const ALC = { C:"Sesión conjunta", R1:"Primer año (R1)", R2:"Segundo año (R2)" };
 function abreCorreo(obj, nombre){
   const d = obj.datos || {}, est = obj.estudiante || {}, alc = ALC[d.alcance || d.ruta] || est.grupo || "";
@@ -74,6 +74,9 @@ function abreCorreo(obj, nombre){
   if(obj.tipo === "diagnostico") lineas.push("Aciertos: " + d.aciertos + " de " + d.n + " (sin nota)");
   if(obj.tipo === "practica") lineas.push("Nota sugerida: " + fmt(d.sugerida, 1));
   if(obj.tipo === "ficha") lineas.push("Ficha " + d.numero + ": " + (d.articuloCita || "").slice(0, 120));
+  if(obj.tipo === "pregunta") lineas.push("Pregunta: " + d.pregunta, "Título: " + d.titulo, "Objetivo general: " + d.general);
+  if(obj.tipo === "entregable") lineas.push("Archivo: " + (d.enlace || "sin enlace"));
+  if(obj.tipo === "proyecto") lineas.push("Proyecto: " + (d.titulo || "") + (d.enlace1 ? " · síntesis: " + d.enlace1 : "") + (d.enlace2 ? " · avance: " + d.enlace2 : ""));
   lineas.push("Código de verificación: " + obj.verificacion, "", "IMPORTANTE: adjunta a este correo el archivo " + nombre + " que se acaba de descargar.");
   const para = A.evaluacion.correoDocente || "";
   const url = "mailto:" + encodeURIComponent(para) + "?subject=" + encodeURIComponent("[Aula IC] " + (TIPOS[obj.tipo] || obj.tipo) + (alc ? " · " + alc : "") + " · " + est.nombre) + "&body=" + encodeURIComponent(lineas.join("\r\n"));
@@ -193,12 +196,12 @@ function armaQuiz(box, a){
 /* ============================================================ FORMULARIOS DE EVIDENCIAS */
 const FORM = { tab:"diagnostico", articulo:"dapahf", repinta:null };
 const FICHA_KEY = "aula-ic-ficha", PRAC_KEY = "aula-ic-practica", COE_KEY = "aula-ic-coevaluacion";
-function formularios(b, ids, numFicha){
+function formularios(b, ids, numFicha, alcance){
   let tab = ids[0];
   b.appendChild(el("p",null,["Cada formulario genera un archivo que entregas a tu docente (por correo o por la plataforma). Con esos archivos el docente calcula las notas en el consolidador. Lo que escribes se guarda como borrador en este navegador."]));
   const idf = identidad(); b.appendChild(idf.nodo);
   const panel = el("div",{class:"ruta-panel", role:"tabpanel", tabindex:"0"});
-  const opciones = [{id:"diagnostico", label:"Diagnóstico"},{id:"ficha", label:"Ficha " + numFicha + " de lectura crítica"},{id:"practica", label:"Árbol y Mendeley"},{id:"coevaluacion", label:"Coevaluación"},{id:"proyecto", label:"Entregables del proyecto"}].filter(o=> ids.includes(o.id));
+  const opciones = [{id:"diagnostico", label:"Diagnóstico"},{id:"ficha", label:"Ficha " + numFicha + " de lectura crítica"},{id:"practica", label:"Árbol y Mendeley"},{id:"coevaluacion", label:"Coevaluación"},{id:"proyecto", label:"Entregables del proyecto"},{id:"pregunta", label:alcance === "C" ? "Tarea: pregunta PICO" : "Pregunta, título y objetivos"},{id:"entregable", label:"Base de datos con histograma"}].filter(o=> ids.includes(o.id)).sort((a,b)=> ids.indexOf(a.id) - ids.indexOf(b.id));
   const lista = el("div",{class:"tabs", role:"tablist", "aria-label":"Formularios"});
   const botones = opciones.map(o=>{ const bt = el("button",{type:"button", role:"tab", class:"tab", id:"ftab-" + numFicha + o.id, "aria-controls":"fpanel-" + numFicha},[o.label]); bt.addEventListener("click", ()=>{ tab = o.id; pinta(true); }); lista.appendChild(bt); return bt; });
   lista.addEventListener("keydown", e=>{ const i = botones.indexOf(document.activeElement); if(i < 0) return; let j = null;
@@ -206,20 +209,20 @@ function formularios(b, ids, numFicha){
     if(j !== null){ e.preventDefault(); tab = opciones[j].id; pinta(true); } });
   panel.id = "fpanel-" + numFicha;
   /* varias instancias en la página: la que el estudiante usa es la que se redibuja */
-  b.addEventListener("pointerdown", ()=>{ FORM.repinta = ()=> pinta(false); FORM.numero = numFicha; }, true); b.addEventListener("focusin", ()=>{ FORM.repinta = ()=> pinta(false); FORM.numero = numFicha; }); b.appendChild(lista); b.appendChild(panel);
+  const activa = ()=>{ FORM.repinta = ()=> pinta(false); FORM.numero = numFicha; FORM.alcance = alcance; };
+  b.addEventListener("pointerdown", activa, true); b.addEventListener("focusin", activa); b.appendChild(lista); b.appendChild(panel);
   function pinta(foco){
     botones.forEach((bt,i)=>{ const on = opciones[i].id === tab; bt.setAttribute("aria-selected", String(on)); bt.tabIndex = on ? 0 : -1; if(on && foco) bt.focus(); });
-    panel.setAttribute("aria-labelledby", "ftab-" + numFicha + tab); panel.innerHTML = ""; FORM.numero = numFicha;
-    ({ diagnostico:fDiagnostico, ficha:fFicha, practica:fPractica, coevaluacion:fCoevaluacion, proyecto:fProyecto })[tab](panel, idf);
+    panel.setAttribute("aria-labelledby", "ftab-" + numFicha + tab); panel.innerHTML = ""; FORM.numero = numFicha; FORM.alcance = alcance;
+    ({ diagnostico:fDiagnostico, ficha:fFicha, practica:fPractica, coevaluacion:fCoevaluacion, proyecto:fProyecto, pregunta:fPregunta, entregable:fEntregable })[tab](panel, idf);
   }
   FORM.repinta = ()=> pinta(false);
   pinta(false);
 }
 /* Entregas de cada alcance: conjunta (diagnóstico, ficha 1, árbol y Mendeley, coevaluación), R1 (ficha 2) y R2 (entregables del proyecto) */
 function entregas(b, alcance){
-  const ids = { C:["diagnostico","ficha","practica","coevaluacion"], R1:["ficha"], R2:["proyecto"] }[alcance];
-  if(alcance === "R1" || alcance === "R2"){ const bt = el("button",{type:"button", class:"btn btn-sm"},["Abrir el constructor de la pregunta"]); bt.addEventListener("click", ()=> irA("pregunta")); b.appendChild(el("p",{class:"callout"},["Tu pregunta, título y objetivos se construyen en el constructor de la pregunta y viajan dentro de tu entrega. ", bt])); }
-  formularios(b, ids, alcance === "R1" ? "2" : "1");
+  const ids = { C:["diagnostico","ficha","practica","coevaluacion","pregunta"], R1:["ficha","pregunta","entregable"], R2:["pregunta","proyecto"] }[alcance];
+  formularios(b, ids, alcance === "R1" ? "2" : alcance === "R2" ? "P" : "1", alcance);
 }
 function botonDescarga(texto, fn){ const bt = el("button",{type:"button", class:"btn btn-primary"},[texto]); bt.addEventListener("click", fn); return bt; }
 function campoTexto(l, valor, onInput, area, ph){ const i = area ? el("textarea",{rows:"3", placeholder:ph || ""}) : el("input",{type:"text", placeholder:ph || ""}); i.value = valor || ""; i.addEventListener("input", ()=> onInput(i.value)); return el("label",{class:area ? "fx-area" : null},[l, i]); }
@@ -234,7 +237,7 @@ function fDiagnostico(p, idf){
   const ver = el("button",{type:"button", class:"btn"},["Ver mis resultados"]);
   ver.addEventListener("click", ()=>{ let ok = 0; zona.querySelectorAll(".eva-q").forEach((f,i)=>{ const q = E.diagnostico[i], bien = resp[i] === q.r; if(bien) ok++; f.querySelectorAll(".fb").forEach(x=> x.remove()); f.appendChild(el("p",{class:"fb " + (bien ? "fb-ok" : "fb-bad")},[ el("strong",null,[bien ? "Correcto. " : "Respuesta: " + q.o[q.r] + ". "]), q.e ])); });
     out.innerHTML = ""; out.appendChild(el("p",{class:"callout"},[ok + " de 5 correctas. " + (ok <= 2 ? "Si fallaste tres o más, repasa el mapa de diseños antes del trabajo en grupo." : "Buen punto de partida.")])); });
-  const dl = botonDescarga("Descargar el diagnóstico", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
+  const dl = botonDescarga("Descargar el diagnóstico y enviar por correo", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
     const ok = E.diagnostico.filter((q,i)=> resp[i] === q.r).length; descargar(empaqueta("diagnostico", est, { respuestas:E.diagnostico.map((q,i)=> resp[i] === undefined ? null : resp[i]), aciertos:ok, n:5 }), archivo("diagnostico", est)); });
   p.appendChild(el("div",{class:"tools-row"},[ver, dl])); p.appendChild(out);
 }
@@ -283,7 +286,7 @@ function fFicha(p, idf){
   const campos = ()=> ["picoP","picoI","picoC","picoO","diseno","medida","valor","interpreta","aplica","conclusion"];
   const pintaEstado = ()=>{ const llenos = campos().filter(k=> (F[k] || "").trim()).length + dominios.filter(dm=> F.sesgos[dm] && F.sesgos[dm].j && (F.sesgos[dm].t || "").trim()).length, tot = campos().length + dominios.length; estado.textContent = "Completo: " + llenos + " de " + tot + " campos."; };
   p.addEventListener("input", pintaEstado); p.addEventListener("change", pintaEstado); pintaEstado();
-  const dl = botonDescarga("Descargar la ficha", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
+  const dl = botonDescarga("Descargar la ficha y enviar por correo", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
     const a = E.articulos.find(x=> x.id === F.articulo); const d = disPor(F.diseno);
     descargar(empaqueta("ficha", est, Object.assign({}, F, { articuloCita: a ? a.cita : F.cita, articuloDoi: a ? a.doi : F.doi, guia: d ? d.guia : "", herramienta: d ? d.herramienta : "", dominios })), archivo("ficha" + F.numero, est)); });
   const limpia = el("button",{type:"button", class:"btn"},["Empezar una ficha nueva"]); limpia.addEventListener("click", ()=>{ if(confirm("Se borrará el borrador de la ficha en este navegador. ¿Continuar?")){ store.del(KF); FORM.repinta(); } });
@@ -317,7 +320,7 @@ function fPractica(p, idf){
     return { arbol:r1(arbol), mend:r1(Math.max(0, mend)), nota:r1((arbol + Math.max(0, mend))/2), correcto:d }; }
   function calc(){ const s = sugerida(); out.innerHTML = ""; out.appendChild(el("p",null,[ el("strong",null,["Nota sugerida: " + fmt(s.nota, 1) + ". "]), "Árbol: " + fmt(s.arbol, 1) + " (diseño, guía y herramienta). Mendeley: " + fmt(s.mend, 1) + (P.checks[3] && (P.nref || 0) < 10 ? " (marcaste diez referencias, pero escribiste menos)." : ".") ])); }
   calc();
-  p.appendChild(el("div",{class:"tools-row"},[ botonDescarga("Descargar la práctica", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
+  p.appendChild(el("div",{class:"tools-row"},[ botonDescarga("Descargar la práctica y enviar por correo", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
     const s = sugerida(); descargar(empaqueta("practica", est, Object.assign({}, P, { sugerida:s.nota, arbol:s.arbol, mendeley:s.mend, disenoCorrecto:s.correcto.nombre })), archivo("practica", est)); }) ]));
 }
 function fCoevaluacion(p, idf){
@@ -338,7 +341,7 @@ function fCoevaluacion(p, idf){
   p.appendChild(el("div",{class:"tools-row"},[add])); p.appendChild(msg);
   if(C.filas.length){ tabla.appendChild(M.tabla(["Grupo","Claridad","Justificación","Aplicabilidad","Promedio"], C.filas.map(f=> [f.grupo, fmt(f.claridad, 1), fmt(f.justificacion, 1), fmt(f.aplicabilidad, 1), fmt(f.promedio, 1)]))); p.appendChild(tabla); }
   const limpia = el("button",{type:"button", class:"btn"},["Borrar las evaluaciones"]); limpia.addEventListener("click", ()=>{ if(confirm("¿Borrar las evaluaciones de este navegador?")){ store.del(COE_KEY); FORM.repinta(); } });
-  p.appendChild(el("div",{class:"tools-row"},[ botonDescarga("Descargar la coevaluación", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar."); if(!C.filas.length) return alert("Agrega al menos una evaluación.");
+  p.appendChild(el("div",{class:"tools-row"},[ botonDescarga("Descargar la coevaluación y enviar por correo", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar."); if(!C.filas.length) return alert("Agrega al menos una evaluación.");
     descargar(empaqueta("coevaluacion", est, { filas:C.filas }), archivo("coevaluacion", est)); }), limpia ]));
 }
 function fProyecto(p, idf){
@@ -354,8 +357,41 @@ function fProyecto(p, idf){
   p.appendChild(el("p",{class:"callout"},["Lista del protocolo: " + c1.hechos + " de " + c1.total + ". Lista del avance: " + c2.hechos + " de " + c2.total + "."]));
   const ir1 = el("button",{type:"button", class:"btn btn-sm"},["Ir a la lista del protocolo"]), ir2 = el("button",{type:"button", class:"btn btn-sm"},["Ir a la lista del avance"]);
   ir1.addEventListener("click", ()=> irA("protocolo")); ir2.addEventListener("click", ()=> irA("avance"));
-  p.appendChild(el("div",{class:"tools-row"},[ir1, ir2, botonDescarga("Descargar mis entregables", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
+  p.appendChild(el("div",{class:"tools-row"},[ir1, ir2, botonDescarga("Descargar mis entregables y enviar por correo", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
     descargar(empaqueta("proyecto", est, Object.assign({}, P, { protocolo:c1, avance:c2, marcas:{ protocolo:store.get("aula-ic-protocolo") || {}, avance:store.get("aula-ic-avance") || {} } })), archivo("proyecto", est)); }) ]));
+}
+
+/* Pregunta, título y objetivos: toma lo que el estudiante escribió en el constructor de la pregunta */
+function fPregunta(p, idf){
+  const alc = FORM.alcance || "C", q = window.AULA && window.AULA.preguntaActual ? window.AULA.preguntaActual() : null;
+  p.appendChild(el("p",null,[alc === "C" ? "Tarea para el 4 de diciembre: una pregunta clínica propia en formato PICO (las diez referencias en Mendeley se registran en la pestaña Árbol y Mendeley)." : "Tu pregunta de investigación con su título y sus objetivos, tal como quedó en el constructor de la pregunta."]));
+  const ir = el("button",{type:"button", class:"btn"},["Abrir el constructor de la pregunta"]); ir.addEventListener("click", ()=> irA("pregunta"));
+  if(!q){ p.appendChild(ir); return; }
+  if(q.faltan.length) p.appendChild(el("p",{class:"callout callout-warn"},["Aún faltan elementos en el constructor (" + q.faltan.join(", ").toLowerCase() + "); se muestra el ejemplo en su lugar. Complétalos antes de enviar."]));
+  p.appendChild(el("div",{class:"pq-out"},[ el("div",{class:"pq-b"},[ el("span",{class:"pq-k"},["Pregunta (" + q.tipo + ")"]), el("p",null,[q.pregunta]) ]),
+    el("div",{class:"pq-b"},[ el("span",{class:"pq-k"},["Título"]), el("p",null,[q.titulo]) ]), el("div",{class:"pq-b"},[ el("span",{class:"pq-k"},["Objetivo general"]), el("p",null,[q.general]) ]),
+    el("div",{class:"pq-b"},[ el("span",{class:"pq-k"},["Objetivos específicos"]), el("ol",null, q.especificos.map(e=> el("li",null,[e]))) ]) ]));
+  p.appendChild(el("div",{class:"tools-row"},[ir, botonDescarga("Descargar y enviar por correo", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
+    if(q.faltan.length && !confirm("Faltan elementos en tu pregunta. ¿Enviar de todos modos?")) return;
+    descargar(empaqueta("pregunta", est, Object.assign({ alcance:alc }, q)), archivo("pregunta_" + alc, est)); }) ]));
+}
+/* Primer año: base de datos con un histograma (11 de diciembre) */
+function fEntregable(p, idf){
+  const K = "aula-ic-entregable", P = store.get(K) || { checks:[] }; const guarda = ()=> store.set(K, P);
+  p.appendChild(el("p",null,["Entregable del 11 de diciembre: tu base de datos en Excel con un histograma. Súbela a Drive u otro servicio con acceso para el docente y pega el enlace."]));
+  const g = el("div",{class:"nota-form"});
+  g.appendChild(campoTexto("Enlace al archivo de Excel", P.enlace, v=>{ P.enlace = v; guarda(); }));
+  g.appendChild(campoTexto("Variable del histograma y su unidad", P.variable, v=>{ P.variable = v; guarda(); }));
+  g.appendChild(campoTexto("¿Qué muestra el histograma? (una o dos frases)", P.lectura, v=>{ P.lectura = v; guarda(); }, true));
+  p.appendChild(g);
+  const items = ["Una fila por participante y una columna por variable, sin celdas combinadas.", "Cada participante se identifica con un código, nunca con su nombre ni su documento.", "Hay una hoja de diccionario de variables.", "La hoja de datos crudos está intacta; los cálculos van en otra hoja.", "El histograma tiene título, ejes con unidades y fuente."];
+  const ul = el("ul",{class:"lv"});
+  items.forEach((t,i)=>{ const cb = el("input",{type:"checkbox", id:"ent-" + i}); cb.checked = !!P.checks[i]; cb.addEventListener("change", ()=>{ P.checks[i] = cb.checked; guarda(); }); ul.appendChild(el("li",{class:"lv-i"},[cb, el("label",{for:"ent-" + i},[t])])); });
+  p.appendChild(ul);
+  const ir = el("button",{type:"button", class:"btn"},["Calcular la estadística y el histograma"]); ir.addEventListener("click", ()=> irA("variables"));
+  p.appendChild(el("div",{class:"tools-row"},[ir, botonDescarga("Descargar y enviar por correo", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
+    if(!(P.enlace || "").trim()) return alert("Pega el enlace a tu archivo antes de enviar.");
+    descargar(empaqueta("entregable", est, Object.assign({ alcance:"R1", items }, P)), archivo("base_de_datos", est)); }) ]));
 }
 
 /* ============================================================ CONSOLIDADOR DE NOTAS (DOCENTE) */
@@ -381,10 +417,12 @@ function docente(b){
         const ok = verifica(o); D.archivos.push({ nombre:f.name, tipo:o.tipo, fecha:o.fecha, verificacion:o.verificacion, integro:ok, estudiante:o.estudiante });
         if(!ok) msgs.push(f.name + ": el código de verificación no coincide; el archivo pudo modificarse.");
         const s = fila(o.estudiante), d = o.datos;
-        if(o.tipo === "evaluacion") s.notas.taller = Math.max(s.notas.taller || 0, d.mejor), s.evaluacion = { intentos:d.intentos, mejor:d.mejor };
+        if(o.tipo === "evaluacion"){ const a = d.alcance || d.ruta || s.grupo; s.evals = s.evals || {}; const prev = s.evals[a] || { mejor:0, intentos:0 }; s.evals[a] = { mejor:Math.max(prev.mejor, d.mejor), intentos:Math.max(prev.intentos, d.intentos) }; sugiereTaller(s); }
         else if(o.tipo === "ficha") s.fichas[d.numero || "1"] = { datos:d, rubrica:(s.fichas[d.numero || "1"] || {}).rubrica || null };
         else if(o.tipo === "practica"){ s.practica = d; if(s.notas.practica === undefined) s.notas.practica = d.sugerida; }
         else if(o.tipo === "proyecto") s.proyecto = d;
+        else if(o.tipo === "pregunta"){ s.preguntas = s.preguntas || {}; s.preguntas[d.alcance || "C"] = d; }
+        else if(o.tipo === "entregable") s.entregable = d;
         else if(o.tipo === "coevaluacion") d.filas.forEach(r=> (D.coev = D.coev || []).push(Object.assign({ evaluador:o.estudiante.nombre }, r)));
         else if(o.tipo === "diagnostico") s.diagnostico = { aciertos:d.aciertos, n:d.n };
         msgs.push(f.name + ": cargado (" + o.tipo + ").");
@@ -392,6 +430,8 @@ function docente(b){
     }
     inp.value = ""; asignaCoev(); guarda(); avisos.innerHTML = ""; avisos.appendChild(el("ul",{class:"doc-avisos"}, msgs.map(m=> el("li",null,[m])))); pinta();
   });
+  /* taller sugerido: promedio de las mejores notas de la sesión conjunta y del año del estudiante, salvo que el docente lo haya escrito */
+  function sugiereTaller(s){ if((s.manual || {}).taller) return; const v = ["C", s.grupo].map(a=> ((s.evals || {})[a] || {}).mejor).filter(x=> isFinite(x)); if(v.length) s.notas.taller = r1(v.reduce((a,b)=> a + b, 0)/v.length); }
   function asignaCoev(){ /* participación sugerida: promedio de las coevaluaciones en que el estudiante figura como integrante del grupo que presenta */
     Object.values(D.est).forEach(s=>{ const n = sinTildes(s.nombre), recibidas = (D.coev || []).filter(r=> r.integrantes.split(/[,;]/).map(sinTildes).some(x=> x && (x === n || n.includes(x) || x.includes(n))));
       s.coevRecibidas = recibidas.map(r=> r.promedio); if(recibidas.length && s.notas.particip === undefined) s.notas.particip = r1(recibidas.reduce((a,r)=> a + r.promedio, 0)/recibidas.length); });
@@ -406,12 +446,12 @@ function docente(b){
     t.appendChild(el("thead",null,[ el("tr",null, ["Estudiante","Grupo","Taller (40 %)","Ficha 1 o síntesis (15 %)","Ficha 2 o avance (15 %)","Práctica (15 %)","Participación (15 %)","Definitiva",""].map(x=> el("th",{scope:"col"},[x]))) ]));
     ests.forEach(s=>{
       const celda = (k, sug)=>{ const i = el("input",{type:"text", inputmode:"decimal", value:s.notas[k] === undefined ? "" : String(s.notas[k]).replace(".", ","), "aria-label":k + " de " + s.nombre, placeholder:sug || "—"});
-        i.addEventListener("change", ()=>{ const x = i.value.trim() === "" ? undefined : parseFloat(i.value.replace(",", ".")); if(x !== undefined && (!isFinite(x) || x < 0 || x > 5)){ i.setAttribute("aria-invalid","true"); return; } i.removeAttribute("aria-invalid"); if(x === undefined) delete s.notas[k]; else s.notas[k] = x; guarda(); pinta(); });
+        i.addEventListener("change", ()=>{ const x = i.value.trim() === "" ? undefined : parseFloat(i.value.replace(",", ".")); if(x !== undefined && (!isFinite(x) || x < 0 || x > 5)){ i.setAttribute("aria-invalid","true"); return; } i.removeAttribute("aria-invalid"); if(x === undefined) delete s.notas[k]; else s.notas[k] = x; s.manual = Object.assign(s.manual || {}, { [k]: x !== undefined }); guarda(); pinta(); });
         return el("td",null,[i]); };
       const ver = el("button",{type:"button", class:"btn btn-sm"},["Ver y calificar"]); ver.addEventListener("click", ()=> muestra(s));
       const def = definitiva(s);
       tb.appendChild(el("tr",null,[ el("th",{scope:"row"},[s.nombre, s.codigo ? el("span",{class:"eje"},[s.codigo]) : null]), el("td",null,[s.grupo]),
-        celda("taller", s.evaluacion ? "mejor de " + s.evaluacion.intentos : ""), celda("ficha1"), celda("ficha2"), celda("practica"), celda("particip", s.coevRecibidas.length ? s.coevRecibidas.length + " coev." : ""),
+        celda("taller", s.evals ? "sugerida" : ""), celda("ficha1"), celda("ficha2"), celda("practica"), celda("particip", s.coevRecibidas.length ? s.coevRecibidas.length + " coev." : ""),
         el("td",{class:"doc-def"},[def === null ? "Faltan notas" : fmt(def, 1)]), el("td",null,[ver]) ]));
     });
     t.appendChild(tb); tabla.appendChild(el("div",{class:"table-wrap"},[t]));
@@ -422,7 +462,10 @@ function docente(b){
     detalle.innerHTML = "";
     detalle.appendChild(el("h4",null,[s.nombre + " · " + s.grupo]));
     if(s.diagnostico) detalle.appendChild(el("p",null,["Diagnóstico: " + s.diagnostico.aciertos + " de " + s.diagnostico.n + " (sin nota)."]));
-    if(s.evaluacion) detalle.appendChild(el("p",null,["Evaluación: " + s.evaluacion.intentos + " intentos; mejor nota " + fmt(s.evaluacion.mejor, 1) + "."]));
+    Object.keys(s.evals || {}).forEach(a=> detalle.appendChild(el("p",null,["Preguntas · " + (ALC[a] || a) + ": " + s.evals[a].intentos + " intentos; mejor nota " + fmt(s.evals[a].mejor, 1) + "."])));
+    if(s.evals) detalle.appendChild(el("p",{class:"muted small"},["El taller sugerido es el promedio de las mejores notas de la sesión conjunta y del año del estudiante. Si aplicas el taller de 20 preguntas, escribe esa nota en la tabla."]));
+    Object.keys(s.preguntas || {}).forEach(a=>{ const q = s.preguntas[a]; detalle.appendChild(el("article",{class:"card"},[ el("h5",null,["Pregunta, título y objetivos · " + (ALC[a] || a)]), el("p",null,["Pregunta: " + q.pregunta]), el("p",null,["Título: " + q.titulo]), el("p",null,["Objetivo general: " + q.general]), el("ol",null, (q.especificos || []).map(e=> el("li",null,[e]))), q.faltan && q.faltan.length ? el("p",{class:"muted small"},["Incompleta: faltaban " + q.faltan.join(", ").toLowerCase() + "."]) : null ])); });
+    if(s.entregable){ const d = s.entregable; detalle.appendChild(el("article",{class:"card"},[ el("h5",null,["Base de datos con histograma"]), d.enlace ? el("p",null,[ el("a",{href:d.enlace, target:"_blank", rel:"noopener noreferrer"},["Abrir el archivo"]) ]) : null, el("p",null,["Variable: " + (d.variable || "—") + ". " + (d.lectura || "")]), el("p",{class:"muted small"},["Lista: " + (d.checks || []).filter(Boolean).length + " de " + (d.items || []).length + " puntos marcados."]) ])); }
     ["1","2"].forEach(n=>{ const fi = s.fichas[n]; if(!fi) return; const d = fi.datos;
       const box = el("article",{class:"card"},[ el("h5",null,["Ficha " + n + ": " + (d.articuloCita || "")]),
         el("p",null,["PICO: P " + (d.picoP || "—") + "; I " + (d.picoI || "—") + "; C " + (d.picoC || "—") + "; O " + (d.picoO || "—") + "."]),
