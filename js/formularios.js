@@ -2,7 +2,11 @@
    Todo ocurre en el navegador: nada se envía a ningún servidor. Los archivos que se descargan los entrega cada estudiante a su docente. */
 (function(){
 "use strict";
-const M = window.Motor, { el, esc, fmt, svgEl, VW, MOB, bindTip } = M, A = window.APP, E = window.EVAL;
+const M = window.Motor, { el, esc, fmt, svgEl, VW, MOB } = M, A = window.APP, E = window.EVAL;
+/* la ficha que queda fija al hacer clic (con enlaces activos) la define js/app.js */
+const bindTip = (window.AULA && window.AULA.bindTip) || M.bindTip;
+/* sección del aula para repasar cada resultado de aprendizaje */
+const REPASO = { MI1:"pregunta", MI2:"diseno", MI3:"variables", LC1:"articulos", LC2:"guias", LC3:"citas", P1a:"pregunta", P1b:"protocolo", P1c:"protocolo", P2a:"avance", P2b:"avance" };
 const NS = M.SVGNS;
 const sv = (tag, attrs, parent)=>{ const n = document.createElementNS(NS, tag); Object.keys(attrs||{}).forEach(k=> n.setAttribute(k, attrs[k])); if(parent) parent.appendChild(n); return n; };
 const tx = (p, x, y, t, cls, anchor)=>{ const n = sv("text",{x, y, class:cls || "ax-t", "text-anchor":anchor || "start"}, p); n.textContent = t; return n; };
@@ -67,7 +71,8 @@ function raSVG(porRA){
     if(MOB()){ tx(g, L, y + 14, M.wrapText(t, 40)[0], "ax-s ax-b"); sv("rect",{x:L, y:y + 22, width:Math.max(2, sx(p) - L), height:18, rx:3, class:"ra-bar" + (p < 0.6 ? " bajo" : "")}, g); tx(g, sx(p) + 6, y + 36, v.ok + "/" + v.n, "ax-s ax-b"); }
     else { tx(g, L - 10, y + 19, M.wrapText(t, 44)[0], "ax-s", "end"); sv("rect",{x:L, y:y + 5, width:Math.max(2, sx(p) - L), height:fila - 12, rx:3, class:"ra-bar" + (p < 0.6 ? " bajo" : "")}, g); tx(g, sx(p) + 6, y + 19, v.ok + "/" + v.n, "ax-s ax-b"); }
     g.setAttribute("tabindex","0"); g.setAttribute("role","img"); g.setAttribute("aria-label", t + ": " + v.ok + " de " + v.n);
-    bindTip(g, ()=> "<h5>" + esc((E.ras[id] || {}).curso || "") + "</h5><p>" + esc(t) + "</p><p><strong>" + v.ok + " de " + v.n + "</strong> correctas</p>"); });
+    const sec = REPASO[id] && M.SEC[REPASO[id]];
+    bindTip(g, ()=> "<h5>" + esc((E.ras[id] || {}).curso || "") + "</h5><p>" + esc(t) + "</p><p><strong>" + v.ok + " de " + v.n + "</strong> correctas</p>" + (sec ? "<p class='tip-links'><a href='#sec-" + REPASO[id] + "' data-ir='" + REPASO[id] + "'>Repasar: " + esc(sec.toc || sec.title) + "</a></p>" : "")); });
   return s;
 }
 

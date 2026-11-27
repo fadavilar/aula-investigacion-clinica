@@ -2,9 +2,42 @@
    portada, acordeón, índice, buscador, tema, tamaño del texto, glosario, referencias y exportación. */
 (function(){
 "use strict";
-const M = window.Motor, { el, esc, fmt, svgEl, VW, MOB, bindTip } = M, A = window.APP, C = window.CONTENIDO;
+const M = window.Motor, { el, esc, fmt, svgEl, VW, MOB } = M, A = window.APP, C = window.CONTENIDO;
 const $ = id=> document.getElementById("body-" + id);
 const NS = M.SVGNS;
+
+/* ------------------------------------------------------------ fichas de los gráficos: al pasar el cursor se ven; al hacer clic quedan fijas
+   con sus enlaces activos (guía, herramienta, sección para repasar). En pantallas táctiles el motor ya las fija abajo. */
+let toque = false;
+document.addEventListener("pointerdown", e=>{ toque = e.pointerType === "touch"; }, true);
+const PISTA = "<p class='tip-pista'>Haz clic para fijar la ficha y abrir sus enlaces.</p>";
+const fijo = el("div",{ class:"tip-fijo", role:"dialog", "aria-label":"Ficha del gráfico", hidden:"" }); document.body.appendChild(fijo);
+let fijoDe = null;
+function cierraFijo(){ if(fijo.hidden) return; fijo.hidden = true; const o = fijoDe; fijoDe = null; if(o && o.focus && document.activeElement && fijo.contains(document.activeElement)) o.focus(); }
+function abreFijo(nodo, html){
+  M.closeTip(); fijoDe = nodo;
+  fijo.innerHTML = html;
+  const x = el("button",{type:"button", class:"tip-close", "aria-label":"Cerrar la ficha"},["×"]); x.addEventListener("click", cierraFijo); fijo.appendChild(x);
+  fijo.hidden = false;
+  const r = nodo.getBoundingClientRect(), w = fijo.offsetWidth, h = fijo.offsetHeight;
+  let left = r.left + r.width/2 - w/2 + scrollX, top = r.bottom + 10 + scrollY;
+  left = Math.max(scrollX + 8, Math.min(left, scrollX + innerWidth - w - 8));
+  if(r.bottom + 10 + h > innerHeight && r.top - h - 10 > 0) top = r.top - h - 10 + scrollY;
+  fijo.style.left = left + "px"; fijo.style.top = top + "px";
+  const primero = fijo.querySelector("a, button"); if(primero) primero.focus({ preventScroll:true });
+}
+document.addEventListener("keydown", e=>{ if(e.key === "Escape") cierraFijo(); });
+document.addEventListener("pointerdown", e=>{ if(!fijo.hidden && !fijo.contains(e.target) && !(fijoDe && fijoDe.contains(e.target))) cierraFijo(); });
+/* Enlaces internos dentro de las fichas: data-ir abre la sección del aula */
+document.addEventListener("click", e=>{ const a = e.target.closest && e.target.closest("a[data-ir]"); if(!a) return; e.preventDefault(); cierraFijo(); M.closeTip(); M.openSection(a.dataset.ir); M.scrollSoon("sec-" + a.dataset.ir); });
+function bindTip(nodo, htmlFn){
+  M.bindTip(nodo, ()=>{ const h = htmlFn(); return /<a\s/.test(h) && !toque && !MOB() ? h + PISTA : h; });
+  const fija = ()=>{ if(toque || MOB()) return; setTimeout(()=> abreFijo(nodo, htmlFn()), 20); };
+  nodo.addEventListener("click", fija);
+  nodo.addEventListener("keydown", e=>{ if(e.key === "Enter" || e.key === " ") fija(); });
+}
+const enlace = (url, t)=> "<a href='" + esc(url) + "' target='_blank' rel='noopener'>" + esc(t) + " ↗</a>";
+const enlacesDiseno = d=> "<p class='tip-links'>" + enlace(d.guiaUrl, "Guía " + d.guia.replace(" (series quirúrgicas)","")) + " " + enlace(d.herrUrl, d.herramienta.replace(/^Lista de JBI.*/, "Lista de JBI")) + "</p>";
 
 /* ------------------------------------------------------------ utilidades SVG */
 function sv(tag, attrs, parent){ const n = document.createElementNS(NS, tag); Object.keys(attrs||{}).forEach(k=> n.setAttribute(k, attrs[k])); if(parent) parent.appendChild(n); return n; }
@@ -361,7 +394,7 @@ function arbolSVG(ruta, fin){
     const lab = p.hoja ? p.nombre : AR[k].c, ls = M.wrapText(lab, 22).slice(0,2);
     txs(g, X(p) + bw/2, Y(p) + (ls.length > 1 ? 19 : 28), ls, "tree-t", "middle", 16);
     if(p.hoja){ const d = disPor(p.nombre); g.setAttribute("data-cod", d.cod); activable(g, d.nombre + ": " + d.guia + " y " + d.herramienta, ()=> M.select(d.cod));
-      bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía de reporte: <strong>" + esc(d.guia) + "</strong></p><p>Herramienta: <strong>" + esc(d.herramienta) + "</strong></p>"); }
+      bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía de reporte: <strong>" + esc(d.guia) + "</strong></p><p>Herramienta: <strong>" + esc(d.herramienta) + "</strong></p>" + enlacesDiseno(d)); }
     else { activable(g, AR[k].p); bindTip(g, ()=> "<h5>" + esc(AR[k].c) + "</h5><p>" + esc(AR[k].p) + "</p>"); }
   });
   const marca = cod=> s.querySelectorAll("[data-cod]").forEach(n=> n.classList.toggle("sel", n.getAttribute("data-cod") === cod));
@@ -992,7 +1025,7 @@ function agreeSVG(sc){
   AGREE.forEach((d,i)=>{ const y = 14 + i*fila, g = sv("g",{class:"ag-row"}, s), p = sc[i];
     if(MOB()){ tx(g, L, y + 14, (i + 1) + ". " + d[0], "ax-s ax-b"); sv("rect",{x:L, y:y + 22, width:Math.max(2, sx(p) - L), height:18, rx:3, class:"ag-bar"}, g); tx(g, sx(p) + 6, y + 36, fmt(p*100, 0) + " %", "ax-s ax-b"); }
     else { tx(g, L - 10, y + 18, (i + 1) + ". " + d[0], "ax-s", "end"); sv("rect",{x:L, y:y + 4, width:Math.max(2, sx(p) - L), height:fila - 12, rx:3, class:"ag-bar"}, g); tx(g, sx(p) + 6, y + 18, fmt(p*100, 0) + " %", "ax-s ax-b"); }
-    activable(g, d[0] + ": " + fmt(p*100, 0) + " %"); bindTip(g, ()=> "<h5>Dominio " + (i + 1) + ". " + esc(d[0]) + "</h5><p>" + d[1] + " ítems · puntaje escalado <strong>" + fmt(p*100, 1) + " %</strong></p>"); });
+    activable(g, d[0] + ": " + fmt(p*100, 0) + " %"); bindTip(g, ()=> "<h5>Dominio " + (i + 1) + ". " + esc(d[0]) + "</h5><p>" + d[1] + " ítems · puntaje escalado <strong>" + fmt(p*100, 1) + " %</strong></p><p class='tip-links'>" + enlace("https://www.agreetrust.org/resource-centre/agree-ii/", "Instrumento y manual de AGREE II") + "</p>"); });
   return s;
 }
 function planoSVG(dc, de, umbral){
@@ -1293,7 +1326,7 @@ function familiasSVG(){
     tx(s, 0, y + 16, f.t, "ax-s ax-b fam-k fam-" + j); y += 24;
     f.d.forEach(nm=>{ const d = disPor(nm), g = sv("g",{class:"fam-d fam-" + j, "data-cod":d.cod}, s);
       sv("rect",{x:12, y:y, width:W - 12, height:fila - 6, rx:13}, g); tx(g, 28, y + 18, d.nombre, "ax-t");
-      activable(g, d.nombre); bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>" + esc(d.guia) + " · " + esc(d.herramienta) + "</p>"); y += fila; });
+      activable(g, d.nombre); bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>" + esc(d.guia) + " · " + esc(d.herramienta) + "</p>" + enlacesDiseno(d) + "<p class='tip-links'><a href='#sec-diseno' data-ir='diseno'>Ver en el árbol de decisión</a></p>"); y += fila; });
     y += 6;
   });
   return s;
@@ -1308,7 +1341,7 @@ function matrizSVG(){
     const herr = d.herramienta.replace(/^Lista de JBI.*/, "Lista de JBI"), guia = d.guia.replace(" (series quirúrgicas)","");
     if(!mob){ tx(g, 8, y + 20, d.nombre.replace("Revisión sistemática o metanálisis","Revisión sistemática").replace("Estudio transversal analítico","Transversal analítico"), "ax-s"); tx(g, c2, y + 20, guia, "ax-s ax-b mat-g"); tx(g, c3, y + 20, herr, "ax-s mat-h"); }
     else { tx(g, 8, y + 17, d.nombre, "ax-s ax-b"); tx(g, 8, y + 35, guia + " · " + herr, "ax-s mat-h"); }
-    activable(g, d.nombre + ": " + d.guia + "; " + d.herramienta); bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía: " + esc(d.guia) + "</p><p>Herramienta: " + esc(d.herramienta) + "</p>"); });
+    activable(g, d.nombre + ": " + d.guia + "; " + d.herramienta); bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía: " + esc(d.guia) + "</p><p>Herramienta: " + esc(d.herramienta) + "</p>" + enlacesDiseno(d)); });
   return s;
 }
 function vancouverSVG(){
@@ -1395,10 +1428,20 @@ if(C.enlaces && C.fuentes){ const ya = new Set(); C.fuentes.forEach(g=> g.items.
   const extra = C.enlaces.filter(f=> !ya.has(f.url)).map(f=> ({ label:f.t, url:f.url }));
   if(extra.length) C.fuentes.push({ grupo:"Guías, herramientas, bases de datos y programas citados", items:extra }); }
 
+/* Perfiles públicos del autor en la portada y en el pie (una sola vez, aunque el documento se redibuje) */
+function perfilesAutor(){
+  const P = C.meta.perfiles || []; if(!P.length) return;
+  const fila = ()=> el("p",{class:"perfiles"}, P.map(p=> el("a",{href:p.url, target:"_blank", rel:"noopener me"},[p.t])));
+  const by = document.getElementById("byline"); if(by && !by.querySelector(".perfiles")) by.appendChild(fila());
+  const pie = document.getElementById("footer-author"); if(pie && !pie.nextElementSibling?.classList.contains("perfiles")) pie.after(fila());
+  /* el motor escribe el pie después de dibujar las secciones: se reemplaza por una sola línea con nombre y títulos */
+  setTimeout(()=>{ const p = document.getElementById("footer-author"); if(p) p.innerHTML = "Elaboración: <strong>" + esc(C.meta.autor) + "</strong>. " + esc(C.equipo[0].rol); }, 0);
+}
+
 M.iniciar({
   contenido: C, secciones: SECCIONES, partes: PARTES, ideas: IDEAS,
   entidad: { nombre:"diseño", inicial:null, valida: cod=> !!disCod(cod) },
-  render(){ resumen(); rutas(); evaluacion(); const F = window.AULA_FORM; if(F){ F.evaluar($("evaluar")); F.formularios($("formularios")); F.docente($("docente")); F.articulos($("articulos")); } temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
+  render(){ perfilesAutor(); resumen(); rutas(); evaluacion(); const F = window.AULA_FORM; if(F){ F.evaluar($("evaluar")); F.formularios($("formularios")); F.docente($("docente")); F.articulos($("articulos")); } temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
   indice(){
     return DIS.map(d=> ({ type:"Diseño", label:d.nombre, detail:d.guia + " · " + d.herramienta, sec:"diseno", anchor:"diseno-selector", cod:d.cod }))
       .concat(MU.calculadoras.map(h=> ({ type:"Tamaño de muestra", label:h.t, detail:"Hoja " + h.hoja + " del Excel", sec:"muestra", anchor:"muestra-calculadora" })))
@@ -1406,5 +1449,5 @@ M.iniciar({
       .concat(A.contenidos.map(c=> ({ type:"Tema", label:c.tema, detail:c.competencia, sec:"temas", anchor:"sec-temas" })));
   }
 });
-window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCalc, metaCalc };
+window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCalc, metaCalc, bindTip };
 })();

@@ -144,23 +144,23 @@ window.APP = {
 
   /* Selector de diseño del capítulo de lectura crítica. */
   disenos: [
-    { nombre: 'Reporte de caso', guia: 'CARE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para reportes de caso', herrUrl: 'https://jbi.global/critical-appraisal-tools',
+    { nombre: 'Reporte de caso', guia: 'CARE', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/care/', herramienta: 'Lista de JBI para reportes de caso', herrUrl: 'https://jbi.global/critical-appraisal-tools',
       preguntas: ['¿Se describe con claridad la historia clínica y la cronología?', '¿Se describen la intervención y los resultados?', '¿Se extraen lecciones aplicables?'] },
-    { nombre: 'Serie de casos', guia: 'PROCESS (series quirúrgicas)', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para series de casos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
+    { nombre: 'Serie de casos', guia: 'PROCESS (series quirúrgicas)', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/process/', herramienta: 'Lista de JBI para series de casos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
       preguntas: ['¿Se incluyeron los casos de forma consecutiva?', '¿Los criterios de inclusión son claros?', '¿La condición se midió de forma válida?'] },
-    { nombre: 'Casos y controles', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI o Newcastle-Ottawa', herrUrl: 'https://www.ohri.ca/programs/clinical_epidemiology/oxford.asp',
+    { nombre: 'Casos y controles', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/strobe/', herramienta: 'Lista de JBI o Newcastle-Ottawa', herrUrl: 'https://www.ohri.ca/programs/clinical_epidemiology/oxford.asp',
       preguntas: ['¿Los controles vienen de la misma población que los casos?', '¿La exposición se midió igual en ambos grupos?', '¿Qué sesgo de recuerdo es posible?'] },
-    { nombre: 'Cohorte', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'ROBINS-E o Newcastle-Ottawa', herrUrl: 'https://www.riskofbias.info',
+    { nombre: 'Cohorte', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/strobe/', herramienta: 'ROBINS-E o Newcastle-Ottawa', herrUrl: 'https://www.riskofbias.info/welcome/robins-e-tool',
       preguntas: ['¿Qué variables confusoras midieron y cuáles faltan?', '¿Cuántos pacientes se perdieron en el seguimiento?', '¿El seguimiento fue suficiente para el desenlace?'] },
-    { nombre: 'Cuasiexperimental', guia: 'TREND', guiaUrl: 'https://www.equator-network.org', herramienta: 'ROBINS-I', herrUrl: 'https://www.riskofbias.info',
+    { nombre: 'Cuasiexperimental', guia: 'TREND', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/improving-the-reporting-quality-of-nonrandomized-evaluations-of-behavioral-and-public-health-interventions-the-trend-statement/', herramienta: 'ROBINS-I', herrUrl: 'https://www.riskofbias.info/welcome/robins-i-v2',
       preguntas: ['¿Cómo se asignó la intervención si no hubo aleatorización?', '¿Los grupos eran comparables al inicio?', '¿Hay un grupo de comparación?'] },
-    { nombre: 'Ensayo clínico aleatorizado', guia: 'CONSORT 2025', guiaUrl: 'https://pubmed.ncbi.nlm.nih.gov/40228833/', herramienta: 'RoB 2', herrUrl: 'https://www.riskofbias.info',
+    { nombre: 'Ensayo clínico aleatorizado', guia: 'CONSORT 2025', guiaUrl: 'https://pubmed.ncbi.nlm.nih.gov/40228833/', herramienta: 'RoB 2', herrUrl: 'https://www.riskofbias.info/welcome/rob-2-0-tool',
       preguntas: ['¿Se generó y se ocultó bien la secuencia de aleatorización?', '¿Hubo desviaciones de la intervención asignada?', '¿Faltan datos del desenlace?', '¿Quien midió sabía el grupo?', '¿Se reportó lo que prometía el protocolo?'] },
-    { nombre: 'Estudio transversal analítico', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para estudios transversales analíticos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
+    { nombre: 'Estudio transversal analítico', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/strobe/', herramienta: 'Lista de JBI para estudios transversales analíticos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
       preguntas: ['¿Se definieron con claridad los criterios de inclusión y el entorno?', '¿La exposición y el desenlace se midieron de forma válida y fiable?', '¿Se identificaron y manejaron los factores de confusión?'] },
-    { nombre: 'Prueba diagnóstica', guia: 'STARD 2015', guiaUrl: 'https://www.equator-network.org', herramienta: 'QUADAS-2', herrUrl: 'https://www.bristol.ac.uk/population-health-sciences/projects/quadas/',
+    { nombre: 'Prueba diagnóstica', guia: 'STARD 2015', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/stard/', herramienta: 'QUADAS-2', herrUrl: 'https://www.bristol.ac.uk/population-health-sciences/projects/quadas/',
       preguntas: ['¿El espectro de pacientes es el de la práctica real?', '¿El estándar de referencia es adecuado?', '¿Se aplicó a todos los pacientes?'] },
-    { nombre: 'Revisión sistemática o metanálisis', guia: 'PRISMA 2020', guiaUrl: 'https://www.equator-network.org', herramienta: 'AMSTAR 2', herrUrl: 'https://amstar.ca',
+    { nombre: 'Revisión sistemática o metanálisis', guia: 'PRISMA 2020', guiaUrl: 'https://www.prisma-statement.org/', herramienta: 'AMSTAR 2', herrUrl: 'https://amstar.ca',
       preguntas: ['¿Hubo protocolo previo?', '¿La búsqueda fue exhaustiva y reproducible?', '¿Se evaluó el riesgo de sesgo de los estudios incluidos?', '¿Se explica la heterogeneidad?'] }
   ],
 

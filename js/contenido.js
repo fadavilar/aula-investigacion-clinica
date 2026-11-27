@@ -9,17 +9,24 @@ window.CONTENIDO = {
     etiqueta: "Material didáctico",
     titulo: "De la pregunta clínica al artículo publicable",
     lede: "Un recorrido para estudiantes y docentes: formular la pregunta, reconocer el diseño, calcular el tamaño de la muestra, leer críticamente, interpretar los números, hacer una revisión sistemática con apoyo de inteligencia artificial y entregar un manuscrito bien citado.",
-    corte: "Versión " + A.meta.version + " · actualizado el 26 de noviembre de 2026",
+    corte: "Versión " + A.meta.version + " · actualizado el 27 de noviembre de 2026",
     autor: A.meta.autor,
-    autorCred: "",
+    autorCred: "Doctor en Modelado y Gestión de Políticas Públicas; médico, epidemiólogo y economista de la salud; MBA y máster en bioestadística",
     institucion: "",
     version: "",
-    orcid: "https://orcid.org/0000-0002-1678-7288"
+    orcid: "https://orcid.org/0000-0002-1678-7288",
+    /* perfiles públicos del autor (enlaces dados por él) */
+    perfiles: [
+      { t: "LinkedIn", url: "https://www.linkedin.com/in/drfabian/" },
+      { t: "CvLAC", url: "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001490367" },
+      { t: "ResearchGate", url: "https://www.researchgate.net/profile/Fabian-Davila" },
+      { t: "ORCID", url: "https://orcid.org/0000-0002-1678-7288" }
+    ]
   },
   aviso: "Material en construcción. Verifica las guías y los enlaces vigentes antes de citarlos. Las calculadoras apoyan el aprendizaje y no sustituyen la asesoría estadística ni el criterio de tu comité de ética.",
   descargo: "Material didáctico de libre uso. Las calculadoras reproducen fórmulas de uso docente y no sustituyen un análisis estadístico completo ni la revisión de un comité de ética.",
   equipoTitulo: "Autor",
-  equipo: [ { nombre: A.meta.autor, rol: "elaboración y contenido" } ],
+  equipo: [ { nombre: A.meta.autor, rol: "Doctor en Modelado y Gestión de Políticas Públicas. Médico, epidemiólogo y economista de la salud. MBA y máster en bioestadística." } ],
   stats: [
     { value: String(A.contenidos.length), label: "temas con su competencia", detail: "Cada tema enlaza sus fuentes y mapas mentales" },
     { value: String(A.disenos.length), label: "diseños de estudio", detail: "Con su guía de reporte y su herramienta de evaluación" },

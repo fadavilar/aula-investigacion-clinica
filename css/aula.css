@@ -351,6 +351,21 @@ textarea{ font: inherit; color: var(--text); background: var(--surface); border:
 .doc-avisos{ font-size:.9rem; margin: 6px 0 10px; }
 .doc-detalle .card{ margin: 10px 0; }
 
+/* ============================================================ fichas de los gráficos: pista y ficha fija con enlaces */
+.tip-pista{ margin-top:6px !important; font-size:.76rem; color: var(--text-muted); font-style: italic; }
+.tip-links{ display:flex; flex-wrap:wrap; gap:6px 12px; margin-top:6px !important; }
+.chart-tip .tip-links a{ color: var(--primary-2); font-weight:700; }
+.tip-fijo{ position:absolute; z-index:85; width: min(340px, calc(100vw - 24px)); background: var(--bg-elevated); color: var(--text); border:1px solid var(--border); border-left:4px solid var(--primary-2); border-radius:12px; box-shadow: var(--shadow-lg); padding:14px 54px 14px 16px; font-size:.92rem; line-height:1.45; }
+.tip-fijo[hidden]{ display:none; }
+.tip-fijo h5{ margin:0 0 6px; font-size:1rem; } .tip-fijo p{ margin:0 0 6px; } .tip-fijo p:last-of-type{ margin-bottom:0; }
+.tip-fijo .tip-links a{ display:inline-flex; align-items:center; min-height:36px; padding:4px 10px; border-radius:8px; background: var(--primary-tint); color: var(--primary-2); font-weight:700; text-decoration:none; }
+.tip-fijo .tip-links a:hover, .tip-fijo .tip-links a:focus-visible{ text-decoration: underline; }
+.tip-fijo .tip-close{ width:36px; height:36px; font-size:1.3rem; }
+.chart-tip.sheet .tip-links a{ display:inline-block; padding:6px 0; }
+@media print{ .tip-fijo{ display:none !important; } }
+.perfiles{ display:flex; flex-wrap:wrap; gap:6px 14px; margin: 8px 0 0; font-size:.88rem; }
+.perfiles a{ font-weight:700; }
+
 /* ============================================================ enlaces a las fuentes y su ficha */
 a.src-link{ color: var(--primary-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--primary-2) 55%, transparent); }
 a.src-link:hover, a.src-link:focus-visible{ text-decoration-color: currentColor; text-decoration-thickness: 2px; }

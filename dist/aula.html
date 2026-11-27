@@ -2023,6 +2023,21 @@ textarea{ font: inherit; color: var(--text); background: var(--surface); border:
 .doc-avisos{ font-size:.9rem; margin: 6px 0 10px; }
 .doc-detalle .card{ margin: 10px 0; }
 
+/* ============================================================ fichas de los gráficos: pista y ficha fija con enlaces */
+.tip-pista{ margin-top:6px !important; font-size:.76rem; color: var(--text-muted); font-style: italic; }
+.tip-links{ display:flex; flex-wrap:wrap; gap:6px 12px; margin-top:6px !important; }
+.chart-tip .tip-links a{ color: var(--primary-2); font-weight:700; }
+.tip-fijo{ position:absolute; z-index:85; width: min(340px, calc(100vw - 24px)); background: var(--bg-elevated); color: var(--text); border:1px solid var(--border); border-left:4px solid var(--primary-2); border-radius:12px; box-shadow: var(--shadow-lg); padding:14px 54px 14px 16px; font-size:.92rem; line-height:1.45; }
+.tip-fijo[hidden]{ display:none; }
+.tip-fijo h5{ margin:0 0 6px; font-size:1rem; } .tip-fijo p{ margin:0 0 6px; } .tip-fijo p:last-of-type{ margin-bottom:0; }
+.tip-fijo .tip-links a{ display:inline-flex; align-items:center; min-height:36px; padding:4px 10px; border-radius:8px; background: var(--primary-tint); color: var(--primary-2); font-weight:700; text-decoration:none; }
+.tip-fijo .tip-links a:hover, .tip-fijo .tip-links a:focus-visible{ text-decoration: underline; }
+.tip-fijo .tip-close{ width:36px; height:36px; font-size:1.3rem; }
+.chart-tip.sheet .tip-links a{ display:inline-block; padding:6px 0; }
+@media print{ .tip-fijo{ display:none !important; } }
+.perfiles{ display:flex; flex-wrap:wrap; gap:6px 14px; margin: 8px 0 0; font-size:.88rem; }
+.perfiles a{ font-weight:700; }
+
 /* ============================================================ enlaces a las fuentes y su ficha */
 a.src-link{ color: var(--primary-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--primary-2) 55%, transparent); }
 a.src-link:hover, a.src-link:focus-visible{ text-decoration-color: currentColor; text-decoration-thickness: 2px; }
@@ -2346,23 +2361,23 @@ window.APP = {
 
   /* Selector de diseño del capítulo de lectura crítica. */
   disenos: [
-    { nombre: 'Reporte de caso', guia: 'CARE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para reportes de caso', herrUrl: 'https://jbi.global/critical-appraisal-tools',
+    { nombre: 'Reporte de caso', guia: 'CARE', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/care/', herramienta: 'Lista de JBI para reportes de caso', herrUrl: 'https://jbi.global/critical-appraisal-tools',
       preguntas: ['¿Se describe con claridad la historia clínica y la cronología?', '¿Se describen la intervención y los resultados?', '¿Se extraen lecciones aplicables?'] },
-    { nombre: 'Serie de casos', guia: 'PROCESS (series quirúrgicas)', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para series de casos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
+    { nombre: 'Serie de casos', guia: 'PROCESS (series quirúrgicas)', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/process/', herramienta: 'Lista de JBI para series de casos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
       preguntas: ['¿Se incluyeron los casos de forma consecutiva?', '¿Los criterios de inclusión son claros?', '¿La condición se midió de forma válida?'] },
-    { nombre: 'Casos y controles', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI o Newcastle-Ottawa', herrUrl: 'https://www.ohri.ca/programs/clinical_epidemiology/oxford.asp',
+    { nombre: 'Casos y controles', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/strobe/', herramienta: 'Lista de JBI o Newcastle-Ottawa', herrUrl: 'https://www.ohri.ca/programs/clinical_epidemiology/oxford.asp',
       preguntas: ['¿Los controles vienen de la misma población que los casos?', '¿La exposición se midió igual en ambos grupos?', '¿Qué sesgo de recuerdo es posible?'] },
-    { nombre: 'Cohorte', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'ROBINS-E o Newcastle-Ottawa', herrUrl: 'https://www.riskofbias.info',
+    { nombre: 'Cohorte', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/strobe/', herramienta: 'ROBINS-E o Newcastle-Ottawa', herrUrl: 'https://www.riskofbias.info/welcome/robins-e-tool',
       preguntas: ['¿Qué variables confusoras midieron y cuáles faltan?', '¿Cuántos pacientes se perdieron en el seguimiento?', '¿El seguimiento fue suficiente para el desenlace?'] },
-    { nombre: 'Cuasiexperimental', guia: 'TREND', guiaUrl: 'https://www.equator-network.org', herramienta: 'ROBINS-I', herrUrl: 'https://www.riskofbias.info',
+    { nombre: 'Cuasiexperimental', guia: 'TREND', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/improving-the-reporting-quality-of-nonrandomized-evaluations-of-behavioral-and-public-health-interventions-the-trend-statement/', herramienta: 'ROBINS-I', herrUrl: 'https://www.riskofbias.info/welcome/robins-i-v2',
       preguntas: ['¿Cómo se asignó la intervención si no hubo aleatorización?', '¿Los grupos eran comparables al inicio?', '¿Hay un grupo de comparación?'] },
-    { nombre: 'Ensayo clínico aleatorizado', guia: 'CONSORT 2025', guiaUrl: 'https://pubmed.ncbi.nlm.nih.gov/40228833/', herramienta: 'RoB 2', herrUrl: 'https://www.riskofbias.info',
+    { nombre: 'Ensayo clínico aleatorizado', guia: 'CONSORT 2025', guiaUrl: 'https://pubmed.ncbi.nlm.nih.gov/40228833/', herramienta: 'RoB 2', herrUrl: 'https://www.riskofbias.info/welcome/rob-2-0-tool',
       preguntas: ['¿Se generó y se ocultó bien la secuencia de aleatorización?', '¿Hubo desviaciones de la intervención asignada?', '¿Faltan datos del desenlace?', '¿Quien midió sabía el grupo?', '¿Se reportó lo que prometía el protocolo?'] },
-    { nombre: 'Estudio transversal analítico', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org', herramienta: 'Lista de JBI para estudios transversales analíticos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
+    { nombre: 'Estudio transversal analítico', guia: 'STROBE', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/strobe/', herramienta: 'Lista de JBI para estudios transversales analíticos', herrUrl: 'https://jbi.global/critical-appraisal-tools',
       preguntas: ['¿Se definieron con claridad los criterios de inclusión y el entorno?', '¿La exposición y el desenlace se midieron de forma válida y fiable?', '¿Se identificaron y manejaron los factores de confusión?'] },
-    { nombre: 'Prueba diagnóstica', guia: 'STARD 2015', guiaUrl: 'https://www.equator-network.org', herramienta: 'QUADAS-2', herrUrl: 'https://www.bristol.ac.uk/population-health-sciences/projects/quadas/',
+    { nombre: 'Prueba diagnóstica', guia: 'STARD 2015', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/stard/', herramienta: 'QUADAS-2', herrUrl: 'https://www.bristol.ac.uk/population-health-sciences/projects/quadas/',
       preguntas: ['¿El espectro de pacientes es el de la práctica real?', '¿El estándar de referencia es adecuado?', '¿Se aplicó a todos los pacientes?'] },
-    { nombre: 'Revisión sistemática o metanálisis', guia: 'PRISMA 2020', guiaUrl: 'https://www.equator-network.org', herramienta: 'AMSTAR 2', herrUrl: 'https://amstar.ca',
+    { nombre: 'Revisión sistemática o metanálisis', guia: 'PRISMA 2020', guiaUrl: 'https://www.prisma-statement.org/', herramienta: 'AMSTAR 2', herrUrl: 'https://amstar.ca',
       preguntas: ['¿Hubo protocolo previo?', '¿La búsqueda fue exhaustiva y reproducible?', '¿Se evaluó el riesgo de sesgo de los estudios incluidos?', '¿Se explica la heterogeneidad?'] }
   ],
 
@@ -2764,17 +2779,24 @@ window.CONTENIDO = {
     etiqueta: "Material didáctico",
     titulo: "De la pregunta clínica al artículo publicable",
     lede: "Un recorrido para estudiantes y docentes: formular la pregunta, reconocer el diseño, calcular el tamaño de la muestra, leer críticamente, interpretar los números, hacer una revisión sistemática con apoyo de inteligencia artificial y entregar un manuscrito bien citado.",
-    corte: "Versión " + A.meta.version + " · actualizado el 26 de noviembre de 2026",
+    corte: "Versión " + A.meta.version + " · actualizado el 27 de noviembre de 2026",
     autor: A.meta.autor,
-    autorCred: "",
+    autorCred: "Doctor en Modelado y Gestión de Políticas Públicas; médico, epidemiólogo y economista de la salud; MBA y máster en bioestadística",
     institucion: "",
     version: "",
-    orcid: "https://orcid.org/0000-0002-1678-7288"
+    orcid: "https://orcid.org/0000-0002-1678-7288",
+    /* perfiles públicos del autor (enlaces dados por él) */
+    perfiles: [
+      { t: "LinkedIn", url: "https://www.linkedin.com/in/drfabian/" },
+      { t: "CvLAC", url: "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001490367" },
+      { t: "ResearchGate", url: "https://www.researchgate.net/profile/Fabian-Davila" },
+      { t: "ORCID", url: "https://orcid.org/0000-0002-1678-7288" }
+    ]
   },
   aviso: "Material en construcción. Verifica las guías y los enlaces vigentes antes de citarlos. Las calculadoras apoyan el aprendizaje y no sustituyen la asesoría estadística ni el criterio de tu comité de ética.",
   descargo: "Material didáctico de libre uso. Las calculadoras reproducen fórmulas de uso docente y no sustituyen un análisis estadístico completo ni la revisión de un comité de ética.",
   equipoTitulo: "Autor",
-  equipo: [ { nombre: A.meta.autor, rol: "elaboración y contenido" } ],
+  equipo: [ { nombre: A.meta.autor, rol: "Doctor en Modelado y Gestión de Políticas Públicas. Médico, epidemiólogo y economista de la salud. MBA y máster en bioestadística." } ],
   stats: [
     { value: String(A.contenidos.length), label: "temas con su competencia", detail: "Cada tema enlaza sus fuentes y mapas mentales" },
     { value: String(A.disenos.length), label: "diseños de estudio", detail: "Con su guía de reporte y su herramienta de evaluación" },
@@ -3719,9 +3741,42 @@ window.Motor = { SVGNS, el, esc, fmt, compact, svgEl, MOB, VW, niceStep, niceMax
    portada, acordeón, índice, buscador, tema, tamaño del texto, glosario, referencias y exportación. */
 (function(){
 "use strict";
-const M = window.Motor, { el, esc, fmt, svgEl, VW, MOB, bindTip } = M, A = window.APP, C = window.CONTENIDO;
+const M = window.Motor, { el, esc, fmt, svgEl, VW, MOB } = M, A = window.APP, C = window.CONTENIDO;
 const $ = id=> document.getElementById("body-" + id);
 const NS = M.SVGNS;
+
+/* ------------------------------------------------------------ fichas de los gráficos: al pasar el cursor se ven; al hacer clic quedan fijas
+   con sus enlaces activos (guía, herramienta, sección para repasar). En pantallas táctiles el motor ya las fija abajo. */
+let toque = false;
+document.addEventListener("pointerdown", e=>{ toque = e.pointerType === "touch"; }, true);
+const PISTA = "<p class='tip-pista'>Haz clic para fijar la ficha y abrir sus enlaces.</p>";
+const fijo = el("div",{ class:"tip-fijo", role:"dialog", "aria-label":"Ficha del gráfico", hidden:"" }); document.body.appendChild(fijo);
+let fijoDe = null;
+function cierraFijo(){ if(fijo.hidden) return; fijo.hidden = true; const o = fijoDe; fijoDe = null; if(o && o.focus && document.activeElement && fijo.contains(document.activeElement)) o.focus(); }
+function abreFijo(nodo, html){
+  M.closeTip(); fijoDe = nodo;
+  fijo.innerHTML = html;
+  const x = el("button",{type:"button", class:"tip-close", "aria-label":"Cerrar la ficha"},["×"]); x.addEventListener("click", cierraFijo); fijo.appendChild(x);
+  fijo.hidden = false;
+  const r = nodo.getBoundingClientRect(), w = fijo.offsetWidth, h = fijo.offsetHeight;
+  let left = r.left + r.width/2 - w/2 + scrollX, top = r.bottom + 10 + scrollY;
+  left = Math.max(scrollX + 8, Math.min(left, scrollX + innerWidth - w - 8));
+  if(r.bottom + 10 + h > innerHeight && r.top - h - 10 > 0) top = r.top - h - 10 + scrollY;
+  fijo.style.left = left + "px"; fijo.style.top = top + "px";
+  const primero = fijo.querySelector("a, button"); if(primero) primero.focus({ preventScroll:true });
+}
+document.addEventListener("keydown", e=>{ if(e.key === "Escape") cierraFijo(); });
+document.addEventListener("pointerdown", e=>{ if(!fijo.hidden && !fijo.contains(e.target) && !(fijoDe && fijoDe.contains(e.target))) cierraFijo(); });
+/* Enlaces internos dentro de las fichas: data-ir abre la sección del aula */
+document.addEventListener("click", e=>{ const a = e.target.closest && e.target.closest("a[data-ir]"); if(!a) return; e.preventDefault(); cierraFijo(); M.closeTip(); M.openSection(a.dataset.ir); M.scrollSoon("sec-" + a.dataset.ir); });
+function bindTip(nodo, htmlFn){
+  M.bindTip(nodo, ()=>{ const h = htmlFn(); return /<a\s/.test(h) && !toque && !MOB() ? h + PISTA : h; });
+  const fija = ()=>{ if(toque || MOB()) return; setTimeout(()=> abreFijo(nodo, htmlFn()), 20); };
+  nodo.addEventListener("click", fija);
+  nodo.addEventListener("keydown", e=>{ if(e.key === "Enter" || e.key === " ") fija(); });
+}
+const enlace = (url, t)=> "<a href='" + esc(url) + "' target='_blank' rel='noopener'>" + esc(t) + " ↗</a>";
+const enlacesDiseno = d=> "<p class='tip-links'>" + enlace(d.guiaUrl, "Guía " + d.guia.replace(" (series quirúrgicas)","")) + " " + enlace(d.herrUrl, d.herramienta.replace(/^Lista de JBI.*/, "Lista de JBI")) + "</p>";
 
 /* ------------------------------------------------------------ utilidades SVG */
 function sv(tag, attrs, parent){ const n = document.createElementNS(NS, tag); Object.keys(attrs||{}).forEach(k=> n.setAttribute(k, attrs[k])); if(parent) parent.appendChild(n); return n; }
@@ -4078,7 +4133,7 @@ function arbolSVG(ruta, fin){
     const lab = p.hoja ? p.nombre : AR[k].c, ls = M.wrapText(lab, 22).slice(0,2);
     txs(g, X(p) + bw/2, Y(p) + (ls.length > 1 ? 19 : 28), ls, "tree-t", "middle", 16);
     if(p.hoja){ const d = disPor(p.nombre); g.setAttribute("data-cod", d.cod); activable(g, d.nombre + ": " + d.guia + " y " + d.herramienta, ()=> M.select(d.cod));
-      bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía de reporte: <strong>" + esc(d.guia) + "</strong></p><p>Herramienta: <strong>" + esc(d.herramienta) + "</strong></p>"); }
+      bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía de reporte: <strong>" + esc(d.guia) + "</strong></p><p>Herramienta: <strong>" + esc(d.herramienta) + "</strong></p>" + enlacesDiseno(d)); }
     else { activable(g, AR[k].p); bindTip(g, ()=> "<h5>" + esc(AR[k].c) + "</h5><p>" + esc(AR[k].p) + "</p>"); }
   });
   const marca = cod=> s.querySelectorAll("[data-cod]").forEach(n=> n.classList.toggle("sel", n.getAttribute("data-cod") === cod));
@@ -4709,7 +4764,7 @@ function agreeSVG(sc){
   AGREE.forEach((d,i)=>{ const y = 14 + i*fila, g = sv("g",{class:"ag-row"}, s), p = sc[i];
     if(MOB()){ tx(g, L, y + 14, (i + 1) + ". " + d[0], "ax-s ax-b"); sv("rect",{x:L, y:y + 22, width:Math.max(2, sx(p) - L), height:18, rx:3, class:"ag-bar"}, g); tx(g, sx(p) + 6, y + 36, fmt(p*100, 0) + " %", "ax-s ax-b"); }
     else { tx(g, L - 10, y + 18, (i + 1) + ". " + d[0], "ax-s", "end"); sv("rect",{x:L, y:y + 4, width:Math.max(2, sx(p) - L), height:fila - 12, rx:3, class:"ag-bar"}, g); tx(g, sx(p) + 6, y + 18, fmt(p*100, 0) + " %", "ax-s ax-b"); }
-    activable(g, d[0] + ": " + fmt(p*100, 0) + " %"); bindTip(g, ()=> "<h5>Dominio " + (i + 1) + ". " + esc(d[0]) + "</h5><p>" + d[1] + " ítems · puntaje escalado <strong>" + fmt(p*100, 1) + " %</strong></p>"); });
+    activable(g, d[0] + ": " + fmt(p*100, 0) + " %"); bindTip(g, ()=> "<h5>Dominio " + (i + 1) + ". " + esc(d[0]) + "</h5><p>" + d[1] + " ítems · puntaje escalado <strong>" + fmt(p*100, 1) + " %</strong></p><p class='tip-links'>" + enlace("https://www.agreetrust.org/resource-centre/agree-ii/", "Instrumento y manual de AGREE II") + "</p>"); });
   return s;
 }
 function planoSVG(dc, de, umbral){
@@ -5010,7 +5065,7 @@ function familiasSVG(){
     tx(s, 0, y + 16, f.t, "ax-s ax-b fam-k fam-" + j); y += 24;
     f.d.forEach(nm=>{ const d = disPor(nm), g = sv("g",{class:"fam-d fam-" + j, "data-cod":d.cod}, s);
       sv("rect",{x:12, y:y, width:W - 12, height:fila - 6, rx:13}, g); tx(g, 28, y + 18, d.nombre, "ax-t");
-      activable(g, d.nombre); bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>" + esc(d.guia) + " · " + esc(d.herramienta) + "</p>"); y += fila; });
+      activable(g, d.nombre); bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>" + esc(d.guia) + " · " + esc(d.herramienta) + "</p>" + enlacesDiseno(d) + "<p class='tip-links'><a href='#sec-diseno' data-ir='diseno'>Ver en el árbol de decisión</a></p>"); y += fila; });
     y += 6;
   });
   return s;
@@ -5025,7 +5080,7 @@ function matrizSVG(){
     const herr = d.herramienta.replace(/^Lista de JBI.*/, "Lista de JBI"), guia = d.guia.replace(" (series quirúrgicas)","");
     if(!mob){ tx(g, 8, y + 20, d.nombre.replace("Revisión sistemática o metanálisis","Revisión sistemática").replace("Estudio transversal analítico","Transversal analítico"), "ax-s"); tx(g, c2, y + 20, guia, "ax-s ax-b mat-g"); tx(g, c3, y + 20, herr, "ax-s mat-h"); }
     else { tx(g, 8, y + 17, d.nombre, "ax-s ax-b"); tx(g, 8, y + 35, guia + " · " + herr, "ax-s mat-h"); }
-    activable(g, d.nombre + ": " + d.guia + "; " + d.herramienta); bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía: " + esc(d.guia) + "</p><p>Herramienta: " + esc(d.herramienta) + "</p>"); });
+    activable(g, d.nombre + ": " + d.guia + "; " + d.herramienta); bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía: " + esc(d.guia) + "</p><p>Herramienta: " + esc(d.herramienta) + "</p>" + enlacesDiseno(d)); });
   return s;
 }
 function vancouverSVG(){
@@ -5112,10 +5167,20 @@ if(C.enlaces && C.fuentes){ const ya = new Set(); C.fuentes.forEach(g=> g.items.
   const extra = C.enlaces.filter(f=> !ya.has(f.url)).map(f=> ({ label:f.t, url:f.url }));
   if(extra.length) C.fuentes.push({ grupo:"Guías, herramientas, bases de datos y programas citados", items:extra }); }
 
+/* Perfiles públicos del autor en la portada y en el pie (una sola vez, aunque el documento se redibuje) */
+function perfilesAutor(){
+  const P = C.meta.perfiles || []; if(!P.length) return;
+  const fila = ()=> el("p",{class:"perfiles"}, P.map(p=> el("a",{href:p.url, target:"_blank", rel:"noopener me"},[p.t])));
+  const by = document.getElementById("byline"); if(by && !by.querySelector(".perfiles")) by.appendChild(fila());
+  const pie = document.getElementById("footer-author"); if(pie && !pie.nextElementSibling?.classList.contains("perfiles")) pie.after(fila());
+  /* el motor escribe el pie después de dibujar las secciones: se reemplaza por una sola línea con nombre y títulos */
+  setTimeout(()=>{ const p = document.getElementById("footer-author"); if(p) p.innerHTML = "Elaboración: <strong>" + esc(C.meta.autor) + "</strong>. " + esc(C.equipo[0].rol); }, 0);
+}
+
 M.iniciar({
   contenido: C, secciones: SECCIONES, partes: PARTES, ideas: IDEAS,
   entidad: { nombre:"diseño", inicial:null, valida: cod=> !!disCod(cod) },
-  render(){ resumen(); rutas(); evaluacion(); const F = window.AULA_FORM; if(F){ F.evaluar($("evaluar")); F.formularios($("formularios")); F.docente($("docente")); F.articulos($("articulos")); } temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
+  render(){ perfilesAutor(); resumen(); rutas(); evaluacion(); const F = window.AULA_FORM; if(F){ F.evaluar($("evaluar")); F.formularios($("formularios")); F.docente($("docente")); F.articulos($("articulos")); } temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
   indice(){
     return DIS.map(d=> ({ type:"Diseño", label:d.nombre, detail:d.guia + " · " + d.herramienta, sec:"diseno", anchor:"diseno-selector", cod:d.cod }))
       .concat(MU.calculadoras.map(h=> ({ type:"Tamaño de muestra", label:h.t, detail:"Hoja " + h.hoja + " del Excel", sec:"muestra", anchor:"muestra-calculadora" })))
@@ -5123,7 +5188,7 @@ M.iniciar({
       .concat(A.contenidos.map(c=> ({ type:"Tema", label:c.tema, detail:c.competencia, sec:"temas", anchor:"sec-temas" })));
   }
 });
-window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCalc, metaCalc };
+window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCalc, metaCalc, bindTip };
 })();
 
 </script>
@@ -5132,7 +5197,11 @@ window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCa
    Todo ocurre en el navegador: nada se envía a ningún servidor. Los archivos que se descargan los entrega cada estudiante a su docente. */
 (function(){
 "use strict";
-const M = window.Motor, { el, esc, fmt, svgEl, VW, MOB, bindTip } = M, A = window.APP, E = window.EVAL;
+const M = window.Motor, { el, esc, fmt, svgEl, VW, MOB } = M, A = window.APP, E = window.EVAL;
+/* la ficha que queda fija al hacer clic (con enlaces activos) la define js/app.js */
+const bindTip = (window.AULA && window.AULA.bindTip) || M.bindTip;
+/* sección del aula para repasar cada resultado de aprendizaje */
+const REPASO = { MI1:"pregunta", MI2:"diseno", MI3:"variables", LC1:"articulos", LC2:"guias", LC3:"citas", P1a:"pregunta", P1b:"protocolo", P1c:"protocolo", P2a:"avance", P2b:"avance" };
 const NS = M.SVGNS;
 const sv = (tag, attrs, parent)=>{ const n = document.createElementNS(NS, tag); Object.keys(attrs||{}).forEach(k=> n.setAttribute(k, attrs[k])); if(parent) parent.appendChild(n); return n; };
 const tx = (p, x, y, t, cls, anchor)=>{ const n = sv("text",{x, y, class:cls || "ax-t", "text-anchor":anchor || "start"}, p); n.textContent = t; return n; };
@@ -5197,7 +5266,8 @@ function raSVG(porRA){
     if(MOB()){ tx(g, L, y + 14, M.wrapText(t, 40)[0], "ax-s ax-b"); sv("rect",{x:L, y:y + 22, width:Math.max(2, sx(p) - L), height:18, rx:3, class:"ra-bar" + (p < 0.6 ? " bajo" : "")}, g); tx(g, sx(p) + 6, y + 36, v.ok + "/" + v.n, "ax-s ax-b"); }
     else { tx(g, L - 10, y + 19, M.wrapText(t, 44)[0], "ax-s", "end"); sv("rect",{x:L, y:y + 5, width:Math.max(2, sx(p) - L), height:fila - 12, rx:3, class:"ra-bar" + (p < 0.6 ? " bajo" : "")}, g); tx(g, sx(p) + 6, y + 19, v.ok + "/" + v.n, "ax-s ax-b"); }
     g.setAttribute("tabindex","0"); g.setAttribute("role","img"); g.setAttribute("aria-label", t + ": " + v.ok + " de " + v.n);
-    bindTip(g, ()=> "<h5>" + esc((E.ras[id] || {}).curso || "") + "</h5><p>" + esc(t) + "</p><p><strong>" + v.ok + " de " + v.n + "</strong> correctas</p>"); });
+    const sec = REPASO[id] && M.SEC[REPASO[id]];
+    bindTip(g, ()=> "<h5>" + esc((E.ras[id] || {}).curso || "") + "</h5><p>" + esc(t) + "</p><p><strong>" + v.ok + " de " + v.n + "</strong> correctas</p>" + (sec ? "<p class='tip-links'><a href='#sec-" + REPASO[id] + "' data-ir='" + REPASO[id] + "'>Repasar: " + esc(sec.toc || sec.title) + "</a></p>" : "")); });
   return s;
 }
 
