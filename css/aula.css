@@ -44,8 +44,8 @@ body{ background: var(--bg); }
 @media (max-width:640px){ .hero{ padding-left:14px; padding-right:14px; border-radius:0 0 16px 16px; } }
 
 /* cuatro partes, cuatro colores; el hilo de la portada en cuatro columnas */
-@media (min-width:1000px){ .thread{ grid-template-columns: repeat(4, minmax(0,1fr)); } }
-.part-I{ --part: var(--p1); } .part-II{ --part: var(--p2); } .part-III{ --part: var(--p3); } .part-IV{ --part: var(--p4); }
+@media (min-width:1000px){ .thread{ grid-template-columns: repeat(5, minmax(0,1fr)); column-gap:20px; } }
+.part-C{ --part: var(--chip-e); } .part-I{ --part: var(--p1); } .part-II{ --part: var(--p2); } .part-III{ --part: var(--p3); } .part-IV{ --part: var(--p4); }
 
 /* ============================================================ texto de los SVG propios (obedece al control de tamaño) */
 .ax-t{ fill: var(--text); font-size: calc(14px * var(--svg-scale,1) * var(--svg-m,1)); }
@@ -223,6 +223,50 @@ input[aria-invalid="true"]{ border-color: var(--danger); }
 .van-k{ text-transform: uppercase; letter-spacing:.04em; }
 .story-frame svg.story-svg{ max-height:100%; }
 .story-card h4{ font-size:1.12rem; }
+
+/* ============================================================ tu curso: pestañas, bloques, calendario y nota */
+.tabs{ display:flex; flex-wrap:wrap; gap:6px; border-bottom:2px solid var(--border); margin: 10px 0 0; }
+.tab{ font: inherit; font-weight:700; padding:10px 16px; min-height:44px; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; background:none; color: var(--text-muted); cursor:pointer; border-radius:10px 10px 0 0; }
+.tab:hover{ color: var(--text); background: var(--surface-2); }
+.tab[aria-selected="true"]{ color: var(--primary-2); border-bottom-color: var(--primary-2); background: var(--surface); }
+.ruta-panel{ background: var(--surface); border:1px solid var(--border); border-top:none; border-radius: 0 0 var(--radius) var(--radius); padding:16px 20px 18px; margin-bottom:18px; }
+.ruta-t{ margin: 4px 0 6px; font-size:1.1rem; }
+.ruta-fecha{ margin: 18px 0 8px; font-size:1rem; color: var(--primary-2); }
+.tag-row{ display:flex; flex-wrap:wrap; gap:6px; }
+.tag-pill{ display:inline-block; padding:3px 10px; border-radius:999px; background: var(--primary-tint); color: var(--primary-2); font-size:.85rem; font-weight:700; }
+.bloques-tab td.min{ white-space:nowrap; font-variant-numeric: tabular-nums; font-weight:700; }
+.bloques-tab .eje{ display:block; font-size:.8rem; font-weight:600; color: var(--text-muted); }
+.bloques-tab tr.descanso{ opacity:.55; } .bloques-tab tr.descanso th, .bloques-tab tr.descanso td{ font-style: italic; }
+.btn-sm{ padding:6px 10px; min-height:36px; font-size:.85rem; }
+@media (max-width:640px){
+  .bloques-tab thead{ display:none; }
+  .bloques-tab, .bloques-tab tbody, .bloques-tab tr, .bloques-tab th, .bloques-tab td{ display:block; width:100%; }
+  .bloques-tab tr{ border:1px solid var(--border); border-radius:12px; padding:10px 12px; margin:0 0 10px; background: var(--surface); }
+  .bloques-tab th, .bloques-tab td{ border:none !important; padding:2px 0 !important; text-align:left; }
+  .bloques-tab td[data-label]:not(.min):not(:empty)::before{ content: attr(data-label) ": "; font-weight:700; color: var(--text-muted); }
+  .bloques-tab td:empty{ display:none; }
+  .ruta-panel{ padding:12px; }
+}
+.pe rect{ stroke: var(--surface); stroke-width:2; }
+.pe-0 rect{ fill: var(--p1); } .pe-1 rect{ fill: var(--p2); } .pe-2 rect{ fill: var(--p3); } .pe-3 rect{ fill: var(--chip-e); }
+.pe-t{ fill:#fff; font-weight:800; font-size: calc(15px * var(--svg-scale,1)); pointer-events:none; }
+:root[data-theme="dark"] .pe-t{ fill:#15142e; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .pe-t{ fill:#15142e; } }
+.pe:hover rect, .pe:focus-visible rect{ filter: brightness(1.08); }
+.cal{ list-style:none; padding:0; margin: 8px 0 18px; border-left:3px solid var(--border); }
+.cal-i{ position:relative; display:grid; grid-template-columns: minmax(0, 15em) minmax(0,1fr); gap:4px 16px; padding:10px 0 10px 18px; }
+.cal-i::before{ content:""; position:absolute; left:-8px; top:15px; width:13px; height:13px; border-radius:50%; background: var(--surface); border:3px solid var(--primary-2); }
+.cal-i.pasado{ opacity:.6; } .cal-i.pasado::before{ background: var(--primary-2); }
+.cal-i.proximo::before{ background: var(--accent); border-color: var(--accent); }
+.cal-f{ font-weight:700; } .cal-e{ grid-column:2; font-size:.88rem; }
+.cal-hoy{ display:inline-block; margin-left:8px; padding:1px 8px; border-radius:999px; background: var(--accent); color:#fff; font-size:.75rem; font-weight:800; }
+@media (max-width:640px){ .cal-i{ grid-template-columns: minmax(0,1fr); } .cal-e{ grid-column:1; } }
+.nota-form{ display:grid; grid-template-columns: repeat(auto-fit, minmax(13em, 1fr)); gap:12px 16px; margin: 8px 0 4px; }
+.nota-form label{ display:flex; flex-direction:column; gap:4px; font-weight:600; }
+.nota-out{ margin: 12px 0 6px; }
+.nota-res{ margin-top:10px; max-width: 26em; }
+.nota-tab td:not(:first-child){ font-variant-numeric: tabular-nums; white-space:nowrap; }
+.callout-warn{ border-left-color: var(--accent); }
 
 /* ============================================================ enlaces a las fuentes y su ficha */
 a.src-link{ color: var(--primary-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--primary-2) 55%, transparent); }

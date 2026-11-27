@@ -3,9 +3,90 @@ window.APP = {
   meta: {
     titulo: 'Aula de investigación clínica',
     subtitulo: 'Lectura crítica, revisiones sistemáticas con apoyo de IA, gestores de referencias y normas ofimáticas',
-    version: '0.3.0',
-    actualizado: '2026-11-26',
+    version: '0.4.0',
+    actualizado: '2026-11-27',
     autor: 'Fabian Antonio Dávila Ramírez'
+  },
+
+  /* Evaluación del proceso (rúbrica aprobada). notaMinima queda en null hasta confirmarla con el reglamento de posgrado:
+     mientras sea null, la calculadora no dice aprobado ni reprobado. Para fijarla, escribe el número, por ejemplo 3.5. */
+  evaluacion: {
+    escala: { min: 0.0, max: 5.0, decimales: 1 },
+    notaMinima: null,
+    criterios: [
+      { id: 'taller', nombre: 'Taller de preguntas de selección múltiple (20 preguntas)', peso: 0.40,
+        evalua: 'Precisión conceptual, justificación de las respuestas y capacidad de identificar el diseño del estudio y la guía de reporte correspondiente.' },
+      { id: 'fichas', nombre: 'Fichas de lectura crítica 1 y 2', peso: 0.30, nombreR2: 'Entregables del proyecto: síntesis de Proyecto I y avance de Proyecto II',
+        evalua: 'Identificación de la pregunta de investigación, el diseño, la calidad metodológica y la aplicabilidad clínica (15 % cada ficha).',
+        evaluaR2: 'Propuesta adaptada para segundo año, por confirmar: reemplaza las fichas por los entregables del proyecto.' },
+      { id: 'practica', nombre: 'Práctica con árbol de decisión y biblioteca en Mendeley', peso: 0.15,
+        evalua: 'Uso correcto del árbol para clasificar diseños y organización de referencias en Mendeley.' },
+      { id: 'particip', nombre: 'Participación y coevaluación en plenarias', peso: 0.15,
+        evalua: 'Intervención argumentada y retroalimentación constructiva a los compañeros.' }
+    ],
+    calendario: [
+      { fecha: '2026-11-27', texto: 'Viernes 27 de noviembre de 2026', que: 'Sesión conjunta de primer y segundo año: árbol de decisión, ficha 1 en grupos y Mendeley', evidencia: 'Práctica, ficha 1 y participación' },
+      { fecha: '2026-12-04', texto: 'Viernes 4 de diciembre de 2026', que: 'Sesión por grupo (primer y segundo año por separado)', evidencia: 'Ficha 2 y práctica' },
+      { fecha: '2026-12-11', texto: 'Viernes 11 de diciembre de 2026', que: 'Sesión por grupo y cierre de la práctica', evidencia: 'Ficha 2, Mendeley y participación' },
+      { fecha: null, texto: 'Por acordar con el grupo', que: 'Taller de 20 preguntas de selección múltiple', evidencia: 'Taller (40 %)' },
+      { fecha: '2027-01-31', texto: '31 de enero de 2027', que: 'Plazo para reportar las notas', evidencia: 'Nota definitiva' }
+    ],
+    ejemplo: { taller: 4.0, ficha1: 3.5, ficha2: 3.5, practica: 4.5, particip: 4.0 }
+  },
+
+  /* Rutas de trabajo por año. seccion: id de la sección del aula que apoya cada bloque. */
+  rutas: {
+    tarea: 'Para el 4 de diciembre: una pregunta clínica propia en formato PICO y diez referencias importadas a la carpeta Lectura_Apellido en Mendeley.',
+    conjunta: { titulo: 'Sesión conjunta de primer y segundo año', fecha: 'Viernes 27 de noviembre de 2026, 3:00 p. m.', duracion: 180,
+      objetivos: ['Entender cómo se evalúa el proceso: cuatro evidencias, pesos y calendario.', 'Dado un diseño de estudio, nombrar su guía de reporte y su herramienta de evaluación crítica.', 'Aplicar la herramienta a un artículo real con una ficha de lectura crítica.', 'Dejar Mendeley funcionando y conectado a Word.'],
+      sesiones: [ { fecha: 'Viernes 27 de noviembre de 2026', bloques: [
+        { min: '0–10', bloque: 'Apertura', actividad: 'Presentación, ruta del día y cómo se organiza el proceso', entregable: 'Ninguno' },
+        { min: '10–30', bloque: 'Rúbrica', actividad: 'Las cuatro evidencias, el cálculo de la nota con un ejemplo y el calendario', entregable: 'Preguntas aclaradas', seccion: 'evaluacion' },
+        { min: '30–40', bloque: 'Diagnóstico', actividad: 'Cinco preguntas de selección múltiple, sin nota', entregable: 'Autoevaluación', seccion: 'practica' },
+        { min: '40–60', bloque: 'Pregunta y mapa de diseños', actividad: 'PICO y PCC; método frente a tipo de publicación; diseño, guía y herramienta', entregable: 'Ninguno', seccion: 'pregunta' },
+        { min: '60–75', bloque: 'Cómo leer los números', actividad: 'RR, OR, HR, IC 95 %, reducción absoluta y NNT con un ejemplo', entregable: 'Cálculo del ejemplo', seccion: 'efecto' },
+        { min: '75–95', bloque: 'Árbol de decisión', actividad: 'Clasificar un estudio; RoB 2, cohortes y sesgos como lectura de apoyo', entregable: 'Clasificación de un artículo', seccion: 'diseno' },
+        { min: '95–100', bloque: 'Descanso', descanso: true },
+        { min: '100–135', bloque: 'Práctica en grupos mixtos', actividad: 'Buscar en PubMed, descargar el PDF y llenar la ficha 1', entregable: 'Ficha 1', seccion: 'diseno' },
+        { min: '135–155', bloque: 'Plenaria', actividad: 'Dos grupos presentan y los demás califican de 1,0 a 5,0 en claridad, justificación y aplicabilidad', entregable: 'Coevaluación' },
+        { min: '155–175', bloque: 'Mendeley', actividad: 'Cuenta, Mendeley Reference Manager, Mendeley Cite en Word, carpeta Lectura_Apellido y estilo Vancouver', entregable: 'Cita de prueba', seccion: 'citas' },
+        { min: '175–180', bloque: 'Cierre', actividad: 'Ruta de cada grupo, tarea para el 4 de diciembre y fecha del taller de preguntas', entregable: 'Fecha acordada' } ] } ] },
+    r1: { titulo: 'Primer año (R1): Metodología de la Investigación I y Lectura crítica',
+      componentes: ['Metodología de la Investigación I', 'Lectura crítica de artículos científicos'],
+      resumen: 'La síntesis conserva los ejes temáticos de los dos cursos y baja la profundidad de cada uno: pregunta, objetivos y marco teórico; variables, muestra y estadística en Excel; pronóstico, pruebas diagnósticas, revisiones sistemáticas, metanálisis y guías de práctica clínica.',
+      sesiones: [
+        { fecha: 'Viernes 4 de diciembre de 2026', bloques: [
+          { min: '0–60', bloque: 'Pregunta, título y objetivos', eje: 'Metodología, eje 1', actividad: 'Taller: de la pregunta PICO al título, objetivos con verbo en infinitivo y esquema del marco teórico', entregable: 'Pregunta, título y objetivos', seccion: 'pregunta' },
+          { min: '60–90', bloque: 'Estudio de pronóstico', eje: 'Lectura crítica, eje 1', actividad: 'Lectura guiada de un artículo de pronóstico: cohorte, HR y curva de supervivencia', entregable: 'Notas de lectura', seccion: 'pronostico' },
+          { min: '90–100', bloque: 'Descanso', descanso: true },
+          { min: '100–140', bloque: 'Pruebas diagnósticas', eje: 'Lectura crítica, eje 2', actividad: 'STARD 2015 y QUADAS-2; sensibilidad, especificidad y razones de verosimilitud', entregable: 'Ficha 2 (borrador)', seccion: 'diagnostica' },
+          { min: '140–180', bloque: 'Revisión sistemática', eje: 'Lectura crítica, ejes 2 y 3', actividad: 'PRISMA 2020 y AMSTAR 2; leer el flujo y la tabla de riesgo de sesgo', entregable: 'Notas de lectura', seccion: 'revision' } ] },
+        { fecha: 'Viernes 11 de diciembre de 2026', bloques: [
+          { min: '0–45', bloque: 'Metanálisis', eje: 'Lectura crítica, eje 3', actividad: 'Leer un forest plot: efecto combinado, I² y sesgo de publicación', entregable: 'Interpretación de un forest plot', seccion: 'metanalisis' },
+          { min: '45–75', bloque: 'Guías de práctica clínica y costo-efectividad', eje: 'Lectura crítica, eje 4', actividad: 'Lectura guiada de una guía; modelo de guías del Sistema General de Seguridad Social en Salud', entregable: 'Notas de lectura', seccion: 'guias' },
+          { min: '75–85', bloque: 'Descanso', descanso: true },
+          { min: '85–160', bloque: 'Variables, muestra y datos', eje: 'Metodología, ejes 3 y 4', actividad: 'Variables y escalas, población y muestra, formato de recolección y cronograma; base de datos y estadística descriptiva con histograma en Excel', entregable: 'Base de datos con un histograma', seccion: 'variables' },
+          { min: '160–180', bloque: 'Probabilidad y prueba diagnóstica', eje: 'Metodología, eje 4', actividad: 'Probabilidad pretest y postest con un caso clínico', entregable: 'Ficha 2 entregada', seccion: 'diagnostica' } ] }
+      ],
+      independiente: 'Hasta el 31 de enero de 2027: ficha 2 terminada (una prueba diagnóstica o una revisión sistemática), práctica del árbol, biblioteca de Mendeley y repaso con las preguntas de práctica del aula.' },
+    r2: { titulo: 'Segundo año (R2): Proyecto de investigación I y II',
+      componentes: ['Proyecto de investigación I', 'Proyecto de investigación II'],
+      resumen: 'Proyecto I: título, planteamiento del problema y pregunta; justificación y objetivos; marco teórico y metodología. Proyecto II: desarrollo del proyecto, recopilación de la información y avance de resultados. La sesión conjunta (PICO, tipos de estudio, árbol de decisión, lectura crítica y Mendeley) es la base del marco teórico y de la metodología.',
+      sesiones: [
+        { fecha: 'Viernes 4 de diciembre de 2026: Proyecto I en síntesis', bloques: [
+          { min: '0–40', bloque: 'Título, problema y pregunta', actividad: 'Del tema clínico a la pregunta PICO; delimitar el problema', entregable: 'Problema y pregunta (una página)', seccion: 'pregunta' },
+          { min: '40–80', bloque: 'Justificación y objetivos', actividad: 'Magnitud, vacío de conocimiento y utilidad; objetivo general y específicos', entregable: 'Justificación y objetivos', seccion: 'protocolo' },
+          { min: '80–90', bloque: 'Descanso', descanso: true },
+          { min: '90–130', bloque: 'Marco teórico', actividad: 'Estrategia de búsqueda, selección de artículos y citas con Mendeley en estilo Vancouver', entregable: 'Marco teórico con diez referencias', seccion: 'citas' },
+          { min: '130–180', bloque: 'Metodología', actividad: 'Diseño con el árbol de decisión; variables, población y muestra, instrumento, análisis y consideraciones éticas', entregable: 'Esquema metodológico', seccion: 'protocolo' } ] },
+        { fecha: 'Viernes 11 de diciembre de 2026: Proyecto II en síntesis', bloques: [
+          { min: '0–60', bloque: 'Recopilación de la información', actividad: 'Instrumento y diccionario de variables; base de datos en Excel; control de calidad de los datos', entregable: 'Base de datos con diccionario', seccion: 'avance' },
+          { min: '60–120', bloque: 'Avance de resultados', actividad: 'Tablas descriptivas y gráficos; lectura crítica de los propios resultados con la guía de reporte que corresponde', entregable: 'Tabla y gráfico de avance', seccion: 'avance' },
+          { min: '120–130', bloque: 'Descanso', descanso: true },
+          { min: '130–180', bloque: 'Presentación de avances', actividad: 'Cada estudiante presenta su avance; coevaluación en claridad, justificación y aplicabilidad', entregable: 'Presentación y coevaluación' } ] }
+      ],
+      independiente: 'Hasta el 31 de enero de 2027: síntesis de Proyecto I y avance de Proyecto II, práctica del árbol y biblioteca de Mendeley.',
+      nota: 'Por confirmar: si segundo año se califica por Proyecto de investigación I y II o por Metodología I y Lectura crítica como primer año. Mientras tanto, la rúbrica conserva los pesos y reemplaza las fichas por los entregables del proyecto.' }
   },
 
   /* Cada tema: competencia que desarrolla y fuentes. Verifica los enlaces al actualizar. */

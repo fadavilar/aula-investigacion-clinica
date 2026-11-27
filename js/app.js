@@ -25,14 +25,17 @@ const disCod = cod=> DIS.find(d=> d.cod === cod);
 
 /* ------------------------------------------------------------ partes y secciones (toda sección analítica es una pregunta) */
 const PARTES = [
-  { id:"I", k:"Primera parte", t:"Planear el estudio", d:"Qué vas a aprender, qué diseño tienes delante y cuántos participantes necesitas." },
-  { id:"II", k:"Segunda parte", t:"Leer y evaluar", d:"Practicar la clasificación y leer los números de un estudio." },
-  { id:"III", k:"Tercera parte", t:"Sintetizar y publicar", d:"Revisión sistemática con IA, citas y formato del manuscrito." },
+  { id:"C", k:"Para empezar", t:"Tu curso", d:"La ruta de primer y segundo año, cómo se evalúa y qué vas a aprender." },
+  { id:"I", k:"Primera parte", t:"Planear el estudio", d:"Pregunta, diseño, tamaño de muestra, variables y protocolo." },
+  { id:"II", k:"Segunda parte", t:"Leer y evaluar", d:"Efecto, pronóstico, pruebas diagnósticas, metanálisis y guías." },
+  { id:"III", k:"Tercera parte", t:"Sintetizar y publicar", d:"Revisión sistemática con IA, avance de resultados, citas y formato." },
   { id:"IV", k:"Cuarta parte", t:"Recursos", d:"Mapas mentales, glosario y referencias." }
 ];
 const SECCIONES = [
   { id:"resumen", part:null, toc:"Resumen", title:"Resumen", sub:"Para qué sirve el aula y cómo recorrerla", open:true, subs:[{id:"resumen-relato",label:"El recorrido, paso a paso"},{id:"resumen-preguntas",label:"Las preguntas del aula"}] },
-  { id:"temas", part:"I", toc:"¿Qué vas a aprender?", title:"¿Qué vas a aprender en esta aula?", sub:"Temas, competencias y fuentes", open:false },
+  { id:"rutas", part:"C", toc:"¿Qué te corresponde este año?", title:"¿Qué te corresponde en primer y segundo año?", sub:"Sesión conjunta, ruta R1 y ruta R2, bloque por bloque", open:false },
+  { id:"evaluacion", part:"C", toc:"¿Cómo se evalúa?", title:"¿Cómo se evalúa y cuándo?", sub:"Cuatro evidencias, calendario y calculadora de la nota", open:false, subs:[{id:"evaluacion-criterios",label:"Las cuatro evidencias"},{id:"evaluacion-calendario",label:"Calendario"},{id:"evaluacion-calculadora",label:"Calculadora de la nota"}] },
+  { id:"temas", part:"C", toc:"¿Qué vas a aprender?", title:"¿Qué vas a aprender en esta aula?", sub:"Temas, competencias y fuentes", open:false },
   { id:"diseno", part:"I", toc:"¿Qué diseño tiene el estudio?", title:"¿Qué diseño tiene el estudio que lees?", sub:"Árbol de decisión, guía de reporte y herramienta de evaluación", open:false, subs:[{id:"diseno-arbol",label:"Árbol de decisión"},{id:"diseno-selector",label:"Guía y herramienta por diseño"},{id:"diseno-ficha",label:"Ficha de lectura crítica"}] },
   { id:"muestra", part:"I", toc:"¿Cuántos participantes?", title:"¿Cuántos participantes necesitas?", sub:"Las seis calculadoras de tamaño de muestra del Excel, paso a paso", open:false, subs:[{id:"muestra-calculadora",label:"Calculadora"},{id:"muestra-formula",label:"La fórmula, paso a paso"},{id:"muestra-curva",label:"¿Cómo cambia la muestra?"}] },
   { id:"practica", part:"II", toc:"¿Reconoces el diseño?", title:"¿Reconoces el diseño y la herramienta?", sub:"Preguntas de práctica con retroalimentación", open:false },
@@ -45,6 +48,8 @@ const SECCIONES = [
   { id:"referencias", part:"IV", toc:"Referencias", title:"Referencias", sub:"Con enlace verificable", open:false }
 ];
 const IDEAS = {
+  rutas:"Primer año condensa Metodología I y Lectura crítica; segundo año, Proyecto de investigación I y II. Cada bloque enlaza la sección del aula que lo apoya.",
+  evaluacion:"La nota definitiva suma cuatro evidencias con pesos de 40, 30, 15 y 15 % y se expresa con un entero y un decimal.",
   temas:"El aula recorre el ciclo de un estudio, de la pregunta a la publicación, con una competencia concreta por tema.",
   diseno:"El diseño se identifica por lo que hicieron los investigadores, no por cómo lo nombra el título.",
   muestra:"La muestra depende de la confianza, la precisión y la variabilidad esperadas: pedir el doble de precisión casi cuadruplica el número de participantes.",
@@ -630,6 +635,153 @@ function recursos(){
   b.appendChild(el("div",{class:"grid3"}, A.recursos.map(r=> el("article",{class:"card rec"},[ el("h4",null,[ el("a",{href:r.u, target:"_blank", rel:"noopener"},[r.t]) ]), el("p",null,[r.d]) ]))));
 }
 
+/* ============================================================ TU CURSO: RUTAS Y EVALUACIÓN */
+const ANIO_KEY = "aula-ic-anio";
+const anioGuardado = ()=>{ try{ return localStorage.getItem(ANIO_KEY) || "conjunta"; }catch(e){ return "conjunta"; } };
+const guardaAnio = v=>{ try{ localStorage.setItem(ANIO_KEY, v); }catch(e){} };
+const irA = id=>{ M.openSection(id); M.scrollSoon("sec-" + id); };
+/* Pestañas accesibles: role="tablist", flechas, Inicio y Fin; tabindex móvil */
+function pestanas(opciones, activa, alElegir, rotulo){
+  const lista = el("div",{class:"tabs", role:"tablist", "aria-label":rotulo});
+  const botones = opciones.map(o=>{
+    const b = el("button",{type:"button", role:"tab", class:"tab", id:"tab-" + o.id, "aria-selected":String(o.id === activa), tabindex:o.id === activa ? "0" : "-1", "aria-controls":"panel-tab-" + o.id},[o.label]);
+    b.addEventListener("click", ()=> elegir(o.id, true)); lista.appendChild(b); return b;
+  });
+  function elegir(id, foco){
+    botones.forEach((b,i)=>{ const on = opciones[i].id === id; b.setAttribute("aria-selected", String(on)); b.tabIndex = on ? 0 : -1; if(on && foco) b.focus(); });
+    alElegir(id);
+  }
+  lista.addEventListener("keydown", e=>{
+    const i = botones.indexOf(document.activeElement); if(i < 0) return;
+    let j = null;
+    if(e.key === "ArrowRight") j = (i + 1) % botones.length; else if(e.key === "ArrowLeft") j = (i - 1 + botones.length) % botones.length;
+    else if(e.key === "Home") j = 0; else if(e.key === "End") j = botones.length - 1;
+    if(j !== null){ e.preventDefault(); elegir(opciones[j].id, true); }
+  });
+  return { nodo:lista, elegir:elegir };
+}
+function tablaBloques(bloques){
+  const t = el("table",{class:"cmp-table bloques-tab"}), tb = el("tbody");
+  t.appendChild(el("thead",null,[ el("tr",null, ["Minutos","Bloque","Actividad","Entregable","En el aula"].map(x=> el("th",{scope:"col"},[x]))) ]));
+  bloques.forEach(b=>{
+    const apoyo = b.seccion && M.SEC[b.seccion] ? el("button",{type:"button", class:"btn btn-sm"},[M.SEC[b.seccion].toc || M.SEC[b.seccion].title]) : null;
+    if(apoyo) apoyo.addEventListener("click", ()=> irA(b.seccion));
+    tb.appendChild(el("tr",{class:b.descanso ? "descanso" : null},[
+      el("td",{"data-label":"Minutos", class:"min"},[b.min]),
+      el("th",{scope:"row", "data-label":"Bloque"},[b.bloque, b.eje ? el("span",{class:"eje"},[b.eje]) : null]),
+      el("td",{"data-label":"Actividad"},[b.descanso ? "Pausa" : b.actividad || ""]),
+      el("td",{"data-label":"Entregable"},[b.descanso ? "" : b.entregable || ""]),
+      el("td",{"data-label":"En el aula"},[apoyo])
+    ]));
+  });
+  t.appendChild(tb);
+  return el("div",{class:"table-wrap"},[t]);
+}
+function rutas(){
+  const b = $("rutas"), R = A.rutas;
+  b.appendChild(el("p",null,["Elige tu grupo. Cada sesión aparece bloque por bloque, con su entregable y la sección del aula que te sirve para prepararlo. La elección queda guardada en este navegador."]));
+  const panel = el("div",{class:"ruta-panel", role:"tabpanel", tabindex:"0"});
+  const pinta = id=>{
+    guardaAnio(id); panel.id = "panel-tab-" + id; panel.setAttribute("aria-labelledby", "tab-" + id); panel.innerHTML = "";
+    const r = R[id];
+    panel.appendChild(el("h4",{class:"ruta-t"},[r.titulo]));
+    if(r.fecha) panel.appendChild(el("p",{class:"muted"},[r.fecha + " · " + r.duracion + " minutos"]));
+    if(r.componentes) panel.appendChild(el("p",{class:"tag-row"}, r.componentes.map(c=> el("span",{class:"tag-pill"},[c]))));
+    if(r.resumen) panel.appendChild(el("p",null,[r.resumen]));
+    if(r.objetivos) panel.appendChild(el("ol",{class:"steps"}, r.objetivos.map(o=> el("li",null,[o]))));
+    r.sesiones.forEach(s=>{ panel.appendChild(el("h5",{class:"ruta-fecha"},[s.fecha])); panel.appendChild(tablaBloques(s.bloques)); });
+    if(r.independiente) panel.appendChild(el("p",{class:"callout"},[ el("strong",null,["Trabajo independiente. "]), r.independiente ]));
+    if(r.nota) panel.appendChild(el("p",{class:"callout callout-warn"},[r.nota]));
+    panel.appendChild(el("p",{class:"callout"},[ el("strong",null,["Tarea para todos. "]), R.tarea ]));
+  };
+  const tabs = pestanas([{id:"conjunta", label:"Sesión conjunta"},{id:"r1", label:"Primer año (R1)"},{id:"r2", label:"Segundo año (R2)"}], anioGuardado(), pinta, "Ruta por grupo");
+  b.appendChild(tabs.nodo); b.appendChild(panel); pinta(anioGuardado());
+}
+const redondea1 = x=> Math.round((x + 1e-9)*10)/10;
+function notaDefinitiva(v){ /* v: { taller, ficha1, ficha2, practica, particip } en la escala de 0 a 5 */
+  const W = {}; A.evaluacion.criterios.forEach(c=> W[c.id] = c.peso);
+  const fichas = (v.ficha1 + v.ficha2)/2, aportes = { taller:W.taller*v.taller, fichas:W.fichas*fichas, practica:W.practica*v.practica, particip:W.particip*v.particip };
+  const total = aportes.taller + aportes.fichas + aportes.practica + aportes.particip;
+  return { fichas, aportes, total, nota:redondea1(total) };
+}
+const EV = { anio:"r1", vals:{} };
+function evaluacion(){
+  const b = $("evaluacion"), E = A.evaluacion;
+  b.appendChild(el("p",null,["La escala va de " + fmt(E.escala.min, 1) + " a " + fmt(E.escala.max, 1) + " y toda nota se expresa con un entero y un decimal. Los pesos son los mismos para primer y segundo año; en segundo año cambia qué se entrega en la segunda evidencia."]));
+  const anioRow = M.chips([{id:"r1", label:"Primer año (R1)"},{id:"r2", label:"Segundo año (R2)"}], EV.anio, id=>{ EV.anio = id; pintaCriterios(); armaCalc(); }, "Año");
+  b.appendChild(anioRow);
+  M.sub(b, "evaluacion-criterios", "Las cuatro evidencias");
+  const crit = el("div"), barra = el("div",{class:"chart-box"});
+  b.appendChild(barra); b.appendChild(crit);
+  function pesosSVG(){
+    const W = VW(760, 340), H = VW(70, 120), s = svgEl(W, H, "pesos-svg", "Peso de cada evidencia en la nota");
+    let x = 0; const cls = ["pe-0","pe-1","pe-2","pe-3"];
+    E.criterios.forEach((c,i)=>{
+      const w = W*c.peso, g = sv("g",{class:"pe " + cls[i]}, s), nombre = EV.anio === "r2" && c.nombreR2 ? c.nombreR2 : c.nombre;
+      sv("rect",{x:x + 1, y:6, width:w - 2, height:VW(40, 46), rx:6}, g);
+      tx(g, x + w/2, VW(32, 35), fmt(c.peso*100, 0) + " %", "pe-t", "middle");
+      if(MOB()) txs(g, x + 6, 72, M.wrapText(nombre.split(" (")[0].split(":")[0], 9).slice(0,3), "ax-s", "start", 15);
+      activable(g, nombre + ": " + fmt(c.peso*100, 0) + " %"); bindTip(g, ()=> "<h5>" + esc(nombre) + "</h5><p>Peso: <strong>" + fmt(c.peso*100, 0) + " %</strong></p><p>" + esc(EV.anio === "r2" && c.evaluaR2 ? c.evaluaR2 : c.evalua) + "</p>");
+      x += w;
+    });
+    return s;
+  }
+  function pintaCriterios(){
+    barra.innerHTML = ""; barra.appendChild(pesosSVG());
+    crit.innerHTML = "";
+    crit.appendChild(M.tabla(["Evidencia","Peso","Qué se evalúa"], E.criterios.map(c=> [EV.anio === "r2" && c.nombreR2 ? c.nombreR2 : c.nombre, fmt(c.peso*100, 0) + " %", EV.anio === "r2" && c.evaluaR2 ? c.evaluaR2 : c.evalua])));
+    if(EV.anio === "r2") crit.appendChild(el("p",{class:"callout callout-warn"},[A.rutas.r2.nota]));
+  }
+  M.sub(b, "evaluacion-calendario", "Calendario");
+  const hoy = new Date().toISOString().slice(0,10), prox = E.calendario.find(c=> c.fecha && c.fecha >= hoy);
+  b.appendChild(el("ol",{class:"cal"}, E.calendario.map(c=> el("li",{class:"cal-i" + (c.fecha && c.fecha < hoy ? " pasado" : "") + (c === prox ? " proximo" : "")},[
+    el("span",{class:"cal-f"},[c.texto, c.fecha === hoy ? el("span",{class:"cal-hoy"},["Hoy"]) : c === prox ? el("span",{class:"cal-hoy"},["Lo siguiente"]) : null]),
+    el("span",{class:"cal-q"},[c.que]), el("span",{class:"cal-e muted"},["Evidencia: " + c.evidencia]) ]))));
+  M.sub(b, "evaluacion-calculadora", "Calculadora de la nota", "Escribe tus notas de 0,0 a 5,0. La segunda evidencia es el promedio de sus dos partes.");
+  const form = el("div",{class:"nota-form"}), out = el("div",{class:"nota-out", "aria-live":"polite"});
+  const botones = el("div",{class:"tools-row"}), ej = el("button",{type:"button", class:"btn"},["Usar el ejemplo"]), lim = el("button",{type:"button", class:"btn"},["Borrar"]);
+  botones.appendChild(ej); botones.appendChild(lim);
+  b.appendChild(form); b.appendChild(botones); b.appendChild(out);
+  b.appendChild(el("p",{class:"muted small"},["El ejemplo usa notas inventadas, solo para mostrar la cuenta."]));
+  const campos = ()=> [
+    { k:"taller", l:"Taller de preguntas (40 %)" },
+    { k:"ficha1", l: EV.anio === "r2" ? "Síntesis de Proyecto I (15 %)" : "Ficha de lectura crítica 1 (15 %)" },
+    { k:"ficha2", l: EV.anio === "r2" ? "Avance de Proyecto II (15 %)" : "Ficha de lectura crítica 2 (15 %)" },
+    { k:"practica", l:"Práctica con árbol y Mendeley (15 %)" },
+    { k:"particip", l:"Participación y coevaluación (15 %)" } ];
+  function armaCalc(){
+    form.innerHTML = "";
+    campos().forEach(c=>{
+      const i = el("input",{type:"text", inputmode:"decimal", id:"nota-" + c.k, placeholder:"0,0 a 5,0", value: EV.vals[c.k] !== undefined ? String(EV.vals[c.k]).replace(".", ",") : ""});
+      i.addEventListener("input", ()=>{ const t = i.value.trim(); if(t === "") delete EV.vals[c.k]; else EV.vals[c.k] = t; calcula(); });
+      form.appendChild(el("label",{for:"nota-" + c.k},[c.l, i]));
+    });
+    calcula();
+  }
+  function calcula(){
+    out.innerHTML = "";
+    const cs = campos(), vals = {}, malos = [], vacios = [];
+    cs.forEach(c=>{ const t = EV.vals[c.k]; if(t === undefined || String(t).trim() === ""){ vacios.push(c.l); return; }
+      const x = parseFloat(String(t).replace(",", ".")); if(!isFinite(x) || x < E.escala.min || x > E.escala.max) malos.push(c.l); else vals[c.k] = x;
+      const inp = form.querySelector("#nota-" + c.k); if(inp){ if(!isFinite(x) || x < E.escala.min || x > E.escala.max) inp.setAttribute("aria-invalid","true"); else inp.removeAttribute("aria-invalid"); } });
+    if(malos.length){ out.appendChild(el("p",{class:"m-err"},["Revisa: " + malos.join("; ") + ". Cada nota va de 0,0 a 5,0."])); return; }
+    if(vacios.length){ out.appendChild(el("p",{class:"muted"},["Faltan " + vacios.length + " de 5 notas para calcular: " + vacios.join("; ") + "."])); return; }
+    const r = notaDefinitiva(vals);
+    const filas = [
+      [cs[0].l.replace(/ \(.*/,""), fmt(vals.taller, 1), "40 %", fmt(r.aportes.taller, 3)],
+      [(EV.anio === "r2" ? "Entregables del proyecto" : "Fichas 1 y 2") + " (promedio)", fmt(r.fichas, 2), "30 %", fmt(r.aportes.fichas, 3)],
+      [cs[3].l.replace(/ \(.*/,""), fmt(vals.practica, 1), "15 %", fmt(r.aportes.practica, 3)],
+      [cs[4].l.replace(/ \(.*/,""), fmt(vals.particip, 1), "15 %", fmt(r.aportes.particip, 3)] ];
+    out.appendChild(M.tabla(["Evidencia","Nota","Peso","Aporte"], filas, "nota-tab"));
+    out.appendChild(el("div",{class:"m-res nota-res"},[ el("span",{class:"m-res-k"},["Nota definitiva"]), el("strong",{class:"m-res-n"},[fmt(r.nota, 1)]),
+      el("span",{class:"m-res-d"},["Suma exacta: " + fmt(r.total, 3) + ", redondeada a una décima."]),
+      el("span",{class:"m-res-d muted"},[E.notaMinima === null ? "La nota mínima de aprobación se confirma con el reglamento de posgrado." : (r.nota >= E.notaMinima ? "Alcanza" : "No alcanza") + " la nota mínima de aprobación (" + fmt(E.notaMinima, 1) + ")."]) ]));
+  }
+  ej.addEventListener("click", ()=>{ Object.keys(E.ejemplo).forEach(k=> EV.vals[k] = E.ejemplo[k]); armaCalc(); });
+  lim.addEventListener("click", ()=>{ EV.vals = {}; armaCalc(); });
+  pintaCriterios(); armaCalc();
+}
+
 /* ============================================================ RESUMEN Y RELATO */
 function picoSVG(){
   const mob = MOB(), W = VW(560, 340), H = VW(300, 420), s = svgEl(W, H, "pico-svg story-svg", "Esquemas PICO y PCC");
@@ -761,7 +913,7 @@ if(C.enlaces && C.fuentes){ const ya = new Set(); C.fuentes.forEach(g=> g.items.
 M.iniciar({
   contenido: C, secciones: SECCIONES, partes: PARTES, ideas: IDEAS,
   entidad: { nombre:"diseño", inicial:null, valida: cod=> !!disCod(cod) },
-  render(){ resumen(); temas(); diseno(); muestra(); practica(); efecto(); revision(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
+  render(){ resumen(); rutas(); evaluacion(); temas(); diseno(); muestra(); practica(); efecto(); revision(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
   indice(){
     return DIS.map(d=> ({ type:"Diseño", label:d.nombre, detail:d.guia + " · " + d.herramienta, sec:"diseno", anchor:"diseno-selector", cod:d.cod }))
       .concat(MU.calculadoras.map(h=> ({ type:"Tamaño de muestra", label:h.t, detail:"Hoja " + h.hoja + " del Excel", sec:"muestra", anchor:"muestra-calculadora" })))
@@ -769,5 +921,5 @@ M.iniciar({
       .concat(A.contenidos.map(c=> ({ type:"Tema", label:c.tema, detail:c.competencia, sec:"temas", anchor:"sec-temas" })));
   }
 });
-window.AULA = { normInv, calcular, efectoCalc };
+window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva };
 })();
