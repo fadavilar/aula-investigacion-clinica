@@ -12,7 +12,7 @@ App estática en español, sin dependencias, construida con el motor de la skill
 - Cada pregunta del banco lleva su resultado de aprendizaje (`ra`, definido en `EVAL.ras`) y sus rutas (`rutas: 'R1 R2'`). Una pregunta compartida se cuenta en el resultado equivalente del otro año según `EQUIV` en `js/formularios.js`.
 - Las preguntas de los artículos solo afirman lo que dice el resumen en PubMed; si agregas un artículo, verifica PMID, DOI y cita con PubMed o Crossref.
 - Cada pregunta tiene un alcance (`C` sesión conjunta, `R1`, `R2`): en `practicaMeta`, en el campo `rutas` del banco, en `alcance` de cada artículo (con `raC` para la sesión conjunta) y en el arreglo `conjunta`.
-- El correo de las entregas (`evaluacion.correoDocente`) solo se publica con la autorización explícita del docente; mientras sea `null`, el estudiante escribe el destinatario.
+- El correo de las entregas (`evaluacion.correoDocente`) solo se publica con la autorización explícita del docente; mientras sea `null`, el estudiante escribe el destinatario. El docente autorizó (2026-11-27) su correo institucional: es la única excepción a la regla de no nombrar instituciones, así que el control de privacidad excluye esa línea: `grep -rniE "<términos>" . --exclude-dir=.git | grep -v "correoDocente"`.
 - La nota mínima (`evaluacion.notaMinima` en `data/contenidos.js`) queda en `null` hasta que el docente la confirme con el reglamento de posgrado; no afirmes 3,0 ni 3,5 en ningún texto.
 - Prueba de la calculadora de la nota: 4,0 / 3,5 / 4,5 / 4,0 da 3,9; todo en 5,0 da 5,0; todo en 0 da 0,0 (`window.AULA.notaDefinitiva`).
 - Enlaces solo verificados; no inventes DOI ni URL. Si un enlace no abre, avísalo.
