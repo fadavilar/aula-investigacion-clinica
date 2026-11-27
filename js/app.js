@@ -35,6 +35,9 @@ const SECCIONES = [
   { id:"resumen", part:null, toc:"Resumen", title:"Resumen", sub:"Para qué sirve el aula y cómo recorrerla", open:true, subs:[{id:"resumen-relato",label:"El recorrido, paso a paso"},{id:"resumen-preguntas",label:"Las preguntas del aula"}] },
   { id:"rutas", part:"C", toc:"¿Qué te corresponde este año?", title:"¿Qué te corresponde en primer y segundo año?", sub:"Sesión conjunta, ruta R1 y ruta R2, bloque por bloque", open:false },
   { id:"evaluacion", part:"C", toc:"¿Cómo se evalúa?", title:"¿Cómo se evalúa y cuándo?", sub:"Cuatro evidencias, calendario y calculadora de la nota", open:false, subs:[{id:"evaluacion-criterios",label:"Las cuatro evidencias"},{id:"evaluacion-calendario",label:"Calendario"},{id:"evaluacion-calculadora",label:"Calculadora de la nota"}] },
+  { id:"evaluar", part:"C", toc:"¿Cuánto has aprendido?", title:"¿Cuánto has aprendido? Evaluación con intentos ilimitados", sub:"Preguntas sorteadas por resultado de aprendizaje, con descarga de resultados", open:false },
+  { id:"formularios", part:"C", toc:"¿Cómo entregas tus evidencias?", title:"¿Cómo entregas tus evidencias?", sub:"Diagnóstico, fichas, árbol y Mendeley, coevaluación y entregables, con descarga", open:false },
+  { id:"docente", part:"C", toc:"Consolidar las notas (docente)", title:"¿Cómo se consolidan las notas? (para el docente)", sub:"Carga los archivos de los estudiantes y descarga la tabla de notas", open:false },
   { id:"temas", part:"C", toc:"¿Qué vas a aprender?", title:"¿Qué vas a aprender en esta aula?", sub:"Temas, competencias y fuentes", open:false },
   { id:"pregunta", part:"I", toc:"¿Cómo se formula la pregunta?", title:"¿Cómo se convierte una duda clínica en pregunta, título y objetivos?", sub:"Constructor de la pregunta PICO, de frecuencia o PCC", open:false },
   { id:"diseno", part:"I", toc:"¿Qué diseño tiene el estudio?", title:"¿Qué diseño tiene el estudio que lees?", sub:"Árbol de decisión, guía de reporte y herramienta de evaluación", open:false, subs:[{id:"diseno-arbol",label:"Árbol de decisión"},{id:"diseno-selector",label:"Guía y herramienta por diseño"},{id:"diseno-ficha",label:"Ficha de lectura crítica"}] },
@@ -46,6 +49,7 @@ const SECCIONES = [
   { id:"diagnostica", part:"II", toc:"¿Qué tan buena es la prueba?", title:"¿Qué tan buena es una prueba diagnóstica?", sub:"Sensibilidad, especificidad, razones de verosimilitud y probabilidad postest", open:false },
   { id:"metanalisis", part:"II", toc:"¿Cómo se lee un metanálisis?", title:"¿Cómo se lee un metanálisis?", sub:"Forest plot, efecto combinado y heterogeneidad", open:false },
   { id:"guias", part:"II", toc:"¿Cuánto confiar en una guía?", title:"¿Cuánto confiar en una guía de práctica clínica y en un estudio económico?", sub:"AGREE II y razón de costo-efectividad incremental", open:false, subs:[{id:"guias-agree",label:"AGREE II"},{id:"guias-rcei",label:"Costo-efectividad"}] },
+  { id:"articulos", part:"II", toc:"¿Y en un artículo real?", title:"¿Cómo se lee críticamente un artículo real?", sub:"Cinco artículos de PubMed, uno por diseño, con preguntas ajustadas", open:false },
   { id:"practica", part:"II", toc:"¿Reconoces el diseño?", title:"¿Reconoces el diseño, la herramienta y la medida?", sub:"Preguntas de práctica con retroalimentación", open:false },
   { id:"revision", part:"III", toc:"¿Cómo se hace una revisión con IA?", title:"¿Cómo se hace una revisión sistemática con apoyo de IA?", sub:"Diez fases, buenas prácticas y declaración de uso", open:false, subs:[{id:"revision-fases",label:"Las diez fases"},{id:"revision-practicas",label:"Buenas prácticas"},{id:"revision-declaracion",label:"Declaración de uso de IA"},{id:"revision-claude",label:"Qué necesitas en Claude"}] },
   { id:"avance", part:"III", toc:"¿Cómo presentas el avance?", title:"¿Cómo se recogen los datos y se presenta el avance de resultados?", sub:"Lista de Proyecto II y plantilla del diccionario de variables", open:false, subs:[{id:"avance-diccionario",label:"Diccionario de variables"}] },
@@ -58,6 +62,10 @@ const SECCIONES = [
 const IDEAS = {
   rutas:"Primer año condensa Metodología I y Lectura crítica; segundo año, Proyecto de investigación I y II. Cada bloque enlaza la sección del aula que lo apoya.",
   evaluacion:"La nota definitiva suma cuatro evidencias con pesos de 40, 30, 15 y 15 % y se expresa con un entero y un decimal.",
+  evaluar:"Equivocarse aquí es parte del aprendizaje: cada intento sortea preguntas nuevas y te dice qué resultado de aprendizaje repasar.",
+  formularios:"Cada evidencia se entrega como un archivo que el docente carga en el consolidador para calcular la nota.",
+  docente:"La nota definitiva sale de las cuatro evidencias con sus pesos; el docente revisa y ajusta cada valor sugerido.",
+  articulos:"La lectura crítica se aprende sobre artículos reales: diseño, guía, herramienta, resultado y aplicabilidad.",
   pregunta:"Una buena pregunta ya contiene el título, el objetivo general y el diseño probable del estudio.",
   variables:"El tipo de variable decide cómo se resume: frecuencias para categorías; media o mediana para números, según la forma de la distribución.",
   protocolo:"Un protocolo coherente encadena la pregunta, los objetivos, el diseño, la muestra, las variables, el análisis y la ética.",
@@ -1048,7 +1056,7 @@ function guias(){
     else if(de > 0) t = "La nueva es más efectiva y más costosa: cada AVAC adicional cuesta <strong>" + fmt(rcei) + " pesos</strong>. " + (isFinite(um) ? (rcei <= um ? "Queda por debajo del umbral que escribiste, así que sería costo-efectiva con ese criterio." : "Supera el umbral que escribiste, así que no sería costo-efectiva con ese criterio.") : "Para decidir hace falta un umbral de disposición a pagar.");
     else if(de < 0) t = "La nueva es menos efectiva y más barata: se ahorran " + fmt(Math.abs(rcei)) + " pesos por cada AVAC que se pierde; la decisión depende del umbral y de la ética de renunciar a salud.";
     else t = "No hay diferencia de efecto: la comparación se reduce a los costos.";
-    M.setReading(ceLec, t + " Lee también el análisis de sensibilidad: una RCEI sin incertidumbre dice poco.");
+    M.setReading(ceLec, t + " Lee también cómo se analizó la incertidumbre: una RCEI sin ese análisis dice poco.");
   }
   calcCe();
 }
@@ -1390,7 +1398,7 @@ if(C.enlaces && C.fuentes){ const ya = new Set(); C.fuentes.forEach(g=> g.items.
 M.iniciar({
   contenido: C, secciones: SECCIONES, partes: PARTES, ideas: IDEAS,
   entidad: { nombre:"diseño", inicial:null, valida: cod=> !!disCod(cod) },
-  render(){ resumen(); rutas(); evaluacion(); temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
+  render(){ resumen(); rutas(); evaluacion(); const F = window.AULA_FORM; if(F){ F.evaluar($("evaluar")); F.formularios($("formularios")); F.docente($("docente")); F.articulos($("articulos")); } temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
   indice(){
     return DIS.map(d=> ({ type:"Diseño", label:d.nombre, detail:d.guia + " · " + d.herramienta, sec:"diseno", anchor:"diseno-selector", cod:d.cod }))
       .concat(MU.calculadoras.map(h=> ({ type:"Tamaño de muestra", label:h.t, detail:"Hoja " + h.hoja + " del Excel", sec:"muestra", anchor:"muestra-calculadora" })))

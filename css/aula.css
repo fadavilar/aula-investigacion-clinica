@@ -324,6 +324,33 @@ textarea{ font: inherit; color: var(--text); background: var(--surface); border:
 .riesgo-minimo{ border-left-color: var(--chip-c); } .riesgo-mayor{ border-left-color: var(--accent); }
 .dic-tab td{ min-width: 9em; }
 
+/* ============================================================ evaluación, artículos, formularios y consolidador */
+.id-box{ display:grid; grid-template-columns: repeat(auto-fit, minmax(13em, 1fr)); gap:10px 16px; border:1px solid var(--border); border-radius: var(--radius); padding:12px 16px 14px; background: var(--surface); margin: 8px 0 14px; }
+.id-box legend{ font-weight:700; padding:0 6px; font-size:.92rem; }
+.id-box label{ display:flex; flex-direction:column; gap:4px; font-weight:600; }
+.eva-info p{ margin: 4px 0 8px; }
+.eva-q{ border:1px solid var(--border); border-radius:12px; padding:12px 14px; margin: 0 0 12px; background: var(--surface); }
+.eva-q legend, .eva-q > .q{ font-weight:700; line-height:1.4; padding: 0 4px; }
+.eva-q.ok{ border-color: var(--success); } .eva-q.bad{ border-color: var(--danger); }
+.eva-op{ display:flex; gap:10px; align-items:flex-start; padding:8px 6px; min-height:40px; border-radius:8px; cursor:pointer; }
+.eva-op:hover{ background: var(--surface-2); }
+.eva-op input{ width:18px; height:18px; margin-top:3px; accent-color: var(--primary); flex:none; }
+.ra-bar{ fill: var(--p3); } .ra-bar.bajo{ fill: var(--accent); }
+.reading-like{ padding:10px 14px; background: var(--surface-2); border-left:4px solid var(--p3); border-radius: 0 10px 10px 0; }
+.art-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(22em, 1fr)); gap:16px; margin: 10px 0; }
+@media (max-width:640px){ .art-grid{ grid-template-columns: minmax(0,1fr); } }
+.art-card h4{ margin: 8px 0 6px; }
+.art-cita{ font-size:.86rem; color: var(--text-muted); overflow-wrap:anywhere; }
+.art-quiz{ margin-top:12px; }
+.sesgo-row{ display:grid; grid-template-columns: minmax(10em, 1fr) minmax(9em, .8fr) minmax(0, 2fr); gap:8px 12px; align-items:center; padding:6px 0; border-top:1px solid var(--border); }
+@media (max-width:640px){ .sesgo-row{ grid-template-columns: minmax(0,1fr); } }
+.fx-area{ grid-column: 1 / -1; }
+#fpanel h5{ margin: 16px 0 8px; font-size:1rem; color: var(--primary-2); }
+.doc-tab input{ width: 5.5em; } .doc-tab th[scope="row"]{ min-width: 12em; }
+.doc-def{ font-weight:800; white-space:nowrap; }
+.doc-avisos{ font-size:.9rem; margin: 6px 0 10px; }
+.doc-detalle .card{ margin: 10px 0; }
+
 /* ============================================================ enlaces a las fuentes y su ficha */
 a.src-link{ color: var(--primary-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--primary-2) 55%, transparent); }
 a.src-link:hover, a.src-link:focus-visible{ text-decoration-color: currentColor; text-decoration-thickness: 2px; }

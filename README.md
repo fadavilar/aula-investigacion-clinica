@@ -1,11 +1,20 @@
 # Aula de investigación clínica
 
-Documento web para estudiantes y docentes que va de la pregunta clínica al artículo publicable. Abre con un resumen y un relato por pasos (el gráfico cambia al desplazarse) y sigue con cuatro partes:
+Documento web para estudiantes y docentes que va de la pregunta clínica al artículo publicable, preparado para primer año (R1: Metodología de la Investigación I y Lectura crítica) y segundo año (R2: Proyecto de investigación I y II). Abre con un resumen y un relato por pasos (el gráfico cambia al desplazarse) y sigue con cinco partes:
 
-1. **Planear el estudio**: temas y competencias, árbol de decisión dibujado para clasificar el diseño (con su guía de reporte y su herramienta de evaluación) y las seis calculadoras de tamaño de muestra del libro `Muestreo.xlsx`, con la fórmula paso a paso y una curva que muestra cómo cambia la muestra.
-2. **Leer y evaluar**: práctica de preguntas de selección múltiple y calculadora de efecto (riesgos, RR, OR, reducción absoluta, NNT) con gráfico de intervalos.
-3. **Sintetizar y publicar**: las diez fases de una revisión sistemática con apoyo de IA, buenas prácticas, generador de la declaración de uso de IA, Mendeley, estilo Vancouver y listas de verificación de Word, Excel y PowerPoint.
+0. **Tu curso**: rutas de la sesión conjunta, de R1 y de R2 bloque por bloque; rúbrica de cuatro evidencias, calendario y calculadora de la nota; evaluación con intentos ilimitados; formularios de evidencias con descarga; consolidador de notas para el docente; temas y competencias.
+1. **Planear el estudio**: constructor de la pregunta (PICO, frecuencia o PCC) con título y objetivos, árbol de decisión dibujado, las seis calculadoras de tamaño de muestra del libro `Muestreo.xlsx`, tipos de variable con estadística descriptiva en Excel, y la lista del protocolo con la categoría de riesgo de la Resolución 8430 de 1993.
+2. **Leer y evaluar**: efecto (RR, OR, NNT), pronóstico (HR y curvas de supervivencia), pruebas diagnósticas (tabla de 2 × 2, razones de verosimilitud y probabilidad postest), metanálisis (forest plot con efecto fijo y aleatorio, I²), guías (AGREE II) y costo-efectividad (RCEI), cinco artículos reales de PubMed con preguntas de lectura crítica y preguntas de práctica.
+3. **Sintetizar y publicar**: revisión sistemática con apoyo de IA, avance de resultados con plantilla de diccionario de variables, Mendeley, estilo Vancouver y listas de verificación de Word, Excel y PowerPoint.
 4. **Recursos**: mapas mentales, glosario con fuente en cada término y referencias verificadas.
+
+## Evaluación y evidencias
+
+- **Evaluación con intentos ilimitados** (`data/evaluacion.js`): cada intento sortea 20 preguntas para R1 o 15 para R2, repartidas entre los resultados de aprendizaje de los contenidos programáticos, y baraja las opciones. Guarda cada intento y la mejor nota en el navegador del estudiante y descarga los resultados en un archivo. Es un banco público y formativo: el taller de 20 preguntas de la rúbrica es privado y no va en este repositorio.
+- **Artículos de PubMed**: DAPA-HF (ensayo aleatorizado), el metanálisis de EMPEROR-Reduced y DAPA-HF, un caso y control anidado sobre fluoroquinolonas, un estudio diagnóstico de troponina 0/1 hora y la cohorte PURE. Sus preguntas se apoyan solo en lo que dice su resumen.
+- **Formularios con descarga**: diagnóstico (sin nota), fichas de lectura crítica 1 y 2, práctica con árbol y Mendeley (con nota sugerida), coevaluación de plenaria y entregables de segundo año. Cada uno descarga un archivo `.json` con un código de verificación.
+- **Consolidador (docente)**: carga los archivos de los estudiantes, toma la mejor nota de la evaluación como propuesta para el taller, sugiere la práctica y la participación (promedio de las coevaluaciones recibidas), permite calificar cada ficha con su rúbrica y descarga la tabla de notas en CSV para Excel. Todo ocurre en el navegador: nada se envía a un servidor. El código de verificación delata cambios casuales en un archivo, pero no es una firma segura.
+- **Nota mínima de aprobación**: está en `evaluacion.notaMinima` de `data/contenidos.js` y vale `null` hasta confirmarla con el reglamento de posgrado. Mientras sea `null`, la app no dice aprobado ni reprobado. Para fijarla, escribe el número (por ejemplo, `3.5`), sube `?v=N` en `index.html` y publica.
 
 Tiene índice lateral, buscador (`/`), modo claro y oscuro, cuatro tamaños de letra, versión para celular y exportación a PDF. No tiene dependencias ni paso de compilación: abre `index.html` en el navegador o publícalo con GitHub Pages.
 
@@ -25,6 +34,12 @@ El material didáctico está en `data/contenidos.js`; los textos de portada, el 
 | `herramientasClaude` | Skills, conectores y entornos que se necesitan |
 | `recursos` | Mapas mentales y herramientas |
 | `ofimatica`, `vancouver` | Listas de verificación y ejemplos |
+| `evaluacion` | Rúbrica de cuatro evidencias, calendario, nota mínima (`null` por confirmar) y ejemplo de cálculo |
+| `rutas` | Sesión conjunta, ruta de primer año y ruta de segundo año, bloque por bloque |
+| `protocolo`, `avance` | Listas de verificación de Proyecto I y Proyecto II |
+| `riesgo8430` | Categorías de riesgo del artículo 11 de la Resolución 8430 de 1993 |
+
+En `data/evaluacion.js` están los resultados de aprendizaje (`ras`), los artículos de PubMed con sus preguntas, el banco general, el diagnóstico y las rúbricas de fichas, coevaluación y Mendeley.
 
 Las fórmulas de muestreo están en `calcular()` de `js/app.js` y reproducen las del Excel: con los valores de ejemplo, los seis resultados coinciden con el libro con una diferencia menor de 10⁻⁷. `NORMINV` se calcula con el algoritmo de Acklam.
 
@@ -39,8 +54,10 @@ css/motor.css        gráficos, relato, acordeón y fichas (de la skill; no se e
 css/aula.css         paleta del aula y estilos propios
 js/motor.js          motor del documento (de la skill; no se edita)
 js/contenido.js      portada, glosario, referencias y panel de fuentes
-js/app.js            secciones, gráficos, árbol, calculadoras y relato
+js/app.js            secciones, gráficos, árbol, calculadoras, rutas y relato
+js/formularios.js    evaluación con intentos ilimitados, artículos, formularios y consolidador
 data/contenidos.js   material didáctico editable
+data/evaluacion.js   banco de evaluación, artículos de PubMed, diagnóstico y rúbricas
 docs/                guías en Markdown (revisión con IA, skills y plugins)
 build/inline.py      genera dist/aula.html, un solo archivo autocontenido
 ```
