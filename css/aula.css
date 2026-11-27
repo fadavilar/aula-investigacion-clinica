@@ -313,6 +313,17 @@ textarea{ font: inherit; color: var(--text); background: var(--surface); border:
   .dx-tab input{ width: 5.5em; }
 }
 
+/* listas de verificación de segundo año */
+.lv-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(19em, 1fr)); gap:14px; margin: 10px 0; }
+.lv{ list-style:none; margin:0; padding:0; }
+.lv-i{ display:grid; grid-template-columns: 22px minmax(0,1fr); gap:4px 10px; align-items:start; padding:9px 0; border-top:1px solid var(--border); }
+.lv-i:first-child{ border-top:none; }
+.lv-i input{ width:20px; height:20px; margin-top:2px; accent-color: var(--p3); }
+.lv-ir{ grid-column:2; justify-self:start; }
+.riesgo-card{ border-left:6px solid var(--p3); }
+.riesgo-minimo{ border-left-color: var(--chip-c); } .riesgo-mayor{ border-left-color: var(--accent); }
+.dic-tab td{ min-width: 9em; }
+
 /* ============================================================ enlaces a las fuentes y su ficha */
 a.src-link{ color: var(--primary-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--primary-2) 55%, transparent); }
 a.src-link:hover, a.src-link:focus-visible{ text-decoration-color: currentColor; text-decoration-thickness: 2px; }

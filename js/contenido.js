@@ -94,7 +94,8 @@ window.CONTENIDO = {
     { id: "netmeta", re: "\\bnetmeta\\b", t: "netmeta", d: "Paquete de R para metanálisis en red.", cita: "CRAN.", url: "https://cran.r-project.org/package=netmeta" },
     { id: "pandas", re: "\\bpandas\\b", t: "pandas", d: "Biblioteca de Python para tablas de datos.", cita: "pandas.pydata.org", url: "https://pandas.pydata.org/" }
   ],
-  normas: [],
+  /* Normas que se enlazan solas en el texto (texto oficial verificado) */
+  normas: [ { re: "Resolución 8430 de 1993", url: "https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/DE/DIJ/RESOLUCION-8430-DE-1993.PDF" } ],
   referencias: [
     { c: "Hopewell S, Chan AW, Collins GS, Hróbjartsson A, et al. CONSORT 2025 statement: updated guideline for reporting randomised trials. BMJ. 2025;389:e081123.", url: "https://doi.org/10.1136/bmj-2024-081123" },
     { c: "Whiting PF, Rutjes AWS, Westwood ME, Mallett S, et al. QUADAS-2: a revised tool for the quality assessment of diagnostic accuracy studies. Ann Intern Med. 2011;155(8):529-36.", url: "https://doi.org/10.7326/0003-4819-155-8-201110180-00009" },

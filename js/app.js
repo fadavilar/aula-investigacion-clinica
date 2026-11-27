@@ -40,6 +40,7 @@ const SECCIONES = [
   { id:"diseno", part:"I", toc:"¿Qué diseño tiene el estudio?", title:"¿Qué diseño tiene el estudio que lees?", sub:"Árbol de decisión, guía de reporte y herramienta de evaluación", open:false, subs:[{id:"diseno-arbol",label:"Árbol de decisión"},{id:"diseno-selector",label:"Guía y herramienta por diseño"},{id:"diseno-ficha",label:"Ficha de lectura crítica"}] },
   { id:"muestra", part:"I", toc:"¿Cuántos participantes?", title:"¿Cuántos participantes necesitas?", sub:"Las seis calculadoras de tamaño de muestra del Excel, paso a paso", open:false, subs:[{id:"muestra-calculadora",label:"Calculadora"},{id:"muestra-formula",label:"La fórmula, paso a paso"},{id:"muestra-curva",label:"¿Cómo cambia la muestra?"}] },
   { id:"variables", part:"I", toc:"¿Qué variables mides?", title:"¿Qué variables vas a medir y cómo se describen?", sub:"Tipo de variable, escala y estadística descriptiva en Excel", open:false, subs:[{id:"variables-tipo",label:"Tipo de variable"},{id:"variables-excel",label:"Estadística descriptiva en Excel"}] },
+  { id:"protocolo", part:"I", toc:"¿Qué debe tener tu protocolo?", title:"¿Qué debe tener tu protocolo de investigación?", sub:"Lista de Proyecto I y categoría de riesgo ético", open:false, subs:[{id:"protocolo-riesgo",label:"Categoría de riesgo"}] },
   { id:"efecto", part:"II", toc:"¿Qué tan grande es el efecto?", title:"¿Qué tan grande y qué tan preciso es el efecto?", sub:"Riesgos, RR, OR, reducción absoluta y NNT", open:false },
   { id:"pronostico", part:"II", toc:"¿Cómo se lee un pronóstico?", title:"¿Cómo se lee un estudio de pronóstico?", sub:"Cohorte, hazard ratio y curvas de supervivencia", open:false, subs:[{id:"pronostico-lectura",label:"Cinco preguntas de lectura"}] },
   { id:"diagnostica", part:"II", toc:"¿Qué tan buena es la prueba?", title:"¿Qué tan buena es una prueba diagnóstica?", sub:"Sensibilidad, especificidad, razones de verosimilitud y probabilidad postest", open:false },
@@ -47,6 +48,7 @@ const SECCIONES = [
   { id:"guias", part:"II", toc:"¿Cuánto confiar en una guía?", title:"¿Cuánto confiar en una guía de práctica clínica y en un estudio económico?", sub:"AGREE II y razón de costo-efectividad incremental", open:false, subs:[{id:"guias-agree",label:"AGREE II"},{id:"guias-rcei",label:"Costo-efectividad"}] },
   { id:"practica", part:"II", toc:"¿Reconoces el diseño?", title:"¿Reconoces el diseño, la herramienta y la medida?", sub:"Preguntas de práctica con retroalimentación", open:false },
   { id:"revision", part:"III", toc:"¿Cómo se hace una revisión con IA?", title:"¿Cómo se hace una revisión sistemática con apoyo de IA?", sub:"Diez fases, buenas prácticas y declaración de uso", open:false, subs:[{id:"revision-fases",label:"Las diez fases"},{id:"revision-practicas",label:"Buenas prácticas"},{id:"revision-declaracion",label:"Declaración de uso de IA"},{id:"revision-claude",label:"Qué necesitas en Claude"}] },
+  { id:"avance", part:"III", toc:"¿Cómo presentas el avance?", title:"¿Cómo se recogen los datos y se presenta el avance de resultados?", sub:"Lista de Proyecto II y plantilla del diccionario de variables", open:false, subs:[{id:"avance-diccionario",label:"Diccionario de variables"}] },
   { id:"citas", part:"III", toc:"¿Cómo se citan las referencias?", title:"¿Cómo se citan las referencias?", sub:"Mendeley y estilo Vancouver", open:false },
   { id:"formato", part:"III", toc:"¿Cómo se presenta el manuscrito?", title:"¿Cómo se presenta el manuscrito?", sub:"Listas de verificación para Word, Excel y PowerPoint", open:false },
   { id:"recursos", part:"IV", toc:"¿Dónde profundizar?", title:"¿Dónde profundizar?", sub:"Mapas mentales y herramientas", open:false },
@@ -58,6 +60,8 @@ const IDEAS = {
   evaluacion:"La nota definitiva suma cuatro evidencias con pesos de 40, 30, 15 y 15 % y se expresa con un entero y un decimal.",
   pregunta:"Una buena pregunta ya contiene el título, el objetivo general y el diseño probable del estudio.",
   variables:"El tipo de variable decide cómo se resume: frecuencias para categorías; media o mediana para números, según la forma de la distribución.",
+  protocolo:"Un protocolo coherente encadena la pregunta, los objetivos, el diseño, la muestra, las variables, el análisis y la ética.",
+  avance:"Un buen avance muestra cuántos participantes van, qué tan limpios están los datos y una primera tabla con su medida principal.",
   pronostico:"El hazard ratio compara el riesgo instantáneo del evento entre grupos, pero la decisión clínica también necesita el riesgo absoluto en el tiempo.",
   diagnostica:"La sensibilidad y la especificidad describen la prueba; las razones de verosimilitud cambian la probabilidad de enfermedad de tu paciente.",
   metanalisis:"El efecto combinado vale tanto como la comparabilidad de los estudios: antes del rombo, mira la heterogeneidad.",
@@ -1049,6 +1053,65 @@ function guias(){
   calcCe();
 }
 
+/* ============================================================ RUTA R2: PROTOCOLO Y AVANCE DE RESULTADOS */
+/* Lista de verificación con avance guardado en el navegador. El texto va fuera de <label> para que sus enlaces no marquen la casilla. */
+function listaVerificacion(b, clave, grupos){
+  const saved = store.get(clave) || {}, total = grupos.reduce((a,g)=> a + g.items.length, 0);
+  const prog = el("p",{class:"progress", "aria-live":"polite"}), bar = el("div",{class:"qz-bar"},[ el("span") ]);
+  const upd = ()=>{ const n = Object.keys(saved).filter(k=> saved[k]).length; prog.textContent = "Tu avance: " + n + " de " + total + " puntos cumplidos."; bar.firstChild.style.width = (100*n/total) + "%"; };
+  b.appendChild(prog); b.appendChild(bar);
+  const grid = el("div",{class:"lv-grid"});
+  grupos.forEach((g,gi)=>{
+    const ul = el("ul",{class:"lv"});
+    g.items.forEach((it,ii)=>{
+      const id = clave + "-" + gi + "-" + ii, cb = el("input",{type:"checkbox", id:id, "aria-labelledby":id + "-t"}); cb.checked = !!saved[id];
+      cb.addEventListener("change", ()=>{ saved[id] = cb.checked; store.set(clave, saved); upd(); });
+      const ir = it.seccion && M.SEC[it.seccion] ? el("button",{type:"button", class:"btn btn-sm lv-ir"},["Herramienta: " + (M.SEC[it.seccion].toc || M.SEC[it.seccion].title)]) : null;
+      if(ir) ir.addEventListener("click", ()=> irA(it.seccion));
+      ul.appendChild(el("li",{class:"lv-i"},[cb, el("span",{id:id + "-t", class:"lv-t"},[it.t]), ir]));
+    });
+    grid.appendChild(el("article",{class:"card lv-card"},[ el("h4",null,[g.g]), ul ]));
+  });
+  b.appendChild(grid); upd();
+}
+const RG = { id:null };
+function protocolo(){
+  const b = $("protocolo");
+  b.appendChild(el("p",null,["Un protocolo responde, antes de empezar, qué se va a estudiar, por qué, cómo y con qué cuidado ético. Esta lista sigue los elementos de Proyecto de investigación I: título, problema y pregunta, justificación, objetivos, marco teórico y metodología, más las consideraciones éticas. Marca lo que tu protocolo ya cumple; el avance queda guardado en este navegador."]));
+  listaVerificacion(b, "aula-ic-protocolo", A.protocolo);
+  b.appendChild(el("p",{class:"muted small"},["Síntesis docente del autor del aula a partir de los contenidos programáticos de Proyecto de investigación I."]));
+  M.sub(b, "protocolo-riesgo", "¿En qué categoría de riesgo queda tu estudio?", "La Resolución 8430 de 1993 clasifica las investigaciones en salud en tres categorías (artículo 11). Elige la que describe tu estudio y confírmala con el comité de ética.");
+  const out = el("div",{"aria-live":"polite"});
+  b.appendChild(M.chips(A.riesgo8430.map(r=> ({ id:r.id, label:r.t })), RG.id, id=>{ RG.id = id; pinta(); }, "Categoría de riesgo"));
+  b.appendChild(out);
+  function pinta(){
+    out.innerHTML = "";
+    const r = A.riesgo8430.find(x=> x.id === RG.id);
+    if(!r){ out.appendChild(el("p",{class:"muted"},["Elige una categoría para ver su definición y ejemplos."])); return; }
+    out.appendChild(el("div",{class:"card riesgo-card riesgo-" + r.id},[ el("h4",null,[r.t]), el("p",null,[r.d]), el("p",{class:"muted"},[ el("strong",null,["Ejemplos de la norma: "]), r.ej ]),
+      el("p",{class:"small"},["Resumen del artículo 11 de la Resolución 8430 de 1993. El texto completo manda."]) ]));
+  }
+  pinta();
+}
+function avance(){
+  const b = $("avance");
+  b.appendChild(el("p",null,["En Proyecto de investigación II el protocolo se vuelve datos: se recoge la información, se organiza la base, se controla su calidad y se presenta un primer avance de resultados. Esta lista sigue esos pasos."]));
+  listaVerificacion(b, "aula-ic-avance", A.avance);
+  b.appendChild(el("p",{class:"muted small"},["Síntesis docente del autor del aula a partir de los contenidos programáticos de Proyecto de investigación II."]));
+  M.sub(b, "avance-diccionario", "Plantilla del diccionario de variables", "Descárgala, ábrela en Excel y llena una fila por variable de tu estudio. Las filas que trae son ejemplos para borrar.");
+  const cab = ["Variable","Definición","Tipo","Escala","Unidad o categorías","Valores permitidos","Fuente del dato"];
+  const filas = [
+    ["codigo","Código del participante (nunca el nombre ni el documento)","Identificador","Nominal","Texto","P001 a P999","Asignado por el equipo"],
+    ["edad","Edad cumplida al ingreso","Cuantitativa discreta","Razón","Años","18 a 110","Historia clínica"],
+    ["nyha","Clase funcional de la NYHA al ingreso","Cualitativa ordinal","Ordinal","I, II, III, IV","I a IV","Historia clínica"],
+    ["hb","Hemoglobina al ingreso","Cuantitativa continua","Razón","g/dL","3,0 a 22,0","Laboratorio"],
+    ["muerte30","Muerte por cualquier causa a 30 días","Cualitativa nominal dicotómica","Nominal","Sí, No","Sí o No","Seguimiento"] ];
+  b.appendChild(M.tabla(cab, filas, "dic-tab"));
+  const dl = el("button",{type:"button", class:"btn btn-primary"},["Descargar la plantilla (CSV)"]);
+  dl.addEventListener("click", ()=> M.downloadCSV("diccionario_de_variables.csv", cab, filas));
+  b.appendChild(el("div",{class:"tools-row"},[dl]));
+}
+
 /* ============================================================ TU CURSO: RUTAS Y EVALUACIÓN */
 const ANIO_KEY = "aula-ic-anio";
 const anioGuardado = ()=>{ try{ return localStorage.getItem(ANIO_KEY) || "conjunta"; }catch(e){ return "conjunta"; } };
@@ -1327,7 +1390,7 @@ if(C.enlaces && C.fuentes){ const ya = new Set(); C.fuentes.forEach(g=> g.items.
 M.iniciar({
   contenido: C, secciones: SECCIONES, partes: PARTES, ideas: IDEAS,
   entidad: { nombre:"diseño", inicial:null, valida: cod=> !!disCod(cod) },
-  render(){ resumen(); rutas(); evaluacion(); temas(); pregunta(); diseno(); muestra(); variables(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
+  render(){ resumen(); rutas(); evaluacion(); temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
   indice(){
     return DIS.map(d=> ({ type:"Diseño", label:d.nombre, detail:d.guia + " · " + d.herramienta, sec:"diseno", anchor:"diseno-selector", cod:d.cod }))
       .concat(MU.calculadoras.map(h=> ({ type:"Tamaño de muestra", label:h.t, detail:"Hoja " + h.hoja + " del Excel", sec:"muestra", anchor:"muestra-calculadora" })))

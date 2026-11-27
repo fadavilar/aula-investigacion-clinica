@@ -333,6 +333,68 @@ window.APP = {
     ]
   },
 
+  /* Segundo año. Listas de verificación del protocolo (Proyecto I) y del avance de resultados (Proyecto II):
+     síntesis docente del autor a partir de los contenidos programáticos; seccion enlaza la herramienta del aula. */
+  protocolo: [
+    { g: 'Título', items: [ { t: 'Es breve y nombra la población, la intervención o exposición y el desenlace; si cabe, también el diseño.', seccion: 'pregunta' } ] },
+    { g: 'Planteamiento del problema y pregunta', items: [
+      { t: 'Muestra la magnitud del problema con datos y su fuente.' },
+      { t: 'Explica qué se sabe y qué falta por saber: el vacío de conocimiento.' },
+      { t: 'Termina en una pregunta de investigación en formato PICO (o de frecuencia, o PCC).', seccion: 'pregunta' } ] },
+    { g: 'Justificación', items: [
+      { t: 'Dice por qué importa responder la pregunta: magnitud, vacío y utilidad para los pacientes o el servicio.' },
+      { t: 'Muestra que el estudio es viable con el tiempo, los pacientes y los recursos disponibles.' } ] },
+    { g: 'Objetivos', items: [
+      { t: 'El objetivo general responde la pregunta y empieza con un verbo en infinitivo que se pueda verificar.', seccion: 'pregunta' },
+      { t: 'Los objetivos específicos son pocos, son pasos para lograr el general y cada uno tiene su análisis en la metodología.' } ] },
+    { g: 'Marco teórico', items: [
+      { t: 'La búsqueda está documentada: bases de datos, ecuación, fecha y número de resultados.' },
+      { t: 'Los estudios clave se leyeron críticamente con la herramienta de su diseño.', seccion: 'diseno' },
+      { t: 'Las citas están en estilo Vancouver, insertadas con Mendeley Cite.', seccion: 'citas' } ] },
+    { g: 'Metodología', items: [
+      { t: 'El tipo de estudio se eligió con el árbol de decisión y se justifica.', seccion: 'diseno' },
+      { t: 'La población, los criterios de inclusión y de exclusión, el lugar y el periodo están definidos.' },
+      { t: 'El tamaño de la muestra se calculó con la fórmula del objetivo y se explica el muestreo.', seccion: 'muestra' },
+      { t: 'Cada variable tiene definición, tipo, escala y valores posibles (diccionario de variables).', seccion: 'variables' },
+      { t: 'El formato o instrumento de recolección está diseñado y se probó.' },
+      { t: 'El plan de análisis dice qué estadística describe cada variable y qué medida responde cada objetivo.', seccion: 'efecto' },
+      { t: 'Hay un cronograma con las fases del estudio.' } ] },
+    { g: 'Consideraciones éticas', items: [
+      { t: 'El riesgo de la investigación está clasificado según el artículo 11 de la Resolución 8430 de 1993.' },
+      { t: 'Si aplica, el consentimiento informado tiene lo que pide el artículo 15 de la Resolución 8430 de 1993.' },
+      { t: 'Se protege la privacidad de los participantes (artículo 8 de la Resolución 8430 de 1993) y se prevé el aval del comité de ética.' } ] },
+    { g: 'Guía para el protocolo', items: [
+      { t: 'Si es un ensayo clínico, el protocolo sigue SPIRIT 2025; en otros diseños, la guía de reporte del diseño sirve de lista de lo que habrá que informar.' } ] }
+  ],
+  avance: [
+    { g: 'Recolección de la información', items: [
+      { t: 'El instrumento se probó en unos pocos casos antes de empezar y se ajustó.' },
+      { t: 'Se registra cuántos participantes van frente a los planeados y en qué fechas.' } ] },
+    { g: 'Base de datos', items: [
+      { t: 'Una fila por participante y una columna por variable, con encabezados sin celdas combinadas.' },
+      { t: 'Cada participante se identifica con un código, nunca con su nombre ni su documento (artículo 8 de la Resolución 8430 de 1993).' },
+      { t: 'La hoja de datos crudos no se modifica; los cálculos van en otra hoja.' },
+      { t: 'El diccionario de variables está al día.', seccion: 'variables' } ] },
+    { g: 'Control de calidad', items: [
+      { t: 'Se buscaron valores fuera de rango, datos faltantes por variable y registros duplicados.' },
+      { t: 'Cada corrección queda anotada: qué se cambió, por qué y con qué fuente.' } ] },
+    { g: 'Avance de resultados', items: [
+      { t: 'El flujo de participantes dice cuántos fueron elegibles, incluidos, excluidos (con el motivo) y perdidos.' },
+      { t: 'La tabla 1 describe la población con la estadística que corresponde a cada tipo de variable.', seccion: 'variables' },
+      { t: 'El resultado principal se presenta con su medida y su intervalo de confianza del 95 %.', seccion: 'efecto' },
+      { t: 'Cada gráfico tiene título, ejes con unidades, fuente y una frase que dice qué muestra.' } ] },
+    { g: 'Informe de avance', items: [
+      { t: 'Compara lo logrado con el cronograma y explica los problemas y los ajustes.' },
+      { t: 'Revisa los resultados contra la guía de reporte del diseño (STROBE, CONSORT 2025 u otra).', seccion: 'diseno' },
+      { t: 'Termina con los próximos pasos y las fechas.' } ] }
+  ],
+  /* Resolución 8430 de 1993, artículo 11: categorías de riesgo (resumen del texto oficial) */
+  riesgo8430: [
+    { id: 'sin', t: 'Investigación sin riesgo', d: 'Estudios con técnicas y métodos de investigación documental retrospectivos y aquellos en los que no se interviene ni se modifican intencionalmente variables biológicas, fisiológicas, psicológicas o sociales de los participantes.', ej: 'Revisión de historias clínicas, entrevistas o cuestionarios en los que no se identifica a la persona ni se tratan aspectos sensitivos de su conducta.' },
+    { id: 'minimo', t: 'Investigación con riesgo mínimo', d: 'Estudios prospectivos que registran datos con procedimientos comunes de diagnóstico o tratamiento rutinario.', ej: 'Pesar al participante, electrocardiograma, extracción de sangre por punción venosa en adultos en buen estado de salud dentro de los límites de la norma, medicamentos de uso común con las indicaciones y dosis establecidas.' },
+    { id: 'mayor', t: 'Investigación con riesgo mayor que el mínimo', d: 'Estudios en los que las probabilidades de afectar al participante son significativas.', ej: 'Estudios radiológicos y con microondas, estudios con los medicamentos y modalidades de los títulos III y IV de la resolución, ensayos con nuevos dispositivos.' }
+  ],
+
   ofimatica: {
     Word: ['Usa estilos de título (Título 1, Título 2) para la jerarquía, no negritas manuales.', 'Genera la tabla de contenido de forma automática.', 'Numera tablas y figuras con Insertar título para que las referencias cruzadas se actualicen.', 'Inserta las citas con Mendeley Cite; no las escribas a mano.', 'Usa el control de cambios cuando otra persona revise el documento.', 'Aplica las márgenes, la fuente y el interlineado de la norma de la revista o de la institución.'],
     Excel: ['Una fila por observación y una columna por variable, con encabezados sin celdas combinadas.', 'Conserva una hoja de datos crudos que no se modifica y trabaja los cálculos en otra.', 'Agrega una hoja de diccionario con el significado, la unidad y los valores de cada variable.', 'Usa validación de datos para evitar entradas fuera de rango.', 'Resume con tablas dinámicas y fórmulas en vez de cálculos a mano.'],
