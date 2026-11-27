@@ -13,6 +13,8 @@ window.APP = {
   evaluacion: {
     escala: { min: 0.0, max: 5.0, decimales: 1 },
     notaMinima: null,
+    /* Correo que recibe las entregas. Mientras sea null, el botón de correo pide descargar el archivo y enviarlo por el canal del curso. */
+    correoDocente: null,
     criterios: [
       { id: 'taller', nombre: 'Taller de preguntas de selección múltiple (20 preguntas)', peso: 0.40,
         evalua: 'Precisión conceptual, justificación de las respuestas y capacidad de identificar el diseño del estudio y la guía de reporte correspondiente.' },
@@ -39,6 +41,20 @@ window.APP = {
     tarea: 'Para el 4 de diciembre: una pregunta clínica propia en formato PICO y diez referencias importadas a la carpeta Lectura_Apellido en Mendeley.',
     conjunta: { titulo: 'Sesión conjunta de primer y segundo año', fecha: 'Viernes 27 de noviembre de 2026, 3:00 p. m.', duracion: 180,
       objetivos: ['Entender cómo se evalúa el proceso: cuatro evidencias, pesos y calendario.', 'Dado un diseño de estudio, nombrar su guía de reporte y su herramienta de evaluación crítica.', 'Aplicar la herramienta a un artículo real con una ficha de lectura crítica.', 'Dejar Mendeley funcionando y conectado a Word.'],
+      /* Contenidos de la presentación de la sesión conjunta; seccion: herramienta del aula que los desarrolla */
+      contenidos: [
+        { t: 'Todo artículo responde una pregunta', d: 'PICO (población, intervención, comparador y desenlace) para preguntas de efecto o de pronóstico; PCC (población, concepto y contexto) para revisiones de alcance (JBI).', seccion: 'pregunta' },
+        { t: 'Método y tipo de publicación no son lo mismo', d: 'El método se clasifica por la intervención (experimental, observacional o cuasiexperimental), el tiempo y el análisis; el tipo de publicación, por su formato. El diseño se identifica por lo que hicieron los investigadores.', seccion: 'diseno' },
+        { t: 'Cada diseño tiene su guía y su herramienta', d: 'Reporte de caso: CARE. Serie de casos: PROCESS. Casos y controles y cohortes: STROBE. Cuasiexperimentales: TREND. Ensayos: CONSORT 2025 y RoB 2. Pruebas diagnósticas: STARD 2015 y QUADAS-2. Revisiones: PRISMA 2020 y AMSTAR 2.', seccion: 'diseno' },
+        { t: 'Efecto, precisión y relevancia clínica', d: 'RR, OR y HR iguales a 1: sin efecto. Si el IC 95 % cruza 1 (o 0 en las diferencias), no es significativo. Reducción absoluta = riesgo del control menos riesgo del tratado; NNT = 1 ÷ reducción absoluta.', seccion: 'efecto' },
+        { t: 'Árbol de decisión', d: 'Cuatro preguntas para clasificar el estudio y encontrar su guía y su herramienta.', seccion: 'diseno' },
+        { t: 'Cinco dominios para juzgar un ensayo (RoB 2)', d: 'Aleatorización, desviaciones de la intervención, datos faltantes, medición del desenlace y selección del resultado reportado; juicio de bajo riesgo, algunas dudas o alto riesgo.', seccion: 'diseno' },
+        { t: 'En las cohortes, el enemigo es la confusión', d: 'Newcastle-Ottawa: selección, comparabilidad y desenlace, hasta nueve estrellas. ROBINS-E: siete dominios, empezando por la confusión.', seccion: 'articulos' },
+        { t: 'Tres familias de sesgo', d: 'Selección, información y confusión. Regla de oro: si el artículo no lo dice, no lo des por hecho.', seccion: 'articulos' },
+        { t: 'La ficha de lectura crítica en cinco pasos', d: 'Pregunta, diseño, validez interna, resultados y aplicabilidad.', seccion: 'conjunta-entregas' },
+        { t: 'Busca, descarga y lee', d: 'Pregunta de trabajo, búsqueda en PubMed con filtros por tipo de artículo y texto completo, PDF con su DOI, guía y herramienta en EQUATOR o JBI, y ficha con el grupo.', seccion: 'articulos' },
+        { t: 'Mendeley y estilo Vancouver', d: 'Cuenta y Reference Manager, Mendeley Cite en Word, carpeta Lectura_Apellido, cita de prueba en Vancouver; MyBib para páginas sin DOI.', seccion: 'citas' }
+      ],
       sesiones: [ { fecha: 'Viernes 27 de noviembre de 2026', bloques: [
         { min: '0–10', bloque: 'Apertura', actividad: 'Presentación, ruta del día y cómo se organiza el proceso', entregable: 'Ninguno' },
         { min: '10–30', bloque: 'Rúbrica', actividad: 'Las cuatro evidencias, el cálculo de la nota con un ejemplo y el calendario', entregable: 'Preguntas aclaradas', seccion: 'evaluacion' },

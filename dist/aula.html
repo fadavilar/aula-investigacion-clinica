@@ -2230,6 +2230,8 @@ window.APP = {
   evaluacion: {
     escala: { min: 0.0, max: 5.0, decimales: 1 },
     notaMinima: null,
+    /* Correo que recibe las entregas. Mientras sea null, el botón de correo pide descargar el archivo y enviarlo por el canal del curso. */
+    correoDocente: null,
     criterios: [
       { id: 'taller', nombre: 'Taller de preguntas de selección múltiple (20 preguntas)', peso: 0.40,
         evalua: 'Precisión conceptual, justificación de las respuestas y capacidad de identificar el diseño del estudio y la guía de reporte correspondiente.' },
@@ -2256,6 +2258,20 @@ window.APP = {
     tarea: 'Para el 4 de diciembre: una pregunta clínica propia en formato PICO y diez referencias importadas a la carpeta Lectura_Apellido en Mendeley.',
     conjunta: { titulo: 'Sesión conjunta de primer y segundo año', fecha: 'Viernes 27 de noviembre de 2026, 3:00 p. m.', duracion: 180,
       objetivos: ['Entender cómo se evalúa el proceso: cuatro evidencias, pesos y calendario.', 'Dado un diseño de estudio, nombrar su guía de reporte y su herramienta de evaluación crítica.', 'Aplicar la herramienta a un artículo real con una ficha de lectura crítica.', 'Dejar Mendeley funcionando y conectado a Word.'],
+      /* Contenidos de la presentación de la sesión conjunta; seccion: herramienta del aula que los desarrolla */
+      contenidos: [
+        { t: 'Todo artículo responde una pregunta', d: 'PICO (población, intervención, comparador y desenlace) para preguntas de efecto o de pronóstico; PCC (población, concepto y contexto) para revisiones de alcance (JBI).', seccion: 'pregunta' },
+        { t: 'Método y tipo de publicación no son lo mismo', d: 'El método se clasifica por la intervención (experimental, observacional o cuasiexperimental), el tiempo y el análisis; el tipo de publicación, por su formato. El diseño se identifica por lo que hicieron los investigadores.', seccion: 'diseno' },
+        { t: 'Cada diseño tiene su guía y su herramienta', d: 'Reporte de caso: CARE. Serie de casos: PROCESS. Casos y controles y cohortes: STROBE. Cuasiexperimentales: TREND. Ensayos: CONSORT 2025 y RoB 2. Pruebas diagnósticas: STARD 2015 y QUADAS-2. Revisiones: PRISMA 2020 y AMSTAR 2.', seccion: 'diseno' },
+        { t: 'Efecto, precisión y relevancia clínica', d: 'RR, OR y HR iguales a 1: sin efecto. Si el IC 95 % cruza 1 (o 0 en las diferencias), no es significativo. Reducción absoluta = riesgo del control menos riesgo del tratado; NNT = 1 ÷ reducción absoluta.', seccion: 'efecto' },
+        { t: 'Árbol de decisión', d: 'Cuatro preguntas para clasificar el estudio y encontrar su guía y su herramienta.', seccion: 'diseno' },
+        { t: 'Cinco dominios para juzgar un ensayo (RoB 2)', d: 'Aleatorización, desviaciones de la intervención, datos faltantes, medición del desenlace y selección del resultado reportado; juicio de bajo riesgo, algunas dudas o alto riesgo.', seccion: 'diseno' },
+        { t: 'En las cohortes, el enemigo es la confusión', d: 'Newcastle-Ottawa: selección, comparabilidad y desenlace, hasta nueve estrellas. ROBINS-E: siete dominios, empezando por la confusión.', seccion: 'articulos' },
+        { t: 'Tres familias de sesgo', d: 'Selección, información y confusión. Regla de oro: si el artículo no lo dice, no lo des por hecho.', seccion: 'articulos' },
+        { t: 'La ficha de lectura crítica en cinco pasos', d: 'Pregunta, diseño, validez interna, resultados y aplicabilidad.', seccion: 'conjunta-entregas' },
+        { t: 'Busca, descarga y lee', d: 'Pregunta de trabajo, búsqueda en PubMed con filtros por tipo de artículo y texto completo, PDF con su DOI, guía y herramienta en EQUATOR o JBI, y ficha con el grupo.', seccion: 'articulos' },
+        { t: 'Mendeley y estilo Vancouver', d: 'Cuenta y Reference Manager, Mendeley Cite en Word, carpeta Lectura_Apellido, cita de prueba en Vancouver; MyBib para páginas sin DOI.', seccion: 'citas' }
+      ],
       sesiones: [ { fecha: 'Viernes 27 de noviembre de 2026', bloques: [
         { min: '0–10', bloque: 'Apertura', actividad: 'Presentación, ruta del día y cómo se organiza el proceso', entregable: 'Ninguno' },
         { min: '10–30', bloque: 'Rúbrica', actividad: 'Las cuatro evidencias, el cálculo de la nota con un ejemplo y el calendario', entregable: 'Preguntas aclaradas', seccion: 'evaluacion' },
@@ -2632,6 +2648,11 @@ window.APP = {
    y las rutas en que aparece. Las preguntas de los artículos se apoyan solo en lo que dice su resumen en PubMed. */
 window.EVAL = {
   ras: {
+    C1: { ruta: 'C', curso: 'Sesión conjunta', t: 'Pregunta PICO o PCC y aplicabilidad' },
+    C2: { ruta: 'C', curso: 'Sesión conjunta', t: 'Diseño, guía de reporte y herramienta de evaluación' },
+    C3: { ruta: 'C', curso: 'Sesión conjunta', t: 'Lectura de los números: RR, OR, HR, IC 95 % y NNT' },
+    C4: { ruta: 'C', curso: 'Sesión conjunta', t: 'Sesgos y riesgo de sesgo (RoB 2, Newcastle-Ottawa, ROBINS-E)' },
+    C5: { ruta: 'C', curso: 'Sesión conjunta', t: 'Búsqueda, Mendeley y estilo Vancouver' },
     MI1: { ruta: 'R1', curso: 'Metodología de la Investigación I', t: 'Inicio de la investigación: título, problema, objetivos y marco teórico' },
     MI2: { ruta: 'R1', curso: 'Metodología de la Investigación I', t: 'Tipos de estudio' },
     MI3: { ruta: 'R1', curso: 'Metodología de la Investigación I', t: 'Variables, población, muestra, estadística descriptiva y probabilidad diagnóstica' },
@@ -2644,12 +2665,32 @@ window.EVAL = {
     P2a: { ruta: 'R2', curso: 'Proyecto de investigación II', t: 'Recopilación de la información' },
     P2b: { ruta: 'R2', curso: 'Proyecto de investigación II', t: 'Avance de resultados' }
   },
-  /* Resultado de aprendizaje y rutas de las 12 preguntas de práctica que ya están en data/contenidos.js, en su orden */
-  practicaRA: [ ['LC1','R1 R2'], ['MI2','R1 R2'], ['MI2','R1 R2'], ['LC1','R1 R2'], ['LC1','R1'], ['LC1','R1 R2'], ['LC1','R1 R2'], ['LC1','R1'], ['MI2','R1 R2'], ['LC1','R1'], ['LC1','R1'], ['LC3','R1 R2'] ],
+  /* Resultado de aprendizaje y alcance de las 12 preguntas de práctica de data/contenidos.js, en su orden.
+     Alcance: C = sesión conjunta (R1 y R2), R1 = primer año, R2 = segundo año. */
+  practicaMeta: [ ['C2','C'], ['C2','C'], ['C2','C'], ['C2','C'], ['C2','C'], ['C3','C'], ['C3','C'], ['C4','C'], ['C2','C'], ['C2','C'], ['LC1','R1'], ['C5','C'] ],
+
+  /* Preguntas de la sesión conjunta, tomadas de su presentación (27 de noviembre de 2026) */
+  conjunta: [
+    { q: '¿Para qué tipo de revisión se usa el esquema PCC (población, concepto y contexto)?', o: ['Para metanálisis de ensayos', 'Para revisiones de alcance (JBI)', 'Para estudios de pruebas diagnósticas', 'Para guías de práctica clínica'], r: 1, e: 'PCC es el esquema de las revisiones de alcance de JBI; PICO sirve para preguntas de efecto o de pronóstico.', ra: 'C1' },
+    { q: '¿Qué define el diseño de un estudio?', o: ['Cómo lo nombran los autores en el título', 'Lo que hicieron los investigadores', 'La revista donde se publicó', 'El número de pacientes'], r: 1, e: 'El diseño se identifica por lo que hicieron los investigadores, no por cómo lo nombran.', ra: 'C2' },
+    { q: 'Un artículo se titula «ensayo», pero los investigadores solo registraron quién recibió el fármaco en la práctica habitual, sin asignarlo. ¿Cómo se clasifica?', o: ['Ensayo clínico aleatorizado', 'Estudio observacional (por ejemplo, una cohorte)', 'Cuasiexperimental', 'Revisión sistemática'], r: 1, e: 'Si los investigadores no asignaron la intervención, el estudio es observacional, aunque el título diga otra cosa.', ra: 'C2' },
+    { q: 'El riesgo del evento es 20 % en el control y 15 % en el tratado. ¿Cuál es el RR?', o: ['0,25', '0,75', '1,33', '5'], r: 1, e: 'RR = 15 % ÷ 20 % = 0,75; la reducción absoluta es 5 puntos y el NNT, 20.', ra: 'C3' },
+    { q: 'Una diferencia de medias de 2,1 mmHg tiene un IC 95 % de −0,4 a 4,6. ¿Qué es correcto?', o: ['Es significativa porque la diferencia es positiva', 'No es significativa: el intervalo de una diferencia incluye 0', 'Es significativa porque el intervalo no incluye 1', 'No se puede interpretar'], r: 1, e: 'En las razones (RR, OR, HR) el valor de no efecto es 1; en las diferencias, 0. Este intervalo incluye 0.', ra: 'C3' },
+    { q: 'Con un HR de 1,00, ¿qué indica el resultado?', o: ['Un efecto protector', 'Un riesgo doble', 'Que no hay diferencia entre los grupos', 'Que todos tuvieron el evento'], r: 2, e: 'RR, OR o HR iguales a 1 indican que no hay efecto; menores de 1, menos riesgo; mayores de 1, más riesgo.', ra: 'C3' },
+    { q: '¿Cómo se expresa el juicio de cada dominio en RoB 2?', o: ['Con estrellas de 0 a 9', 'Bajo riesgo, algunas dudas o alto riesgo', 'De 1 a 7', 'Aprobado o reprobado'], r: 1, e: 'Cada dominio de RoB 2 se juzga como bajo riesgo, algunas dudas o alto riesgo.', ra: 'C4' },
+    { q: '¿Cuáles son los tres bloques de la escala Newcastle-Ottawa?', o: ['Aleatorización, cegamiento y pérdidas', 'Selección de los grupos, comparabilidad y desenlace (o exposición)', 'Búsqueda, selección y síntesis', 'Prueba índice, estándar y flujo'], r: 1, e: 'Newcastle-Ottawa juzga la selección, la comparabilidad y el desenlace, y da hasta nueve estrellas.', ra: 'C4' },
+    { q: '¿Cuál de estos es un dominio de ROBINS-E?', o: ['Confusión', 'Ocultamiento de la secuencia de aleatorización', 'Exactitud de la prueba índice', 'Exhaustividad de la búsqueda'], r: 0, e: 'ROBINS-E tiene siete dominios: confusión, medición de la exposición, selección de participantes, intervenciones posteriores a la exposición, datos faltantes, medición del desenlace y resultado reportado.', ra: 'C4' },
+    { q: 'En un estudio de casos y controles, los casos recuerdan con más detalle sus exposiciones que los controles. ¿Qué sesgo es?', o: ['Sesgo de selección', 'Sesgo de información (de recuerdo)', 'Confusión', 'Sesgo de publicación'], r: 1, e: 'Medir distinto la exposición entre grupos es un sesgo de información; el de recuerdo es el ejemplo clásico.', ra: 'C4' },
+    { q: 'El artículo no dice si quienes midieron el desenlace conocían el grupo de cada paciente. ¿Qué haces en la ficha?', o: ['Supones que hubo cegamiento', 'No lo das por hecho: lo registras como información faltante y lo tienes en cuenta en el juicio', 'Omites ese dominio', 'Calificas el estudio como de alta calidad'], r: 1, e: 'Regla de oro de la sesión: si el artículo no lo dice, no lo des por hecho.', ra: 'C4' },
+    { q: 'En la plenaria, ¿qué evalúa el criterio de justificación?', o: ['Que la presentación sea corta', 'Que cada juicio de sesgo se apoye en algo que dice el artículo', 'Que el grupo cite muchas referencias', 'Que el estudio tenga resultados significativos'], r: 1, e: 'Los tres criterios de la plenaria son claridad, justificación y aplicabilidad; la justificación exige apoyo en el texto.', ra: 'C4' },
+    { q: 'Encontraste el artículo en PubMed. ¿Qué dato anotas para importarlo a Mendeley sin errores?', o: ['El nombre del primer autor', 'El DOI', 'El número de páginas', 'El país del estudio'], r: 1, e: 'Con el DOI, Mendeley trae los datos completos de la referencia.', ra: 'C5' },
+    { q: 'Quieres citar una página web sin DOI. ¿Qué herramienta de la sesión usas y qué revisas?', o: ['PubMed; el resumen', 'MyBib; autor, fecha, título y URL antes de aceptar la cita', 'Excel; el formato', 'Ninguna: se escribe a mano'], r: 1, e: 'MyBib genera la cita desde la página; revisa autor, fecha, título y URL.', ra: 'C5' },
+    { q: 'En estilo Vancouver, ¿cómo se numeran las referencias?', o: ['Por orden alfabético del primer autor', 'Por orden de primera mención en el texto', 'Por año de publicación', 'Por importancia'], r: 1, e: 'Un número entre paréntesis o en superíndice, en orden de primera mención; la lista sigue ese orden.', ra: 'C5' }
+  ],
 
   /* Artículos reales de PubMed, uno por diseño. diseno: nombre exacto del diseño en data/contenidos.js */
   articulos: [
-    { id: 'dapahf', diseno: 'Ensayo clínico aleatorizado', corto: 'DAPA-HF (dapagliflozina en insuficiencia cardíaca)',
+    { id: 'dapahf', alcance: 'C', raC: ['C2','C1','C3','C3','C1','C4'], diseno: 'Ensayo clínico aleatorizado', corto: 'DAPA-HF (dapagliflozina en insuficiencia cardíaca)',
       cita: 'McMurray JJV, Solomon SD, Inzucchi SE, Køber L, Kosiborod MN, Martinez FA, et al. Dapagliflozin in patients with heart failure and reduced ejection fraction. N Engl J Med. 2019;381(21):1995-2008.',
       doi: '10.1056/NEJMoa1911303', pmid: '31535829', pmc: null,
       resumen: 'Ensayo de fase 3 controlado con placebo: 4744 pacientes con insuficiencia cardíaca NYHA II a IV y fracción de eyección de 40 % o menos se asignaron al azar a dapagliflozina 10 mg al día o placebo, además del tratamiento recomendado. Desenlace primario: empeoramiento de la insuficiencia cardíaca (hospitalización o visita urgente con terapia intravenosa) o muerte cardiovascular. Con una mediana de 18,2 meses, ocurrió en 386 de 2373 (16,3 %) con dapagliflozina y en 502 de 2371 (21,2 %) con placebo (HR 0,74; IC 95 %, 0,65 a 0,85). Financiado por AstraZeneca.',
@@ -2661,7 +2702,7 @@ window.EVAL = {
         { q: 'Tu paciente tiene insuficiencia cardíaca con fracción de eyección de 55 %. ¿Qué dice DAPA-HF sobre él?', o: ['Que se beneficia igual, porque tiene insuficiencia cardíaca', 'Nada directo: el ensayo solo incluyó fracción de eyección de 40 % o menos', 'Que la dapagliflozina está contraindicada', 'Que el beneficio es mayor'], r: 1, e: 'La aplicabilidad depende de la población incluida. DAPA-HF estudió fracción de eyección reducida (40 % o menos); para fracción preservada hacen falta otros estudios.', ra: 'LC1' },
         { q: 'Al aplicar RoB 2 al dominio de desviaciones de la intervención en DAPA-HF, ¿qué rasgo del diseño descrito en el resumen ayuda?', o: ['Que fue controlado con placebo', 'Que lo financió una empresa', 'Que duró 18 meses', 'Que incluyó pacientes con y sin diabetes'], r: 0, e: 'El control con placebo permite el cegamiento de pacientes y tratantes, que protege contra desviaciones de la intervención. La financiación por la industria es un conflicto de interés que se registra aparte.', ra: 'LC1' }
       ] },
-    { id: 'zannad', diseno: 'Revisión sistemática o metanálisis', corto: 'Metanálisis de EMPEROR-Reduced y DAPA-HF',
+    { id: 'zannad', alcance: 'R1', diseno: 'Revisión sistemática o metanálisis', corto: 'Metanálisis de EMPEROR-Reduced y DAPA-HF',
       cita: 'Zannad F, Ferreira JP, Pocock SJ, Anker SD, Butler J, Filippatos G, et al. SGLT2 inhibitors in patients with heart failure with reduced ejection fraction: a meta-analysis of the EMPEROR-Reduced and DAPA-HF trials. Lancet. 2020;396(10254):819-29.',
       doi: '10.1016/S0140-6736(20)31824-9', pmid: '32877652', pmc: null,
       resumen: 'Metanálisis prespecificado de dos ensayos (DAPA-HF con datos publicados a nivel de estudio y EMPEROR-Reduced con datos individuales de pacientes), 8474 pacientes con insuficiencia cardíaca con fracción de eyección reducida. Desenlace primario: muerte por cualquier causa (HR combinado 0,87; IC 95 %, 0,77 a 0,98). Muerte cardiovascular u hospitalización por insuficiencia cardíaca: 0,74 (0,68 a 0,82). Las pruebas de heterogeneidad entre ensayos no fueron significativas. Financiado por Boehringer Ingelheim.',
@@ -2672,7 +2713,7 @@ window.EVAL = {
         { q: 'Las pruebas de heterogeneidad entre los dos ensayos no fueron significativas. ¿Cómo se lee?', o: ['Prueba que los dos fármacos son idénticos', 'Los resultados fueron consistentes, aunque con solo dos estudios la prueba tiene poco poder para detectar heterogeneidad', 'Obliga a usar efecto fijo', 'Invalida el metanálisis'], r: 1, e: 'Con pocos estudios, una prueba de heterogeneidad no significativa no descarta diferencias: la consistencia se juzga también con la clínica y con los intervalos de cada estudio.', ra: 'LC1' },
         { q: 'El metanálisis lo financió el fabricante de uno de los fármacos. ¿Qué haces con ese dato al leerlo?', o: ['Descartas el artículo', 'Lo registras como conflicto de interés y revisas con más cuidado los análisis y su interpretación', 'Lo ignoras, porque los datos son de ensayos', 'Concluyes que el efecto es falso'], r: 1, e: 'La financiación no invalida un estudio, pero AMSTAR 2 pide registrar las fuentes de financiación y los conflictos de interés, y leer con más cuidado las conclusiones.', ra: 'LC1' }
       ] },
-    { id: 'lee', diseno: 'Casos y controles', corto: 'Fluoroquinolonas y aneurisma o disección aórtica',
+    { id: 'lee', alcance: 'C', raC: ['C2','C4','C3','C4','C2'], diseno: 'Casos y controles', corto: 'Fluoroquinolonas y aneurisma o disección aórtica',
       cita: 'Lee CC, Lee MT, Chen YS, Lee SH, Chen YS, Chen SC, et al. Risk of aortic dissection and aortic aneurysm in patients taking oral fluoroquinolone. JAMA Intern Med. 2015;175(11):1839-47.',
       doi: '10.1001/jamainternmed.2015.5389', pmid: '26436523', pmc: null,
       resumen: 'Análisis de casos y controles anidado en una cohorte de un millón de personas de la base de datos del seguro nacional de salud de Taiwán (2000 a 2011): 1477 casos hospitalizados por aneurisma o disección aórtica y 147 700 controles emparejados por edad y sexo (100 por caso). Uso actual de fluoroquinolonas (60 días previos): RR 2,43 (IC 95 %, 1,83 a 3,22) ajustado por puntaje de propensión; uso pasado: 1,48 (1,18 a 1,86). En el análisis de sensibilidad con casos que requirieron cirugía: 2,15 (0,97 a 4,60).',
@@ -2683,7 +2724,7 @@ window.EVAL = {
         { q: '¿Qué explicación alternativa debes descartar primero antes de atribuir el riesgo a las fluoroquinolonas?', o: ['El sesgo de recuerdo de los pacientes', 'La confusión: la infección o las condiciones que llevaron a recetar el antibiótico podrían asociarse por sí mismas con el evento', 'El efecto placebo', 'El sesgo de publicación'], r: 1, e: 'Los datos salen de las prescripciones registradas, así que el recuerdo no interviene. La amenaza principal es la confusión por indicación; el puntaje de propensión ajusta por lo medido, no por lo no medido.', ra: 'LC1' },
         { q: '¿Qué herramienta usarías para evaluar la calidad de este estudio?', o: ['RoB 2', 'La escala Newcastle-Ottawa o la lista de JBI para casos y controles', 'QUADAS-2', 'AGREE II'], r: 1, e: 'Para casos y controles se usa la escala Newcastle-Ottawa o la lista de JBI correspondiente.', ra: 'LC1' }
       ] },
-    { id: 'twerenbold', diseno: 'Prueba diagnóstica', corto: 'Algoritmo de troponina 0/1 hora en disfunción renal',
+    { id: 'twerenbold', alcance: 'R1', diseno: 'Prueba diagnóstica', corto: 'Algoritmo de troponina 0/1 hora en disfunción renal',
       cita: 'Twerenbold R, Badertscher P, Boeddinghaus J, Nestelberger T, Wildi K, Puelacher C, et al. 0/1-hour triage algorithm for myocardial infarction in patients with renal dysfunction. Circulation. 2018;137(5):436-51.',
       doi: '10.1161/CIRCULATIONAHA.117.028901', pmid: '29101287', pmc: 'PMC5794234',
       resumen: 'Estudio diagnóstico prospectivo y multicéntrico en pacientes no seleccionados que consultaron a urgencias con sospecha de infarto sin elevación del ST. El diagnóstico final lo adjudicaron dos cardiólogos independientes con toda la información disponible, incluida la imagen cardíaca. De 3254 pacientes, 487 (15 %) tenían disfunción renal; la prevalencia de infarto fue 31 % con disfunción renal frente a 13 % con función normal. Con hs-cTnT, la sensibilidad para descartar fue 100,0 % (IC 95 %, 97,6 a 100,0) con disfunción renal frente a 99,2 %; la especificidad para confirmar, 88,7 % frente a 96,5 %; la eficacia global, 51 % frente a 81 %.',
@@ -2694,7 +2735,7 @@ window.EVAL = {
         { q: 'La prevalencia de infarto fue 31 % con disfunción renal y 13 % con función normal. ¿Qué medidas cambian por esa diferencia, aunque la prueba sea la misma?', o: ['La sensibilidad y la especificidad, solamente', 'Los valores predictivos', 'Las razones de verosimilitud, solamente', 'Ninguna'], r: 1, e: 'Los valores predictivos dependen de la prevalencia: con más enfermos, el valor predictivo positivo tiende a subir y el negativo a bajar.', ra: 'MI3' },
         { q: 'Con disfunción renal, la sensibilidad para descartar fue alta (100,0 %), pero la eficacia global bajó de 81 % a 51 %. ¿Qué significa para la práctica?', o: ['Que el algoritmo es inseguro en disfunción renal', 'Que sigue siendo seguro para descartar, pero menos pacientes quedan clasificados en la primera hora y más requieren observación', 'Que hay que usar otra troponina', 'Que la prueba no sirve'], r: 1, e: 'La seguridad (sensibilidad para descartar) se mantuvo; lo que bajó fue la proporción de pacientes que el algoritmo clasifica, sobre todo porque menos cumplieron criterios para descartar (18 % frente a 68 %).', ra: 'LC1' }
       ] },
-    { id: 'pure', diseno: 'Cohorte', corto: 'PURE: factores de riesgo modificables y mortalidad',
+    { id: 'pure', alcance: 'C', raC: ['C2','C2','C3','C4'], diseno: 'Cohorte', corto: 'PURE: factores de riesgo modificables y mortalidad',
       cita: 'Yusuf S, Joseph P, Rangarajan S, Islam S, Mente A, Hystad P, et al. Modifiable risk factors, cardiovascular disease, and mortality in 155 722 individuals from 21 high-income, middle-income, and low-income countries (PURE): a prospective cohort study. Lancet. 2020;395(10226):795-808.',
       doi: '10.1016/S0140-6736(19)32008-2', pmid: '31492503', pmc: 'PMC8006904',
       resumen: 'Cohorte prospectiva multinacional de 155 722 personas sin enfermedad cardiovascular previa de 21 países de ingresos altos, medios y bajos, reclutadas entre 2005 y 2016. Se estimaron hazard ratios con modelos de Cox y fracciones atribuibles poblacionales para 14 factores modificables. Cerca de 70 % de los casos de enfermedad cardiovascular y de las muertes se atribuyeron a factores modificables; la hipertensión fue el mayor para enfermedad cardiovascular (22,3 % de la fracción atribuible) y el bajo nivel educativo, el mayor para mortalidad (12,5 %).',
@@ -3797,7 +3838,10 @@ const disCod = cod=> DIS.find(d=> d.cod === cod);
 
 /* ------------------------------------------------------------ partes y secciones (toda sección analítica es una pregunta) */
 const PARTES = [
-  { id:"C", k:"Para empezar", t:"Tu curso", d:"La ruta de primer y segundo año, cómo se evalúa y qué vas a aprender." },
+  { id:"S", k:"Primera sesión", t:"Sesión conjunta (R1 y R2)", d:"Alcance, preguntas y entregas de la primera sesión, para los dos grupos." },
+  { id:"A1", k:"Primer año", t:"Ruta R1", d:"Metodología I y Lectura crítica: alcance, preguntas y entregas." },
+  { id:"A2", k:"Segundo año", t:"Ruta R2", d:"Proyecto de investigación I y II: alcance, preguntas y entregas." },
+  { id:"N", k:"Calificación", t:"Rúbrica y notas", d:"Cómo se evalúa, calendario, calculadora y consolidador del docente." },
   { id:"I", k:"Primera parte", t:"Planear el estudio", d:"Pregunta, diseño, tamaño de muestra, variables y protocolo." },
   { id:"II", k:"Segunda parte", t:"Leer y evaluar", d:"Efecto, pronóstico, pruebas diagnósticas, metanálisis y guías." },
   { id:"III", k:"Tercera parte", t:"Sintetizar y publicar", d:"Revisión sistemática con IA, avance de resultados, citas y formato." },
@@ -3805,12 +3849,17 @@ const PARTES = [
 ];
 const SECCIONES = [
   { id:"resumen", part:null, toc:"Resumen", title:"Resumen", sub:"Para qué sirve el aula y cómo recorrerla", open:true, subs:[{id:"resumen-relato",label:"El recorrido, paso a paso"},{id:"resumen-preguntas",label:"Las preguntas del aula"}] },
-  { id:"rutas", part:"C", toc:"¿Qué te corresponde este año?", title:"¿Qué te corresponde en primer y segundo año?", sub:"Sesión conjunta, ruta R1 y ruta R2, bloque por bloque", open:false },
-  { id:"evaluacion", part:"C", toc:"¿Cómo se evalúa?", title:"¿Cómo se evalúa y cuándo?", sub:"Cuatro evidencias, calendario y calculadora de la nota", open:false, subs:[{id:"evaluacion-criterios",label:"Las cuatro evidencias"},{id:"evaluacion-calendario",label:"Calendario"},{id:"evaluacion-calculadora",label:"Calculadora de la nota"}] },
-  { id:"evaluar", part:"C", toc:"¿Cuánto has aprendido?", title:"¿Cuánto has aprendido? Evaluación con intentos ilimitados", sub:"Preguntas sorteadas por resultado de aprendizaje, con descarga de resultados", open:false },
-  { id:"formularios", part:"C", toc:"¿Cómo entregas tus evidencias?", title:"¿Cómo entregas tus evidencias?", sub:"Diagnóstico, fichas, árbol y Mendeley, coevaluación y entregables, con descarga", open:false },
-  { id:"docente", part:"C", toc:"Consolidar las notas (docente)", title:"¿Cómo se consolidan las notas? (para el docente)", sub:"Carga los archivos de los estudiantes y descarga la tabla de notas", open:false },
-  { id:"temas", part:"C", toc:"¿Qué vas a aprender?", title:"¿Qué vas a aprender en esta aula?", sub:"Temas, competencias y fuentes", open:false },
+  { id:"conjunta-alcance", part:"S", toc:"¿Qué cubre la sesión conjunta?", title:"¿Qué cubre la sesión conjunta?", sub:"Objetivos, contenidos y bloques del viernes 27 de noviembre", open:false },
+  { id:"conjunta-preguntas", part:"S", toc:"Preguntas de la sesión conjunta", title:"¿Qué aprendiste en la sesión conjunta?", sub:"Preguntas con intentos ilimitados y envío de resultados", open:false },
+  { id:"conjunta-entregas", part:"S", toc:"Entregas de la sesión conjunta", title:"¿Qué entregas de la sesión conjunta?", sub:"Diagnóstico, ficha 1, árbol y Mendeley, coevaluación y tarea", open:false },
+  { id:"r1-alcance", part:"A1", toc:"¿Qué cubre primer año?", title:"¿Qué cubre la ruta de primer año?", sub:"Sesiones del 4 y el 11 de diciembre y trabajo independiente", open:false },
+  { id:"r1-preguntas", part:"A1", toc:"Preguntas de primer año", title:"¿Qué aprendiste en primer año?", sub:"Preguntas de Metodología I y Lectura crítica, con envío de resultados", open:false },
+  { id:"r1-entregas", part:"A1", toc:"Entregas de primer año", title:"¿Qué entregas en primer año?", sub:"Ficha 2, pregunta y objetivos, y base de datos con histograma", open:false },
+  { id:"r2-alcance", part:"A2", toc:"¿Qué cubre segundo año?", title:"¿Qué cubre la ruta de segundo año?", sub:"Proyecto I y Proyecto II en síntesis", open:false },
+  { id:"r2-preguntas", part:"A2", toc:"Preguntas de segundo año", title:"¿Qué aprendiste en segundo año?", sub:"Preguntas de Proyecto de investigación I y II, con envío de resultados", open:false },
+  { id:"r2-entregas", part:"A2", toc:"Entregas de segundo año", title:"¿Qué entregas en segundo año?", sub:"Pregunta y objetivos, y entregables del proyecto", open:false },
+  { id:"evaluacion", part:"N", toc:"¿Cómo se evalúa?", title:"¿Cómo se evalúa y cuándo?", sub:"Cuatro evidencias, calendario y calculadora de la nota", open:false, subs:[{id:"evaluacion-criterios",label:"Las cuatro evidencias"},{id:"evaluacion-calendario",label:"Calendario"},{id:"evaluacion-calculadora",label:"Calculadora de la nota"}] },
+  { id:"docente", part:"N", toc:"Consolidar las notas (docente)", title:"¿Cómo se consolidan las notas? (para el docente)", sub:"Archivos y códigos de entrega de los estudiantes, tabla de notas", open:false },
   { id:"pregunta", part:"I", toc:"¿Cómo se formula la pregunta?", title:"¿Cómo se convierte una duda clínica en pregunta, título y objetivos?", sub:"Constructor de la pregunta PICO, de frecuencia o PCC", open:false },
   { id:"diseno", part:"I", toc:"¿Qué diseño tiene el estudio?", title:"¿Qué diseño tiene el estudio que lees?", sub:"Árbol de decisión, guía de reporte y herramienta de evaluación", open:false, subs:[{id:"diseno-arbol",label:"Árbol de decisión"},{id:"diseno-selector",label:"Guía y herramienta por diseño"},{id:"diseno-ficha",label:"Ficha de lectura crítica"}] },
   { id:"muestra", part:"I", toc:"¿Cuántos participantes?", title:"¿Cuántos participantes necesitas?", sub:"Las seis calculadoras de tamaño de muestra del Excel, paso a paso", open:false, subs:[{id:"muestra-calculadora",label:"Calculadora"},{id:"muestra-formula",label:"La fórmula, paso a paso"},{id:"muestra-curva",label:"¿Cómo cambia la muestra?"}] },
@@ -3827,15 +3876,22 @@ const SECCIONES = [
   { id:"avance", part:"III", toc:"¿Cómo presentas el avance?", title:"¿Cómo se recogen los datos y se presenta el avance de resultados?", sub:"Lista de Proyecto II y plantilla del diccionario de variables", open:false, subs:[{id:"avance-diccionario",label:"Diccionario de variables"}] },
   { id:"citas", part:"III", toc:"¿Cómo se citan las referencias?", title:"¿Cómo se citan las referencias?", sub:"Mendeley y estilo Vancouver", open:false },
   { id:"formato", part:"III", toc:"¿Cómo se presenta el manuscrito?", title:"¿Cómo se presenta el manuscrito?", sub:"Listas de verificación para Word, Excel y PowerPoint", open:false },
+  { id:"temas", part:"IV", toc:"¿Qué temas cubre el aula?", title:"¿Qué temas cubre el aula?", sub:"Temas, competencias y fuentes", open:false },
   { id:"recursos", part:"IV", toc:"¿Dónde profundizar?", title:"¿Dónde profundizar?", sub:"Mapas mentales y herramientas", open:false },
   { id:"glosario", part:"IV", toc:"Glosario", title:"Glosario", sub:"Términos del aula, con su fuente", open:false },
   { id:"referencias", part:"IV", toc:"Referencias", title:"Referencias", sub:"Con enlace verificable", open:false }
 ];
 const IDEAS = {
-  rutas:"Primer año condensa Metodología I y Lectura crítica; segundo año, Proyecto de investigación I y II. Cada bloque enlaza la sección del aula que lo apoya.",
+  "conjunta-alcance":"La primera sesión es común a los dos grupos: pregunta, diseño, guía y herramienta, números, sesgos, ficha de lectura crítica y Mendeley.",
+  "conjunta-preguntas":"Equivocarse aquí es parte del aprendizaje: cada intento sortea preguntas nuevas de la sesión conjunta y te dice qué repasar.",
+  "conjunta-entregas":"Cada entrega se descarga como archivo y se envía al docente por correo; ese correo es el soporte de entrega y de calificación.",
+  "r1-alcance":"Primer año condensa Metodología I y Lectura crítica en dos sesiones más trabajo independiente hasta el 31 de enero de 2027.",
+  "r1-preguntas":"Las preguntas de primer año cubren variables y estadística, pronóstico, pruebas diagnósticas, metanálisis, guías y costo-efectividad.",
+  "r1-entregas":"Primer año entrega la ficha 2, su pregunta con título y objetivos, y una base de datos con su histograma.",
+  "r2-alcance":"Segundo año sintetiza Proyecto I (de la pregunta a la metodología) y Proyecto II (de la recolección al avance de resultados).",
+  "r2-preguntas":"Las preguntas de segundo año siguen los elementos del protocolo y del avance de resultados.",
+  "r2-entregas":"Segundo año entrega su pregunta con título y objetivos y los entregables del proyecto.",
   evaluacion:"La nota definitiva suma cuatro evidencias con pesos de 40, 30, 15 y 15 % y se expresa con un entero y un decimal.",
-  evaluar:"Equivocarse aquí es parte del aprendizaje: cada intento sortea preguntas nuevas y te dice qué resultado de aprendizaje repasar.",
-  formularios:"Cada evidencia se entrega como un archivo que el docente carga en el consolidador para calcular la nota.",
   docente:"La nota definitiva sale de las cuatro evidencias con sus pesos; el docente revisa y ajusta cada valor sugerido.",
   articulos:"La lectura crítica se aprende sobre artículos reales: diseño, guía, herramienta, resultado y aplicabilidad.",
   pregunta:"Una buena pregunta ya contiene el título, el objetivo general y el diseño probable del estudio.",
@@ -4934,25 +4990,26 @@ function tablaBloques(bloques){
   t.appendChild(tb);
   return el("div",{class:"table-wrap"},[t]);
 }
-function rutas(){
-  const b = $("rutas"), R = A.rutas;
-  b.appendChild(el("p",null,["Elige tu grupo. Cada sesión aparece bloque por bloque, con su entregable y la sección del aula que te sirve para prepararlo. La elección queda guardada en este navegador."]));
-  const panel = el("div",{class:"ruta-panel", role:"tabpanel", tabindex:"0"});
-  const pinta = id=>{
-    guardaAnio(id); panel.id = "panel-tab-" + id; panel.setAttribute("aria-labelledby", "tab-" + id); panel.innerHTML = "";
-    const r = R[id];
-    panel.appendChild(el("h4",{class:"ruta-t"},[r.titulo]));
-    if(r.fecha) panel.appendChild(el("p",{class:"muted"},[r.fecha + " · " + r.duracion + " minutos"]));
-    if(r.componentes) panel.appendChild(el("p",{class:"tag-row"}, r.componentes.map(c=> el("span",{class:"tag-pill"},[c]))));
-    if(r.resumen) panel.appendChild(el("p",null,[r.resumen]));
-    if(r.objetivos) panel.appendChild(el("ol",{class:"steps"}, r.objetivos.map(o=> el("li",null,[o]))));
-    r.sesiones.forEach(s=>{ panel.appendChild(el("h5",{class:"ruta-fecha"},[s.fecha])); panel.appendChild(tablaBloques(s.bloques)); });
-    if(r.independiente) panel.appendChild(el("p",{class:"callout"},[ el("strong",null,["Trabajo independiente. "]), r.independiente ]));
-    if(r.nota) panel.appendChild(el("p",{class:"callout callout-warn"},[r.nota]));
-    panel.appendChild(el("p",{class:"callout"},[ el("strong",null,["Tarea para todos. "]), R.tarea ]));
-  };
-  const tabs = pestanas([{id:"conjunta", label:"Sesión conjunta"},{id:"r1", label:"Primer año (R1)"},{id:"r2", label:"Segundo año (R2)"}], anioGuardado(), pinta, "Ruta por grupo");
-  b.appendChild(tabs.nodo); b.appendChild(panel); pinta(anioGuardado());
+/* Alcance de cada bloque del curso: conjunta (R1 y R2), r1 o r2. Termina con los botones a sus preguntas y sus entregas. */
+function alcance(clave, sec){
+  const b = $(sec), R = A.rutas, r = R[clave], pref = clave === "conjunta" ? "conjunta" : clave;
+  const p = el("div",{class:"ruta-panel alcance"});
+  p.appendChild(el("h4",{class:"ruta-t"},[r.titulo]));
+  if(r.fecha) p.appendChild(el("p",{class:"muted"},[r.fecha + " · " + r.duracion + " minutos"]));
+  if(r.componentes) p.appendChild(el("p",{class:"tag-row"}, r.componentes.map(c=> el("span",{class:"tag-pill"},[c]))));
+  if(r.resumen) p.appendChild(el("p",null,[r.resumen]));
+  if(r.objetivos){ p.appendChild(el("h5",{class:"ruta-fecha"},["Objetivos"])); p.appendChild(el("ol",{class:"steps"}, r.objetivos.map(o=> el("li",null,[o])))); }
+  if(r.contenidos){ p.appendChild(el("h5",{class:"ruta-fecha"},["Contenidos de la sesión"]));
+    p.appendChild(el("div",{class:"cont-grid"}, r.contenidos.map(c=>{ const ir = c.seccion && M.SEC[c.seccion] ? el("button",{type:"button", class:"btn btn-sm"},["Abrir: " + (M.SEC[c.seccion].toc || M.SEC[c.seccion].title)]) : null;
+      if(ir) ir.addEventListener("click", ()=> irA(c.seccion)); return el("article",{class:"card cont-card"},[ el("h5",null,[c.t]), el("p",null,[c.d]), ir ]); }))); }
+  r.sesiones.forEach(s=>{ p.appendChild(el("h5",{class:"ruta-fecha"},[s.fecha])); p.appendChild(tablaBloques(s.bloques)); });
+  if(r.independiente) p.appendChild(el("p",{class:"callout"},[ el("strong",null,["Trabajo independiente. "]), r.independiente ]));
+  if(r.nota) p.appendChild(el("p",{class:"callout callout-warn"},[r.nota]));
+  if(clave === "conjunta") p.appendChild(el("p",{class:"callout"},[ el("strong",null,["Tarea para los dos grupos. "]), R.tarea ]));
+  const q = el("button",{type:"button", class:"btn btn-primary"},["Responder las preguntas"]), e = el("button",{type:"button", class:"btn"},["Ir a las entregas"]);
+  q.addEventListener("click", ()=> irA(pref + "-preguntas")); e.addEventListener("click", ()=> irA(pref + "-entregas"));
+  p.appendChild(el("div",{class:"tools-row"},[q, e]));
+  b.appendChild(p);
 }
 const redondea1 = x=> Math.round((x + 1e-9)*10)/10;
 function notaDefinitiva(v){ /* v: { taller, ficha1, ficha2, practica, particip } en la escala de 0 a 5 */
@@ -5180,7 +5237,8 @@ function perfilesAutor(){
 M.iniciar({
   contenido: C, secciones: SECCIONES, partes: PARTES, ideas: IDEAS,
   entidad: { nombre:"diseño", inicial:null, valida: cod=> !!disCod(cod) },
-  render(){ perfilesAutor(); resumen(); rutas(); evaluacion(); const F = window.AULA_FORM; if(F){ F.evaluar($("evaluar")); F.formularios($("formularios")); F.docente($("docente")); F.articulos($("articulos")); } temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
+  render(){ perfilesAutor(); resumen(); alcance("conjunta", "conjunta-alcance"); alcance("r1", "r1-alcance"); alcance("r2", "r2-alcance"); evaluacion();
+    const F = window.AULA_FORM; if(F){ [["C","conjunta"],["R1","r1"],["R2","r2"]].forEach(x=>{ F.evaluar($(x[1] + "-preguntas"), x[0]); F.entregas($(x[1] + "-entregas"), x[0]); }); F.docente($("docente")); F.articulos($("articulos")); } temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
   indice(){
     return DIS.map(d=> ({ type:"Diseño", label:d.nombre, detail:d.guia + " · " + d.herramienta, sec:"diseno", anchor:"diseno-selector", cod:d.cod }))
       .concat(MU.calculadoras.map(h=> ({ type:"Tamaño de muestra", label:h.t, detail:"Hoja " + h.hoja + " del Excel", sec:"muestra", anchor:"muestra-calculadora" })))
@@ -5188,7 +5246,14 @@ M.iniciar({
       .concat(A.contenidos.map(c=> ({ type:"Tema", label:c.tema, detail:c.competencia, sec:"temas", anchor:"sec-temas" })));
   }
 });
-window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCalc, metaCalc, bindTip };
+/* Lo que el estudiante escribió en el constructor de la pregunta (para la entrega de la pregunta, el título y los objetivos) */
+function preguntaActual(){
+  let st; try{ st = JSON.parse(localStorage.getItem(PQ_KEY) || "null"); }catch(e){} st = st || PQ;
+  const T = TIPOS_PQ[st.tipo] || TIPOS_PQ.efecto, v = {}, faltan = [];
+  T.campos.forEach(c=>{ const t = ((st.v || {})[st.tipo + c[0]] || "").trim(); if(!t) faltan.push(c[1]); v[c[0]] = t || c[2]; });
+  return Object.assign({ tipo:T.label, campos:T.campos.map(c=> ({ k:c[0], l:c[1], v:((st.v || {})[st.tipo + c[0]] || "").trim() })), faltan }, T.arma(v));
+}
+window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCalc, metaCalc, bindTip, preguntaActual };
 })();
 
 </script>
@@ -5215,14 +5280,18 @@ const hoyTexto = ()=> new Date().toLocaleString("es-CO", { dateStyle:"long", tim
 const VERSION = A.meta.version;
 
 /* ------------------------------------------------------------ preguntas: banco unificado con identificador estable */
+/* alcance: C = sesión conjunta (R1 y R2), R1 = primer año, R2 = segundo año */
 const PREGUNTAS = [].concat(
-  A.practica.map((p,i)=> Object.assign({ id:"P" + (i + 1), ra:(E.practicaRA[i] || ["LC1"])[0], rutas:(E.practicaRA[i] || ["","R1"])[1] }, p)),
-  E.banco.map((p,i)=> Object.assign({ id:"B" + (i + 1) }, p)),
-  E.articulos.flatMap(a=> a.preguntas.map((p,i)=> Object.assign({ id:a.id + "-" + (i + 1), rutas:"R1", art:a.id }, p)))
+  A.practica.map((p,i)=> Object.assign({ id:"P" + (i + 1), ra:(E.practicaMeta[i] || ["LC1"])[0], alcance:(E.practicaMeta[i] || ["","R1"])[1] }, p)),
+  (E.conjunta || []).map((p,i)=> Object.assign({ id:"C" + (i + 1), alcance:"C" }, p)),
+  E.banco.map((p,i)=> Object.assign({ id:"B" + (i + 1), alcance:p.rutas || "R1" }, p)),
+  E.articulos.flatMap(a=> a.preguntas.map((p,i)=> Object.assign({}, p, { id:a.id + "-" + (i + 1), alcance:a.alcance || "R1", art:a.id, ra:a.alcance === "C" && a.raC ? a.raC[i] : p.ra })))
 );
-const poolDe = ruta=> PREGUNTAS.filter(p=> String(p.rutas).split(" ").includes(ruta));
-/* Una pregunta compartida entre años se cuenta en el resultado de aprendizaje equivalente del curso de cada año */
-const EQUIV = { R2:{ MI1:"P1b", MI2:"P1c", MI3:"P2b", LC1:"P1c", LC2:"P1c", LC3:"P1c" }, R1:{ P1a:"MI1", P1b:"MI1", P1c:"MI3", P2a:"MI3", P2b:"MI3" } };
+const poolDe = ruta=> PREGUNTAS.filter(p=> String(p.alcance).split(" ").includes(ruta));
+/* Una pregunta compartida se cuenta en el resultado de aprendizaje equivalente de cada alcance */
+const EQUIV = { C:{ MI1:"C1", P1a:"C1", MI2:"C2", LC1:"C2", MI3:"C3", LC3:"C5" },
+  R2:{ MI1:"P1b", MI2:"P1c", MI3:"P2b", LC1:"P1c", LC2:"P1c", LC3:"P1c", C1:"P1a", C2:"P1c", C3:"P2b", C4:"P1c", C5:"P1c" },
+  R1:{ P1a:"MI1", P1b:"MI1", P1c:"MI3", P2a:"MI3", P2b:"MI3", C1:"MI1", C2:"MI2", C3:"LC1", C4:"LC1", C5:"LC3" } };
 const raDe = (p, ruta)=> (E.ras[p.ra] && E.ras[p.ra].ruta === ruta) ? p.ra : (EQUIV[ruta][p.ra] || p.ra);
 const barajar = a=>{ const b = a.slice(); for(let i=b.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 /* Sorteo estratificado: reparte las preguntas entre los resultados de aprendizaje de la ruta */
@@ -5253,6 +5322,23 @@ function verifica(obj){ const c = Object.assign({}, obj); const v = c.verificaci
 function descargar(obj, nombre){
   const blob = new Blob([JSON.stringify(obj, null, 2)], { type:"application/json" });
   const a = el("a",{ href:URL.createObjectURL(blob), download:nombre }); document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 400);
+  if(obj.app === "aula-ic") setTimeout(()=> abreCorreo(obj, nombre), 600);
+}
+/* Correo de entrega: abre el programa de correo con asunto y resumen; el estudiante adjunta el archivo descargado. */
+const TIPOS = { evaluacion:"Preguntas", diagnostico:"Diagnóstico", ficha:"Ficha de lectura crítica", practica:"Árbol y Mendeley", coevaluacion:"Coevaluación", proyecto:"Entregables del proyecto" };
+const ALC = { C:"Sesión conjunta", R1:"Primer año (R1)", R2:"Segundo año (R2)" };
+function abreCorreo(obj, nombre){
+  const d = obj.datos || {}, est = obj.estudiante || {}, alc = ALC[d.alcance || d.ruta] || est.grupo || "";
+  const lineas = ["Entrega del aula de investigación clínica", "Estudiante: " + est.nombre + (est.codigo ? " (" + est.codigo + ")" : ""), "Grupo: " + est.grupo, "Entrega: " + (TIPOS[obj.tipo] || obj.tipo) + (alc ? " · " + alc : ""), "Fecha: " + hoyTexto()];
+  if(obj.tipo === "evaluacion") lineas.push("Intentos: " + d.intentos + " · mejor nota: " + fmt(d.mejor, 1) + " · última: " + fmt(d.ultima, 1));
+  if(obj.tipo === "diagnostico") lineas.push("Aciertos: " + d.aciertos + " de " + d.n + " (sin nota)");
+  if(obj.tipo === "practica") lineas.push("Nota sugerida: " + fmt(d.sugerida, 1));
+  if(obj.tipo === "ficha") lineas.push("Ficha " + d.numero + ": " + (d.articuloCita || "").slice(0, 120));
+  lineas.push("Código de verificación: " + obj.verificacion, "", "IMPORTANTE: adjunta a este correo el archivo " + nombre + " que se acaba de descargar.");
+  const para = A.evaluacion.correoDocente || "";
+  const url = "mailto:" + encodeURIComponent(para) + "?subject=" + encodeURIComponent("[Aula IC] " + (TIPOS[obj.tipo] || obj.tipo) + (alc ? " · " + alc : "") + " · " + est.nombre) + "&body=" + encodeURIComponent(lineas.join("\r\n"));
+  if(!para) alert("Se abrirá tu correo para enviar la entrega. Escribe el correo de tu docente y adjunta el archivo " + nombre + ".");
+  const a = el("a",{ href:url }); document.body.appendChild(a); a.click(); a.remove();
 }
 const archivo = (tipo, est)=> "aula_" + tipo + "_" + (sinTildes(est.nombre).replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"") || "sin_nombre") + "_" + new Date().toISOString().slice(0,10) + ".json";
 const faltaNombre = est=> !est.nombre || est.nombre.length < 5;
@@ -5272,30 +5358,29 @@ function raSVG(porRA){
 }
 
 /* ============================================================ EVALUACIÓN CON INTENTOS ILIMITADOS */
-const EVA = { ruta:null, intento:null };
 const HIST_KEY = r=> "aula-ic-eval-" + r;
-function evaluar(b){
+function evaluar(b, ALCANCE){
+  const EVA = { ruta:ALCANCE, intento:null };
   b.appendChild(el("p",null,["Cada intento sortea preguntas nuevas del banco, repartidas entre los resultados de aprendizaje de tu año, y las presenta en otro orden. Puedes repetir cuantas veces quieras: queda registrado cada intento y tu mejor nota. Al terminar, descarga el archivo de resultados y entrégalo a tu docente."]));
-  const idf = identidad(v=>{ if(!EVA.intento){ EVA.ruta = v.grupo; } });
+  const idf = identidad();
   b.appendChild(idf.nodo);
-  const tam = { R1:20, R2:15 };
+  const tam = { C:15, R1:15, R2:12 };
   const info = el("div",{class:"eva-info"}), zona = el("div",{class:"eva-zona", "aria-live":"polite"}), res = el("div",{"aria-live":"polite"});
-  const nuevo = el("button",{type:"button", class:"btn btn-primary"},["Empezar un intento"]), bajar = el("button",{type:"button", class:"btn"},["Descargar mis resultados"]), borrar = el("button",{type:"button", class:"btn"},["Borrar mi historial en este navegador"]);
+  const nuevo = el("button",{type:"button", class:"btn btn-primary"},["Empezar un intento"]), bajar = el("button",{type:"button", class:"btn"},["Descargar y enviar mis resultados por correo"]), borrar = el("button",{type:"button", class:"btn"},["Borrar mi historial en este navegador"]);
   b.appendChild(info); b.appendChild(el("div",{class:"tools-row"},[nuevo, bajar, borrar])); b.appendChild(zona); b.appendChild(res);
   function historial(r){ return store.get(HIST_KEY(r)) || []; }
   function pintaInfo(){
-    const r = idf.valor().grupo, h = historial(r), mejor = h.length ? Math.max(...h.map(x=> x.nota)) : null, pool = poolDe(r);
+    const r = ALCANCE, h = historial(r), mejor = h.length ? Math.max(...h.map(x=> x.nota)) : null, pool = poolDe(r);
     const ras = [...new Set(pool.map(p=> p.ra))];
     info.innerHTML = "";
-    info.appendChild(el("p",null,["Banco de " + (r === "R1" ? "primer" : "segundo") + " año: " + pool.length + " preguntas en " + ras.length + " resultados de aprendizaje; cada intento tiene " + Math.min(tam[r], pool.length) + ". Intentos hechos: " + h.length + (mejor !== null ? "; mejor nota: " + fmt(mejor, 1) : "") + "."]));
+    info.appendChild(el("p",null,["Banco de " + ALC[r].toLowerCase().replace("sesión", "la sesión") + ": " + pool.length + " preguntas en " + ras.length + " resultados de aprendizaje; cada intento tiene " + Math.min(tam[r], pool.length) + ". Intentos hechos: " + h.length + (mejor !== null ? "; mejor nota: " + fmt(mejor, 1) : "") + "."]));
   }
   function empezar(){
-    const est = idf.valor(); EVA.ruta = est.grupo;
-    EVA.intento = { items:sortear(est.grupo, tam[est.grupo]), resp:{} };
+    EVA.intento = { items:sortear(ALCANCE, tam[ALCANCE]), resp:{} };
     res.innerHTML = ""; zona.innerHTML = "";
     EVA.intento.items.forEach((it,i)=>{
       const f = el("fieldset",{class:"eva-q"},[ el("legend",null,[(i + 1) + ". " + it.p.q]) ]);
-      it.orden.forEach((oi,k)=>{ const id = "eva-" + i + "-" + k, inp = el("input",{type:"radio", name:"eva-" + i, id:id, value:String(oi)});
+      it.orden.forEach((oi,k)=>{ const id = "eva-" + ALCANCE + "-" + i + "-" + k, inp = el("input",{type:"radio", name:"eva-" + ALCANCE + "-" + i, id:id, value:String(oi)});
         inp.addEventListener("change", ()=>{ EVA.intento.resp[i] = oi; cuenta.textContent = Object.keys(EVA.intento.resp).length + " de " + EVA.intento.items.length + " respondidas"; });
         f.appendChild(el("label",{for:id, class:"eva-op"},[inp, el("span",null,[it.p.o[oi]])])); });
       zona.appendChild(f);
@@ -5328,9 +5413,9 @@ function evaluar(b){
   }
   nuevo.addEventListener("click", empezar);
   bajar.addEventListener("click", ()=>{ const est = idf.valor(); if(faltaNombre(est)){ alert("Escribe tu nombre completo antes de descargar."); return; }
-    const h = historial(est.grupo); if(!h.length){ alert("Aún no tienes intentos en " + est.grupo + "."); return; }
-    descargar(empaqueta("evaluacion", est, { ruta:est.grupo, intentos:h.length, mejor:Math.max(...h.map(x=> x.nota)), ultima:h[h.length-1].nota, historial:h }), archivo("evaluacion", est)); });
-  borrar.addEventListener("click", ()=>{ const r = idf.valor().grupo; if(confirm("Se borrarán tus " + historial(r).length + " intentos de " + r + " en este navegador. Descarga antes tus resultados si los necesitas. ¿Continuar?")){ store.del(HIST_KEY(r)); pintaInfo(); } });
+    const h = historial(ALCANCE); if(!h.length){ alert("Aún no tienes intentos en " + ALC[ALCANCE] + "."); return; }
+    descargar(empaqueta("evaluacion", est, { alcance:ALCANCE, ruta:ALCANCE, intentos:h.length, mejor:Math.max(...h.map(x=> x.nota)), ultima:h[h.length-1].nota, historial:h }), archivo("evaluacion_" + ALCANCE, est)); });
+  borrar.addEventListener("click", ()=>{ const r = ALCANCE; if(confirm("Se borrarán tus " + historial(r).length + " intentos de " + r + " en este navegador. Descarga antes tus resultados si los necesitas. ¿Continuar?")){ store.del(HIST_KEY(r)); pintaInfo(); } });
   idf.nodo.addEventListener("change", pintaInfo); idf.nodo.addEventListener("input", pintaInfo);
   pintaInfo();
 }
@@ -5347,7 +5432,7 @@ function articulos(b){
       a.pmc ? el("a",{href:"https://pmc.ncbi.nlm.nih.gov/articles/" + a.pmc + "/", target:"_blank", rel:"noopener", class:"btn btn-sm"},["Texto completo gratuito (PMC)"]) : null ]);
     const prac = el("button",{type:"button", class:"btn btn-primary"},["Responder " + a.preguntas.length + " preguntas"]), ficha = el("button",{type:"button", class:"btn"},["Llenar mi ficha con este artículo"]);
     prac.addEventListener("click", ()=>{ quiz.hidden = !quiz.hidden; if(!quiz.hidden && !quiz.firstChild) armaQuiz(quiz, a); });
-    ficha.addEventListener("click", ()=>{ FORM.tab = "ficha"; FORM.articulo = a.id; irA("formularios"); if(FORM.repinta) FORM.repinta(); });
+    ficha.addEventListener("click", ()=>{ FORM.articulo = a.id; irA(a.alcance === "C" ? "conjunta-entregas" : "r1-entregas"); });
     grid.appendChild(el("article",{class:"card art-card"},[
       el("span",{class:"tag-pill"},[a.diseno]), el("h4",null,[a.corto]), el("p",{class:"art-cita"},[a.cita]),
       el("p",null,[a.resumen]), el("p",{class:"muted small"},["Resumen del autor del aula a partir del resumen publicado en PubMed. Guía de reporte: " + d.guia + ". Herramienta: " + d.herramienta + "."]),
@@ -5368,24 +5453,33 @@ function armaQuiz(box, a){
 /* ============================================================ FORMULARIOS DE EVIDENCIAS */
 const FORM = { tab:"diagnostico", articulo:"dapahf", repinta:null };
 const FICHA_KEY = "aula-ic-ficha", PRAC_KEY = "aula-ic-practica", COE_KEY = "aula-ic-coevaluacion";
-function formularios(b){
+function formularios(b, ids, numFicha){
+  let tab = ids[0];
   b.appendChild(el("p",null,["Cada formulario genera un archivo que entregas a tu docente (por correo o por la plataforma). Con esos archivos el docente calcula las notas en el consolidador. Lo que escribes se guarda como borrador en este navegador."]));
   const idf = identidad(); b.appendChild(idf.nodo);
   const panel = el("div",{class:"ruta-panel", role:"tabpanel", tabindex:"0"});
-  const opciones = [{id:"diagnostico", label:"Diagnóstico"},{id:"ficha", label:"Ficha de lectura crítica"},{id:"practica", label:"Árbol y Mendeley"},{id:"coevaluacion", label:"Coevaluación"},{id:"proyecto", label:"Entregables de segundo año"}];
+  const opciones = [{id:"diagnostico", label:"Diagnóstico"},{id:"ficha", label:"Ficha " + numFicha + " de lectura crítica"},{id:"practica", label:"Árbol y Mendeley"},{id:"coevaluacion", label:"Coevaluación"},{id:"proyecto", label:"Entregables del proyecto"}].filter(o=> ids.includes(o.id));
   const lista = el("div",{class:"tabs", role:"tablist", "aria-label":"Formularios"});
-  const botones = opciones.map(o=>{ const bt = el("button",{type:"button", role:"tab", class:"tab", id:"ftab-" + o.id, "aria-controls":"fpanel"},[o.label]); bt.addEventListener("click", ()=>{ FORM.tab = o.id; pinta(true); }); lista.appendChild(bt); return bt; });
+  const botones = opciones.map(o=>{ const bt = el("button",{type:"button", role:"tab", class:"tab", id:"ftab-" + numFicha + o.id, "aria-controls":"fpanel-" + numFicha},[o.label]); bt.addEventListener("click", ()=>{ tab = o.id; pinta(true); }); lista.appendChild(bt); return bt; });
   lista.addEventListener("keydown", e=>{ const i = botones.indexOf(document.activeElement); if(i < 0) return; let j = null;
     if(e.key === "ArrowRight") j = (i + 1) % botones.length; else if(e.key === "ArrowLeft") j = (i - 1 + botones.length) % botones.length; else if(e.key === "Home") j = 0; else if(e.key === "End") j = botones.length - 1;
-    if(j !== null){ e.preventDefault(); FORM.tab = opciones[j].id; pinta(true); } });
-  panel.id = "fpanel"; b.appendChild(lista); b.appendChild(panel);
+    if(j !== null){ e.preventDefault(); tab = opciones[j].id; pinta(true); } });
+  panel.id = "fpanel-" + numFicha;
+  /* varias instancias en la página: la que el estudiante usa es la que se redibuja */
+  b.addEventListener("pointerdown", ()=>{ FORM.repinta = ()=> pinta(false); FORM.numero = numFicha; }, true); b.addEventListener("focusin", ()=>{ FORM.repinta = ()=> pinta(false); FORM.numero = numFicha; }); b.appendChild(lista); b.appendChild(panel);
   function pinta(foco){
-    botones.forEach((bt,i)=>{ const on = opciones[i].id === FORM.tab; bt.setAttribute("aria-selected", String(on)); bt.tabIndex = on ? 0 : -1; if(on && foco) bt.focus(); });
-    panel.setAttribute("aria-labelledby", "ftab-" + FORM.tab); panel.innerHTML = "";
-    ({ diagnostico:fDiagnostico, ficha:fFicha, practica:fPractica, coevaluacion:fCoevaluacion, proyecto:fProyecto })[FORM.tab](panel, idf);
+    botones.forEach((bt,i)=>{ const on = opciones[i].id === tab; bt.setAttribute("aria-selected", String(on)); bt.tabIndex = on ? 0 : -1; if(on && foco) bt.focus(); });
+    panel.setAttribute("aria-labelledby", "ftab-" + numFicha + tab); panel.innerHTML = ""; FORM.numero = numFicha;
+    ({ diagnostico:fDiagnostico, ficha:fFicha, practica:fPractica, coevaluacion:fCoevaluacion, proyecto:fProyecto })[tab](panel, idf);
   }
   FORM.repinta = ()=> pinta(false);
   pinta(false);
+}
+/* Entregas de cada alcance: conjunta (diagnóstico, ficha 1, árbol y Mendeley, coevaluación), R1 (ficha 2) y R2 (entregables del proyecto) */
+function entregas(b, alcance){
+  const ids = { C:["diagnostico","ficha","practica","coevaluacion"], R1:["ficha"], R2:["proyecto"] }[alcance];
+  if(alcance === "R1" || alcance === "R2"){ const bt = el("button",{type:"button", class:"btn btn-sm"},["Abrir el constructor de la pregunta"]); bt.addEventListener("click", ()=> irA("pregunta")); b.appendChild(el("p",{class:"callout"},["Tu pregunta, título y objetivos se construyen en el constructor de la pregunta y viajan dentro de tu entrega. ", bt])); }
+  formularios(b, ids, alcance === "R1" ? "2" : "1");
 }
 function botonDescarga(texto, fn){ const bt = el("button",{type:"button", class:"btn btn-primary"},[texto]); bt.addEventListener("click", fn); return bt; }
 function campoTexto(l, valor, onInput, area, ph){ const i = area ? el("textarea",{rows:"3", placeholder:ph || ""}) : el("input",{type:"text", placeholder:ph || ""}); i.value = valor || ""; i.addEventListener("input", ()=> onInput(i.value)); return el("label",{class:area ? "fx-area" : null},[l, i]); }
@@ -5405,12 +5499,12 @@ function fDiagnostico(p, idf){
   p.appendChild(el("div",{class:"tools-row"},[ver, dl])); p.appendChild(out);
 }
 function fFicha(p, idf){
-  const F = store.get(FICHA_KEY) || {}; if(!F.numero) F.numero = "1"; if(!F.articulo) F.articulo = FORM.articulo || "dapahf";
+  const KF = FICHA_KEY + "-" + (FORM.numero || "1"), F = store.get(KF) || {}; F.numero = FORM.numero || "1"; if(!F.articulo) F.articulo = FORM.articulo || "dapahf";
   if(FORM.articulo && FORM.articulo !== F.articulo){ F.articulo = FORM.articulo; const a = E.articulos.find(x=> x.id === F.articulo); if(a) F.diseno = a.diseno; }
-  const guarda = ()=> store.set(FICHA_KEY, F);
+  const guarda = ()=> store.set(KF, F);
   p.appendChild(el("p",null,["La ficha sigue los cinco pasos de la lectura crítica. Trabájala con tu grupo y que cada integrante descargue su archivo, o descárgala una vez con los nombres de todos."]));
   const g1 = el("div",{class:"nota-form"});
-  const num = el("select",null,[ el("option",{value:"1"},["Ficha 1"]), el("option",{value:"2"},["Ficha 2"]) ]); num.value = F.numero; num.addEventListener("change", ()=>{ F.numero = num.value; guarda(); });
+  const num = el("select",null,[ el("option",{value:"1"},["Ficha 1"]), el("option",{value:"2"},["Ficha 2"]) ]); num.value = F.numero; num.disabled = true;
   const art = el("select",null, E.articulos.map(a=> el("option",{value:a.id},[a.corto])).concat([ el("option",{value:"otro"},["Otro artículo"]) ])); art.value = F.articulo;
   art.addEventListener("change", ()=>{ F.articulo = art.value; FORM.articulo = art.value; const a = E.articulos.find(x=> x.id === art.value); if(a){ F.diseno = a.diseno; } guarda(); FORM.repinta(); });
   g1.appendChild(el("label",null,["Ficha", num])); g1.appendChild(el("label",null,["Artículo", art]));
@@ -5452,7 +5546,7 @@ function fFicha(p, idf){
   const dl = botonDescarga("Descargar la ficha", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
     const a = E.articulos.find(x=> x.id === F.articulo); const d = disPor(F.diseno);
     descargar(empaqueta("ficha", est, Object.assign({}, F, { articuloCita: a ? a.cita : F.cita, articuloDoi: a ? a.doi : F.doi, guia: d ? d.guia : "", herramienta: d ? d.herramienta : "", dominios })), archivo("ficha" + F.numero, est)); });
-  const limpia = el("button",{type:"button", class:"btn"},["Empezar una ficha nueva"]); limpia.addEventListener("click", ()=>{ if(confirm("Se borrará el borrador de la ficha en este navegador. ¿Continuar?")){ store.del(FICHA_KEY); FORM.repinta(); } });
+  const limpia = el("button",{type:"button", class:"btn"},["Empezar una ficha nueva"]); limpia.addEventListener("click", ()=>{ if(confirm("Se borrará el borrador de la ficha en este navegador. ¿Continuar?")){ store.del(KF); FORM.repinta(); } });
   p.appendChild(estado); p.appendChild(el("div",{class:"tools-row"},[dl, limpia]));
 }
 function fPractica(p, idf){
@@ -5619,7 +5713,7 @@ function docente(b){
   pinta();
 }
 
-window.AULA_FORM = { evaluar, articulos, formularios, docente, PREGUNTAS, sortear, huella, verifica, empaqueta, raDe };
+window.AULA_FORM = { evaluar, articulos, formularios, entregas, docente, PREGUNTAS, sortear, huella, verifica, empaqueta, raDe };
 })();
 
 </script>

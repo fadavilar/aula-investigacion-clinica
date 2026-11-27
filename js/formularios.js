@@ -20,14 +20,18 @@ const hoyTexto = ()=> new Date().toLocaleString("es-CO", { dateStyle:"long", tim
 const VERSION = A.meta.version;
 
 /* ------------------------------------------------------------ preguntas: banco unificado con identificador estable */
+/* alcance: C = sesión conjunta (R1 y R2), R1 = primer año, R2 = segundo año */
 const PREGUNTAS = [].concat(
-  A.practica.map((p,i)=> Object.assign({ id:"P" + (i + 1), ra:(E.practicaRA[i] || ["LC1"])[0], rutas:(E.practicaRA[i] || ["","R1"])[1] }, p)),
-  E.banco.map((p,i)=> Object.assign({ id:"B" + (i + 1) }, p)),
-  E.articulos.flatMap(a=> a.preguntas.map((p,i)=> Object.assign({ id:a.id + "-" + (i + 1), rutas:"R1", art:a.id }, p)))
+  A.practica.map((p,i)=> Object.assign({ id:"P" + (i + 1), ra:(E.practicaMeta[i] || ["LC1"])[0], alcance:(E.practicaMeta[i] || ["","R1"])[1] }, p)),
+  (E.conjunta || []).map((p,i)=> Object.assign({ id:"C" + (i + 1), alcance:"C" }, p)),
+  E.banco.map((p,i)=> Object.assign({ id:"B" + (i + 1), alcance:p.rutas || "R1" }, p)),
+  E.articulos.flatMap(a=> a.preguntas.map((p,i)=> Object.assign({}, p, { id:a.id + "-" + (i + 1), alcance:a.alcance || "R1", art:a.id, ra:a.alcance === "C" && a.raC ? a.raC[i] : p.ra })))
 );
-const poolDe = ruta=> PREGUNTAS.filter(p=> String(p.rutas).split(" ").includes(ruta));
-/* Una pregunta compartida entre años se cuenta en el resultado de aprendizaje equivalente del curso de cada año */
-const EQUIV = { R2:{ MI1:"P1b", MI2:"P1c", MI3:"P2b", LC1:"P1c", LC2:"P1c", LC3:"P1c" }, R1:{ P1a:"MI1", P1b:"MI1", P1c:"MI3", P2a:"MI3", P2b:"MI3" } };
+const poolDe = ruta=> PREGUNTAS.filter(p=> String(p.alcance).split(" ").includes(ruta));
+/* Una pregunta compartida se cuenta en el resultado de aprendizaje equivalente de cada alcance */
+const EQUIV = { C:{ MI1:"C1", P1a:"C1", MI2:"C2", LC1:"C2", MI3:"C3", LC3:"C5" },
+  R2:{ MI1:"P1b", MI2:"P1c", MI3:"P2b", LC1:"P1c", LC2:"P1c", LC3:"P1c", C1:"P1a", C2:"P1c", C3:"P2b", C4:"P1c", C5:"P1c" },
+  R1:{ P1a:"MI1", P1b:"MI1", P1c:"MI3", P2a:"MI3", P2b:"MI3", C1:"MI1", C2:"MI2", C3:"LC1", C4:"LC1", C5:"LC3" } };
 const raDe = (p, ruta)=> (E.ras[p.ra] && E.ras[p.ra].ruta === ruta) ? p.ra : (EQUIV[ruta][p.ra] || p.ra);
 const barajar = a=>{ const b = a.slice(); for(let i=b.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 /* Sorteo estratificado: reparte las preguntas entre los resultados de aprendizaje de la ruta */
@@ -58,6 +62,23 @@ function verifica(obj){ const c = Object.assign({}, obj); const v = c.verificaci
 function descargar(obj, nombre){
   const blob = new Blob([JSON.stringify(obj, null, 2)], { type:"application/json" });
   const a = el("a",{ href:URL.createObjectURL(blob), download:nombre }); document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 400);
+  if(obj.app === "aula-ic") setTimeout(()=> abreCorreo(obj, nombre), 600);
+}
+/* Correo de entrega: abre el programa de correo con asunto y resumen; el estudiante adjunta el archivo descargado. */
+const TIPOS = { evaluacion:"Preguntas", diagnostico:"Diagnóstico", ficha:"Ficha de lectura crítica", practica:"Árbol y Mendeley", coevaluacion:"Coevaluación", proyecto:"Entregables del proyecto" };
+const ALC = { C:"Sesión conjunta", R1:"Primer año (R1)", R2:"Segundo año (R2)" };
+function abreCorreo(obj, nombre){
+  const d = obj.datos || {}, est = obj.estudiante || {}, alc = ALC[d.alcance || d.ruta] || est.grupo || "";
+  const lineas = ["Entrega del aula de investigación clínica", "Estudiante: " + est.nombre + (est.codigo ? " (" + est.codigo + ")" : ""), "Grupo: " + est.grupo, "Entrega: " + (TIPOS[obj.tipo] || obj.tipo) + (alc ? " · " + alc : ""), "Fecha: " + hoyTexto()];
+  if(obj.tipo === "evaluacion") lineas.push("Intentos: " + d.intentos + " · mejor nota: " + fmt(d.mejor, 1) + " · última: " + fmt(d.ultima, 1));
+  if(obj.tipo === "diagnostico") lineas.push("Aciertos: " + d.aciertos + " de " + d.n + " (sin nota)");
+  if(obj.tipo === "practica") lineas.push("Nota sugerida: " + fmt(d.sugerida, 1));
+  if(obj.tipo === "ficha") lineas.push("Ficha " + d.numero + ": " + (d.articuloCita || "").slice(0, 120));
+  lineas.push("Código de verificación: " + obj.verificacion, "", "IMPORTANTE: adjunta a este correo el archivo " + nombre + " que se acaba de descargar.");
+  const para = A.evaluacion.correoDocente || "";
+  const url = "mailto:" + encodeURIComponent(para) + "?subject=" + encodeURIComponent("[Aula IC] " + (TIPOS[obj.tipo] || obj.tipo) + (alc ? " · " + alc : "") + " · " + est.nombre) + "&body=" + encodeURIComponent(lineas.join("\r\n"));
+  if(!para) alert("Se abrirá tu correo para enviar la entrega. Escribe el correo de tu docente y adjunta el archivo " + nombre + ".");
+  const a = el("a",{ href:url }); document.body.appendChild(a); a.click(); a.remove();
 }
 const archivo = (tipo, est)=> "aula_" + tipo + "_" + (sinTildes(est.nombre).replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"") || "sin_nombre") + "_" + new Date().toISOString().slice(0,10) + ".json";
 const faltaNombre = est=> !est.nombre || est.nombre.length < 5;
@@ -77,30 +98,29 @@ function raSVG(porRA){
 }
 
 /* ============================================================ EVALUACIÓN CON INTENTOS ILIMITADOS */
-const EVA = { ruta:null, intento:null };
 const HIST_KEY = r=> "aula-ic-eval-" + r;
-function evaluar(b){
+function evaluar(b, ALCANCE){
+  const EVA = { ruta:ALCANCE, intento:null };
   b.appendChild(el("p",null,["Cada intento sortea preguntas nuevas del banco, repartidas entre los resultados de aprendizaje de tu año, y las presenta en otro orden. Puedes repetir cuantas veces quieras: queda registrado cada intento y tu mejor nota. Al terminar, descarga el archivo de resultados y entrégalo a tu docente."]));
-  const idf = identidad(v=>{ if(!EVA.intento){ EVA.ruta = v.grupo; } });
+  const idf = identidad();
   b.appendChild(idf.nodo);
-  const tam = { R1:20, R2:15 };
+  const tam = { C:15, R1:15, R2:12 };
   const info = el("div",{class:"eva-info"}), zona = el("div",{class:"eva-zona", "aria-live":"polite"}), res = el("div",{"aria-live":"polite"});
-  const nuevo = el("button",{type:"button", class:"btn btn-primary"},["Empezar un intento"]), bajar = el("button",{type:"button", class:"btn"},["Descargar mis resultados"]), borrar = el("button",{type:"button", class:"btn"},["Borrar mi historial en este navegador"]);
+  const nuevo = el("button",{type:"button", class:"btn btn-primary"},["Empezar un intento"]), bajar = el("button",{type:"button", class:"btn"},["Descargar y enviar mis resultados por correo"]), borrar = el("button",{type:"button", class:"btn"},["Borrar mi historial en este navegador"]);
   b.appendChild(info); b.appendChild(el("div",{class:"tools-row"},[nuevo, bajar, borrar])); b.appendChild(zona); b.appendChild(res);
   function historial(r){ return store.get(HIST_KEY(r)) || []; }
   function pintaInfo(){
-    const r = idf.valor().grupo, h = historial(r), mejor = h.length ? Math.max(...h.map(x=> x.nota)) : null, pool = poolDe(r);
+    const r = ALCANCE, h = historial(r), mejor = h.length ? Math.max(...h.map(x=> x.nota)) : null, pool = poolDe(r);
     const ras = [...new Set(pool.map(p=> p.ra))];
     info.innerHTML = "";
-    info.appendChild(el("p",null,["Banco de " + (r === "R1" ? "primer" : "segundo") + " año: " + pool.length + " preguntas en " + ras.length + " resultados de aprendizaje; cada intento tiene " + Math.min(tam[r], pool.length) + ". Intentos hechos: " + h.length + (mejor !== null ? "; mejor nota: " + fmt(mejor, 1) : "") + "."]));
+    info.appendChild(el("p",null,["Banco de " + ALC[r].toLowerCase().replace("sesión", "la sesión") + ": " + pool.length + " preguntas en " + ras.length + " resultados de aprendizaje; cada intento tiene " + Math.min(tam[r], pool.length) + ". Intentos hechos: " + h.length + (mejor !== null ? "; mejor nota: " + fmt(mejor, 1) : "") + "."]));
   }
   function empezar(){
-    const est = idf.valor(); EVA.ruta = est.grupo;
-    EVA.intento = { items:sortear(est.grupo, tam[est.grupo]), resp:{} };
+    EVA.intento = { items:sortear(ALCANCE, tam[ALCANCE]), resp:{} };
     res.innerHTML = ""; zona.innerHTML = "";
     EVA.intento.items.forEach((it,i)=>{
       const f = el("fieldset",{class:"eva-q"},[ el("legend",null,[(i + 1) + ". " + it.p.q]) ]);
-      it.orden.forEach((oi,k)=>{ const id = "eva-" + i + "-" + k, inp = el("input",{type:"radio", name:"eva-" + i, id:id, value:String(oi)});
+      it.orden.forEach((oi,k)=>{ const id = "eva-" + ALCANCE + "-" + i + "-" + k, inp = el("input",{type:"radio", name:"eva-" + ALCANCE + "-" + i, id:id, value:String(oi)});
         inp.addEventListener("change", ()=>{ EVA.intento.resp[i] = oi; cuenta.textContent = Object.keys(EVA.intento.resp).length + " de " + EVA.intento.items.length + " respondidas"; });
         f.appendChild(el("label",{for:id, class:"eva-op"},[inp, el("span",null,[it.p.o[oi]])])); });
       zona.appendChild(f);
@@ -133,9 +153,9 @@ function evaluar(b){
   }
   nuevo.addEventListener("click", empezar);
   bajar.addEventListener("click", ()=>{ const est = idf.valor(); if(faltaNombre(est)){ alert("Escribe tu nombre completo antes de descargar."); return; }
-    const h = historial(est.grupo); if(!h.length){ alert("Aún no tienes intentos en " + est.grupo + "."); return; }
-    descargar(empaqueta("evaluacion", est, { ruta:est.grupo, intentos:h.length, mejor:Math.max(...h.map(x=> x.nota)), ultima:h[h.length-1].nota, historial:h }), archivo("evaluacion", est)); });
-  borrar.addEventListener("click", ()=>{ const r = idf.valor().grupo; if(confirm("Se borrarán tus " + historial(r).length + " intentos de " + r + " en este navegador. Descarga antes tus resultados si los necesitas. ¿Continuar?")){ store.del(HIST_KEY(r)); pintaInfo(); } });
+    const h = historial(ALCANCE); if(!h.length){ alert("Aún no tienes intentos en " + ALC[ALCANCE] + "."); return; }
+    descargar(empaqueta("evaluacion", est, { alcance:ALCANCE, ruta:ALCANCE, intentos:h.length, mejor:Math.max(...h.map(x=> x.nota)), ultima:h[h.length-1].nota, historial:h }), archivo("evaluacion_" + ALCANCE, est)); });
+  borrar.addEventListener("click", ()=>{ const r = ALCANCE; if(confirm("Se borrarán tus " + historial(r).length + " intentos de " + r + " en este navegador. Descarga antes tus resultados si los necesitas. ¿Continuar?")){ store.del(HIST_KEY(r)); pintaInfo(); } });
   idf.nodo.addEventListener("change", pintaInfo); idf.nodo.addEventListener("input", pintaInfo);
   pintaInfo();
 }
@@ -152,7 +172,7 @@ function articulos(b){
       a.pmc ? el("a",{href:"https://pmc.ncbi.nlm.nih.gov/articles/" + a.pmc + "/", target:"_blank", rel:"noopener", class:"btn btn-sm"},["Texto completo gratuito (PMC)"]) : null ]);
     const prac = el("button",{type:"button", class:"btn btn-primary"},["Responder " + a.preguntas.length + " preguntas"]), ficha = el("button",{type:"button", class:"btn"},["Llenar mi ficha con este artículo"]);
     prac.addEventListener("click", ()=>{ quiz.hidden = !quiz.hidden; if(!quiz.hidden && !quiz.firstChild) armaQuiz(quiz, a); });
-    ficha.addEventListener("click", ()=>{ FORM.tab = "ficha"; FORM.articulo = a.id; irA("formularios"); if(FORM.repinta) FORM.repinta(); });
+    ficha.addEventListener("click", ()=>{ FORM.articulo = a.id; irA(a.alcance === "C" ? "conjunta-entregas" : "r1-entregas"); });
     grid.appendChild(el("article",{class:"card art-card"},[
       el("span",{class:"tag-pill"},[a.diseno]), el("h4",null,[a.corto]), el("p",{class:"art-cita"},[a.cita]),
       el("p",null,[a.resumen]), el("p",{class:"muted small"},["Resumen del autor del aula a partir del resumen publicado en PubMed. Guía de reporte: " + d.guia + ". Herramienta: " + d.herramienta + "."]),
@@ -173,24 +193,33 @@ function armaQuiz(box, a){
 /* ============================================================ FORMULARIOS DE EVIDENCIAS */
 const FORM = { tab:"diagnostico", articulo:"dapahf", repinta:null };
 const FICHA_KEY = "aula-ic-ficha", PRAC_KEY = "aula-ic-practica", COE_KEY = "aula-ic-coevaluacion";
-function formularios(b){
+function formularios(b, ids, numFicha){
+  let tab = ids[0];
   b.appendChild(el("p",null,["Cada formulario genera un archivo que entregas a tu docente (por correo o por la plataforma). Con esos archivos el docente calcula las notas en el consolidador. Lo que escribes se guarda como borrador en este navegador."]));
   const idf = identidad(); b.appendChild(idf.nodo);
   const panel = el("div",{class:"ruta-panel", role:"tabpanel", tabindex:"0"});
-  const opciones = [{id:"diagnostico", label:"Diagnóstico"},{id:"ficha", label:"Ficha de lectura crítica"},{id:"practica", label:"Árbol y Mendeley"},{id:"coevaluacion", label:"Coevaluación"},{id:"proyecto", label:"Entregables de segundo año"}];
+  const opciones = [{id:"diagnostico", label:"Diagnóstico"},{id:"ficha", label:"Ficha " + numFicha + " de lectura crítica"},{id:"practica", label:"Árbol y Mendeley"},{id:"coevaluacion", label:"Coevaluación"},{id:"proyecto", label:"Entregables del proyecto"}].filter(o=> ids.includes(o.id));
   const lista = el("div",{class:"tabs", role:"tablist", "aria-label":"Formularios"});
-  const botones = opciones.map(o=>{ const bt = el("button",{type:"button", role:"tab", class:"tab", id:"ftab-" + o.id, "aria-controls":"fpanel"},[o.label]); bt.addEventListener("click", ()=>{ FORM.tab = o.id; pinta(true); }); lista.appendChild(bt); return bt; });
+  const botones = opciones.map(o=>{ const bt = el("button",{type:"button", role:"tab", class:"tab", id:"ftab-" + numFicha + o.id, "aria-controls":"fpanel-" + numFicha},[o.label]); bt.addEventListener("click", ()=>{ tab = o.id; pinta(true); }); lista.appendChild(bt); return bt; });
   lista.addEventListener("keydown", e=>{ const i = botones.indexOf(document.activeElement); if(i < 0) return; let j = null;
     if(e.key === "ArrowRight") j = (i + 1) % botones.length; else if(e.key === "ArrowLeft") j = (i - 1 + botones.length) % botones.length; else if(e.key === "Home") j = 0; else if(e.key === "End") j = botones.length - 1;
-    if(j !== null){ e.preventDefault(); FORM.tab = opciones[j].id; pinta(true); } });
-  panel.id = "fpanel"; b.appendChild(lista); b.appendChild(panel);
+    if(j !== null){ e.preventDefault(); tab = opciones[j].id; pinta(true); } });
+  panel.id = "fpanel-" + numFicha;
+  /* varias instancias en la página: la que el estudiante usa es la que se redibuja */
+  b.addEventListener("pointerdown", ()=>{ FORM.repinta = ()=> pinta(false); FORM.numero = numFicha; }, true); b.addEventListener("focusin", ()=>{ FORM.repinta = ()=> pinta(false); FORM.numero = numFicha; }); b.appendChild(lista); b.appendChild(panel);
   function pinta(foco){
-    botones.forEach((bt,i)=>{ const on = opciones[i].id === FORM.tab; bt.setAttribute("aria-selected", String(on)); bt.tabIndex = on ? 0 : -1; if(on && foco) bt.focus(); });
-    panel.setAttribute("aria-labelledby", "ftab-" + FORM.tab); panel.innerHTML = "";
-    ({ diagnostico:fDiagnostico, ficha:fFicha, practica:fPractica, coevaluacion:fCoevaluacion, proyecto:fProyecto })[FORM.tab](panel, idf);
+    botones.forEach((bt,i)=>{ const on = opciones[i].id === tab; bt.setAttribute("aria-selected", String(on)); bt.tabIndex = on ? 0 : -1; if(on && foco) bt.focus(); });
+    panel.setAttribute("aria-labelledby", "ftab-" + numFicha + tab); panel.innerHTML = ""; FORM.numero = numFicha;
+    ({ diagnostico:fDiagnostico, ficha:fFicha, practica:fPractica, coevaluacion:fCoevaluacion, proyecto:fProyecto })[tab](panel, idf);
   }
   FORM.repinta = ()=> pinta(false);
   pinta(false);
+}
+/* Entregas de cada alcance: conjunta (diagnóstico, ficha 1, árbol y Mendeley, coevaluación), R1 (ficha 2) y R2 (entregables del proyecto) */
+function entregas(b, alcance){
+  const ids = { C:["diagnostico","ficha","practica","coevaluacion"], R1:["ficha"], R2:["proyecto"] }[alcance];
+  if(alcance === "R1" || alcance === "R2"){ const bt = el("button",{type:"button", class:"btn btn-sm"},["Abrir el constructor de la pregunta"]); bt.addEventListener("click", ()=> irA("pregunta")); b.appendChild(el("p",{class:"callout"},["Tu pregunta, título y objetivos se construyen en el constructor de la pregunta y viajan dentro de tu entrega. ", bt])); }
+  formularios(b, ids, alcance === "R1" ? "2" : "1");
 }
 function botonDescarga(texto, fn){ const bt = el("button",{type:"button", class:"btn btn-primary"},[texto]); bt.addEventListener("click", fn); return bt; }
 function campoTexto(l, valor, onInput, area, ph){ const i = area ? el("textarea",{rows:"3", placeholder:ph || ""}) : el("input",{type:"text", placeholder:ph || ""}); i.value = valor || ""; i.addEventListener("input", ()=> onInput(i.value)); return el("label",{class:area ? "fx-area" : null},[l, i]); }
@@ -210,12 +239,12 @@ function fDiagnostico(p, idf){
   p.appendChild(el("div",{class:"tools-row"},[ver, dl])); p.appendChild(out);
 }
 function fFicha(p, idf){
-  const F = store.get(FICHA_KEY) || {}; if(!F.numero) F.numero = "1"; if(!F.articulo) F.articulo = FORM.articulo || "dapahf";
+  const KF = FICHA_KEY + "-" + (FORM.numero || "1"), F = store.get(KF) || {}; F.numero = FORM.numero || "1"; if(!F.articulo) F.articulo = FORM.articulo || "dapahf";
   if(FORM.articulo && FORM.articulo !== F.articulo){ F.articulo = FORM.articulo; const a = E.articulos.find(x=> x.id === F.articulo); if(a) F.diseno = a.diseno; }
-  const guarda = ()=> store.set(FICHA_KEY, F);
+  const guarda = ()=> store.set(KF, F);
   p.appendChild(el("p",null,["La ficha sigue los cinco pasos de la lectura crítica. Trabájala con tu grupo y que cada integrante descargue su archivo, o descárgala una vez con los nombres de todos."]));
   const g1 = el("div",{class:"nota-form"});
-  const num = el("select",null,[ el("option",{value:"1"},["Ficha 1"]), el("option",{value:"2"},["Ficha 2"]) ]); num.value = F.numero; num.addEventListener("change", ()=>{ F.numero = num.value; guarda(); });
+  const num = el("select",null,[ el("option",{value:"1"},["Ficha 1"]), el("option",{value:"2"},["Ficha 2"]) ]); num.value = F.numero; num.disabled = true;
   const art = el("select",null, E.articulos.map(a=> el("option",{value:a.id},[a.corto])).concat([ el("option",{value:"otro"},["Otro artículo"]) ])); art.value = F.articulo;
   art.addEventListener("change", ()=>{ F.articulo = art.value; FORM.articulo = art.value; const a = E.articulos.find(x=> x.id === art.value); if(a){ F.diseno = a.diseno; } guarda(); FORM.repinta(); });
   g1.appendChild(el("label",null,["Ficha", num])); g1.appendChild(el("label",null,["Artículo", art]));
@@ -257,7 +286,7 @@ function fFicha(p, idf){
   const dl = botonDescarga("Descargar la ficha", ()=>{ const est = idf.valor(); if(faltaNombre(est)) return alert("Escribe tu nombre completo antes de descargar.");
     const a = E.articulos.find(x=> x.id === F.articulo); const d = disPor(F.diseno);
     descargar(empaqueta("ficha", est, Object.assign({}, F, { articuloCita: a ? a.cita : F.cita, articuloDoi: a ? a.doi : F.doi, guia: d ? d.guia : "", herramienta: d ? d.herramienta : "", dominios })), archivo("ficha" + F.numero, est)); });
-  const limpia = el("button",{type:"button", class:"btn"},["Empezar una ficha nueva"]); limpia.addEventListener("click", ()=>{ if(confirm("Se borrará el borrador de la ficha en este navegador. ¿Continuar?")){ store.del(FICHA_KEY); FORM.repinta(); } });
+  const limpia = el("button",{type:"button", class:"btn"},["Empezar una ficha nueva"]); limpia.addEventListener("click", ()=>{ if(confirm("Se borrará el borrador de la ficha en este navegador. ¿Continuar?")){ store.del(KF); FORM.repinta(); } });
   p.appendChild(estado); p.appendChild(el("div",{class:"tools-row"},[dl, limpia]));
 }
 function fPractica(p, idf){
@@ -424,5 +453,5 @@ function docente(b){
   pinta();
 }
 
-window.AULA_FORM = { evaluar, articulos, formularios, docente, PREGUNTAS, sortear, huella, verifica, empaqueta, raDe };
+window.AULA_FORM = { evaluar, articulos, formularios, entregas, docente, PREGUNTAS, sortear, huella, verifica, empaqueta, raDe };
 })();

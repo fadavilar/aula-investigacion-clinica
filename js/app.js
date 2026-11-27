@@ -58,7 +58,10 @@ const disCod = cod=> DIS.find(d=> d.cod === cod);
 
 /* ------------------------------------------------------------ partes y secciones (toda sección analítica es una pregunta) */
 const PARTES = [
-  { id:"C", k:"Para empezar", t:"Tu curso", d:"La ruta de primer y segundo año, cómo se evalúa y qué vas a aprender." },
+  { id:"S", k:"Primera sesión", t:"Sesión conjunta (R1 y R2)", d:"Alcance, preguntas y entregas de la primera sesión, para los dos grupos." },
+  { id:"A1", k:"Primer año", t:"Ruta R1", d:"Metodología I y Lectura crítica: alcance, preguntas y entregas." },
+  { id:"A2", k:"Segundo año", t:"Ruta R2", d:"Proyecto de investigación I y II: alcance, preguntas y entregas." },
+  { id:"N", k:"Calificación", t:"Rúbrica y notas", d:"Cómo se evalúa, calendario, calculadora y consolidador del docente." },
   { id:"I", k:"Primera parte", t:"Planear el estudio", d:"Pregunta, diseño, tamaño de muestra, variables y protocolo." },
   { id:"II", k:"Segunda parte", t:"Leer y evaluar", d:"Efecto, pronóstico, pruebas diagnósticas, metanálisis y guías." },
   { id:"III", k:"Tercera parte", t:"Sintetizar y publicar", d:"Revisión sistemática con IA, avance de resultados, citas y formato." },
@@ -66,12 +69,17 @@ const PARTES = [
 ];
 const SECCIONES = [
   { id:"resumen", part:null, toc:"Resumen", title:"Resumen", sub:"Para qué sirve el aula y cómo recorrerla", open:true, subs:[{id:"resumen-relato",label:"El recorrido, paso a paso"},{id:"resumen-preguntas",label:"Las preguntas del aula"}] },
-  { id:"rutas", part:"C", toc:"¿Qué te corresponde este año?", title:"¿Qué te corresponde en primer y segundo año?", sub:"Sesión conjunta, ruta R1 y ruta R2, bloque por bloque", open:false },
-  { id:"evaluacion", part:"C", toc:"¿Cómo se evalúa?", title:"¿Cómo se evalúa y cuándo?", sub:"Cuatro evidencias, calendario y calculadora de la nota", open:false, subs:[{id:"evaluacion-criterios",label:"Las cuatro evidencias"},{id:"evaluacion-calendario",label:"Calendario"},{id:"evaluacion-calculadora",label:"Calculadora de la nota"}] },
-  { id:"evaluar", part:"C", toc:"¿Cuánto has aprendido?", title:"¿Cuánto has aprendido? Evaluación con intentos ilimitados", sub:"Preguntas sorteadas por resultado de aprendizaje, con descarga de resultados", open:false },
-  { id:"formularios", part:"C", toc:"¿Cómo entregas tus evidencias?", title:"¿Cómo entregas tus evidencias?", sub:"Diagnóstico, fichas, árbol y Mendeley, coevaluación y entregables, con descarga", open:false },
-  { id:"docente", part:"C", toc:"Consolidar las notas (docente)", title:"¿Cómo se consolidan las notas? (para el docente)", sub:"Carga los archivos de los estudiantes y descarga la tabla de notas", open:false },
-  { id:"temas", part:"C", toc:"¿Qué vas a aprender?", title:"¿Qué vas a aprender en esta aula?", sub:"Temas, competencias y fuentes", open:false },
+  { id:"conjunta-alcance", part:"S", toc:"¿Qué cubre la sesión conjunta?", title:"¿Qué cubre la sesión conjunta?", sub:"Objetivos, contenidos y bloques del viernes 27 de noviembre", open:false },
+  { id:"conjunta-preguntas", part:"S", toc:"Preguntas de la sesión conjunta", title:"¿Qué aprendiste en la sesión conjunta?", sub:"Preguntas con intentos ilimitados y envío de resultados", open:false },
+  { id:"conjunta-entregas", part:"S", toc:"Entregas de la sesión conjunta", title:"¿Qué entregas de la sesión conjunta?", sub:"Diagnóstico, ficha 1, árbol y Mendeley, coevaluación y tarea", open:false },
+  { id:"r1-alcance", part:"A1", toc:"¿Qué cubre primer año?", title:"¿Qué cubre la ruta de primer año?", sub:"Sesiones del 4 y el 11 de diciembre y trabajo independiente", open:false },
+  { id:"r1-preguntas", part:"A1", toc:"Preguntas de primer año", title:"¿Qué aprendiste en primer año?", sub:"Preguntas de Metodología I y Lectura crítica, con envío de resultados", open:false },
+  { id:"r1-entregas", part:"A1", toc:"Entregas de primer año", title:"¿Qué entregas en primer año?", sub:"Ficha 2, pregunta y objetivos, y base de datos con histograma", open:false },
+  { id:"r2-alcance", part:"A2", toc:"¿Qué cubre segundo año?", title:"¿Qué cubre la ruta de segundo año?", sub:"Proyecto I y Proyecto II en síntesis", open:false },
+  { id:"r2-preguntas", part:"A2", toc:"Preguntas de segundo año", title:"¿Qué aprendiste en segundo año?", sub:"Preguntas de Proyecto de investigación I y II, con envío de resultados", open:false },
+  { id:"r2-entregas", part:"A2", toc:"Entregas de segundo año", title:"¿Qué entregas en segundo año?", sub:"Pregunta y objetivos, y entregables del proyecto", open:false },
+  { id:"evaluacion", part:"N", toc:"¿Cómo se evalúa?", title:"¿Cómo se evalúa y cuándo?", sub:"Cuatro evidencias, calendario y calculadora de la nota", open:false, subs:[{id:"evaluacion-criterios",label:"Las cuatro evidencias"},{id:"evaluacion-calendario",label:"Calendario"},{id:"evaluacion-calculadora",label:"Calculadora de la nota"}] },
+  { id:"docente", part:"N", toc:"Consolidar las notas (docente)", title:"¿Cómo se consolidan las notas? (para el docente)", sub:"Archivos y códigos de entrega de los estudiantes, tabla de notas", open:false },
   { id:"pregunta", part:"I", toc:"¿Cómo se formula la pregunta?", title:"¿Cómo se convierte una duda clínica en pregunta, título y objetivos?", sub:"Constructor de la pregunta PICO, de frecuencia o PCC", open:false },
   { id:"diseno", part:"I", toc:"¿Qué diseño tiene el estudio?", title:"¿Qué diseño tiene el estudio que lees?", sub:"Árbol de decisión, guía de reporte y herramienta de evaluación", open:false, subs:[{id:"diseno-arbol",label:"Árbol de decisión"},{id:"diseno-selector",label:"Guía y herramienta por diseño"},{id:"diseno-ficha",label:"Ficha de lectura crítica"}] },
   { id:"muestra", part:"I", toc:"¿Cuántos participantes?", title:"¿Cuántos participantes necesitas?", sub:"Las seis calculadoras de tamaño de muestra del Excel, paso a paso", open:false, subs:[{id:"muestra-calculadora",label:"Calculadora"},{id:"muestra-formula",label:"La fórmula, paso a paso"},{id:"muestra-curva",label:"¿Cómo cambia la muestra?"}] },
@@ -88,15 +96,22 @@ const SECCIONES = [
   { id:"avance", part:"III", toc:"¿Cómo presentas el avance?", title:"¿Cómo se recogen los datos y se presenta el avance de resultados?", sub:"Lista de Proyecto II y plantilla del diccionario de variables", open:false, subs:[{id:"avance-diccionario",label:"Diccionario de variables"}] },
   { id:"citas", part:"III", toc:"¿Cómo se citan las referencias?", title:"¿Cómo se citan las referencias?", sub:"Mendeley y estilo Vancouver", open:false },
   { id:"formato", part:"III", toc:"¿Cómo se presenta el manuscrito?", title:"¿Cómo se presenta el manuscrito?", sub:"Listas de verificación para Word, Excel y PowerPoint", open:false },
+  { id:"temas", part:"IV", toc:"¿Qué temas cubre el aula?", title:"¿Qué temas cubre el aula?", sub:"Temas, competencias y fuentes", open:false },
   { id:"recursos", part:"IV", toc:"¿Dónde profundizar?", title:"¿Dónde profundizar?", sub:"Mapas mentales y herramientas", open:false },
   { id:"glosario", part:"IV", toc:"Glosario", title:"Glosario", sub:"Términos del aula, con su fuente", open:false },
   { id:"referencias", part:"IV", toc:"Referencias", title:"Referencias", sub:"Con enlace verificable", open:false }
 ];
 const IDEAS = {
-  rutas:"Primer año condensa Metodología I y Lectura crítica; segundo año, Proyecto de investigación I y II. Cada bloque enlaza la sección del aula que lo apoya.",
+  "conjunta-alcance":"La primera sesión es común a los dos grupos: pregunta, diseño, guía y herramienta, números, sesgos, ficha de lectura crítica y Mendeley.",
+  "conjunta-preguntas":"Equivocarse aquí es parte del aprendizaje: cada intento sortea preguntas nuevas de la sesión conjunta y te dice qué repasar.",
+  "conjunta-entregas":"Cada entrega se descarga como archivo y se envía al docente por correo; ese correo es el soporte de entrega y de calificación.",
+  "r1-alcance":"Primer año condensa Metodología I y Lectura crítica en dos sesiones más trabajo independiente hasta el 31 de enero de 2027.",
+  "r1-preguntas":"Las preguntas de primer año cubren variables y estadística, pronóstico, pruebas diagnósticas, metanálisis, guías y costo-efectividad.",
+  "r1-entregas":"Primer año entrega la ficha 2, su pregunta con título y objetivos, y una base de datos con su histograma.",
+  "r2-alcance":"Segundo año sintetiza Proyecto I (de la pregunta a la metodología) y Proyecto II (de la recolección al avance de resultados).",
+  "r2-preguntas":"Las preguntas de segundo año siguen los elementos del protocolo y del avance de resultados.",
+  "r2-entregas":"Segundo año entrega su pregunta con título y objetivos y los entregables del proyecto.",
   evaluacion:"La nota definitiva suma cuatro evidencias con pesos de 40, 30, 15 y 15 % y se expresa con un entero y un decimal.",
-  evaluar:"Equivocarse aquí es parte del aprendizaje: cada intento sortea preguntas nuevas y te dice qué resultado de aprendizaje repasar.",
-  formularios:"Cada evidencia se entrega como un archivo que el docente carga en el consolidador para calcular la nota.",
   docente:"La nota definitiva sale de las cuatro evidencias con sus pesos; el docente revisa y ajusta cada valor sugerido.",
   articulos:"La lectura crítica se aprende sobre artículos reales: diseño, guía, herramienta, resultado y aplicabilidad.",
   pregunta:"Una buena pregunta ya contiene el título, el objetivo general y el diseño probable del estudio.",
@@ -1195,25 +1210,26 @@ function tablaBloques(bloques){
   t.appendChild(tb);
   return el("div",{class:"table-wrap"},[t]);
 }
-function rutas(){
-  const b = $("rutas"), R = A.rutas;
-  b.appendChild(el("p",null,["Elige tu grupo. Cada sesión aparece bloque por bloque, con su entregable y la sección del aula que te sirve para prepararlo. La elección queda guardada en este navegador."]));
-  const panel = el("div",{class:"ruta-panel", role:"tabpanel", tabindex:"0"});
-  const pinta = id=>{
-    guardaAnio(id); panel.id = "panel-tab-" + id; panel.setAttribute("aria-labelledby", "tab-" + id); panel.innerHTML = "";
-    const r = R[id];
-    panel.appendChild(el("h4",{class:"ruta-t"},[r.titulo]));
-    if(r.fecha) panel.appendChild(el("p",{class:"muted"},[r.fecha + " · " + r.duracion + " minutos"]));
-    if(r.componentes) panel.appendChild(el("p",{class:"tag-row"}, r.componentes.map(c=> el("span",{class:"tag-pill"},[c]))));
-    if(r.resumen) panel.appendChild(el("p",null,[r.resumen]));
-    if(r.objetivos) panel.appendChild(el("ol",{class:"steps"}, r.objetivos.map(o=> el("li",null,[o]))));
-    r.sesiones.forEach(s=>{ panel.appendChild(el("h5",{class:"ruta-fecha"},[s.fecha])); panel.appendChild(tablaBloques(s.bloques)); });
-    if(r.independiente) panel.appendChild(el("p",{class:"callout"},[ el("strong",null,["Trabajo independiente. "]), r.independiente ]));
-    if(r.nota) panel.appendChild(el("p",{class:"callout callout-warn"},[r.nota]));
-    panel.appendChild(el("p",{class:"callout"},[ el("strong",null,["Tarea para todos. "]), R.tarea ]));
-  };
-  const tabs = pestanas([{id:"conjunta", label:"Sesión conjunta"},{id:"r1", label:"Primer año (R1)"},{id:"r2", label:"Segundo año (R2)"}], anioGuardado(), pinta, "Ruta por grupo");
-  b.appendChild(tabs.nodo); b.appendChild(panel); pinta(anioGuardado());
+/* Alcance de cada bloque del curso: conjunta (R1 y R2), r1 o r2. Termina con los botones a sus preguntas y sus entregas. */
+function alcance(clave, sec){
+  const b = $(sec), R = A.rutas, r = R[clave], pref = clave === "conjunta" ? "conjunta" : clave;
+  const p = el("div",{class:"ruta-panel alcance"});
+  p.appendChild(el("h4",{class:"ruta-t"},[r.titulo]));
+  if(r.fecha) p.appendChild(el("p",{class:"muted"},[r.fecha + " · " + r.duracion + " minutos"]));
+  if(r.componentes) p.appendChild(el("p",{class:"tag-row"}, r.componentes.map(c=> el("span",{class:"tag-pill"},[c]))));
+  if(r.resumen) p.appendChild(el("p",null,[r.resumen]));
+  if(r.objetivos){ p.appendChild(el("h5",{class:"ruta-fecha"},["Objetivos"])); p.appendChild(el("ol",{class:"steps"}, r.objetivos.map(o=> el("li",null,[o])))); }
+  if(r.contenidos){ p.appendChild(el("h5",{class:"ruta-fecha"},["Contenidos de la sesión"]));
+    p.appendChild(el("div",{class:"cont-grid"}, r.contenidos.map(c=>{ const ir = c.seccion && M.SEC[c.seccion] ? el("button",{type:"button", class:"btn btn-sm"},["Abrir: " + (M.SEC[c.seccion].toc || M.SEC[c.seccion].title)]) : null;
+      if(ir) ir.addEventListener("click", ()=> irA(c.seccion)); return el("article",{class:"card cont-card"},[ el("h5",null,[c.t]), el("p",null,[c.d]), ir ]); }))); }
+  r.sesiones.forEach(s=>{ p.appendChild(el("h5",{class:"ruta-fecha"},[s.fecha])); p.appendChild(tablaBloques(s.bloques)); });
+  if(r.independiente) p.appendChild(el("p",{class:"callout"},[ el("strong",null,["Trabajo independiente. "]), r.independiente ]));
+  if(r.nota) p.appendChild(el("p",{class:"callout callout-warn"},[r.nota]));
+  if(clave === "conjunta") p.appendChild(el("p",{class:"callout"},[ el("strong",null,["Tarea para los dos grupos. "]), R.tarea ]));
+  const q = el("button",{type:"button", class:"btn btn-primary"},["Responder las preguntas"]), e = el("button",{type:"button", class:"btn"},["Ir a las entregas"]);
+  q.addEventListener("click", ()=> irA(pref + "-preguntas")); e.addEventListener("click", ()=> irA(pref + "-entregas"));
+  p.appendChild(el("div",{class:"tools-row"},[q, e]));
+  b.appendChild(p);
 }
 const redondea1 = x=> Math.round((x + 1e-9)*10)/10;
 function notaDefinitiva(v){ /* v: { taller, ficha1, ficha2, practica, particip } en la escala de 0 a 5 */
@@ -1441,7 +1457,8 @@ function perfilesAutor(){
 M.iniciar({
   contenido: C, secciones: SECCIONES, partes: PARTES, ideas: IDEAS,
   entidad: { nombre:"diseño", inicial:null, valida: cod=> !!disCod(cod) },
-  render(){ perfilesAutor(); resumen(); rutas(); evaluacion(); const F = window.AULA_FORM; if(F){ F.evaluar($("evaluar")); F.formularios($("formularios")); F.docente($("docente")); F.articulos($("articulos")); } temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
+  render(){ perfilesAutor(); resumen(); alcance("conjunta", "conjunta-alcance"); alcance("r1", "r1-alcance"); alcance("r2", "r2-alcance"); evaluacion();
+    const F = window.AULA_FORM; if(F){ [["C","conjunta"],["R1","r1"],["R2","r2"]].forEach(x=>{ F.evaluar($(x[1] + "-preguntas"), x[0]); F.entregas($(x[1] + "-entregas"), x[0]); }); F.docente($("docente")); F.articulos($("articulos")); } temas(); pregunta(); diseno(); muestra(); variables(); protocolo(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); avance(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
   indice(){
     return DIS.map(d=> ({ type:"Diseño", label:d.nombre, detail:d.guia + " · " + d.herramienta, sec:"diseno", anchor:"diseno-selector", cod:d.cod }))
       .concat(MU.calculadoras.map(h=> ({ type:"Tamaño de muestra", label:h.t, detail:"Hoja " + h.hoja + " del Excel", sec:"muestra", anchor:"muestra-calculadora" })))
@@ -1449,5 +1466,12 @@ M.iniciar({
       .concat(A.contenidos.map(c=> ({ type:"Tema", label:c.tema, detail:c.competencia, sec:"temas", anchor:"sec-temas" })));
   }
 });
-window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCalc, metaCalc, bindTip };
+/* Lo que el estudiante escribió en el constructor de la pregunta (para la entrega de la pregunta, el título y los objetivos) */
+function preguntaActual(){
+  let st; try{ st = JSON.parse(localStorage.getItem(PQ_KEY) || "null"); }catch(e){} st = st || PQ;
+  const T = TIPOS_PQ[st.tipo] || TIPOS_PQ.efecto, v = {}, faltan = [];
+  T.campos.forEach(c=>{ const t = ((st.v || {})[st.tipo + c[0]] || "").trim(); if(!t) faltan.push(c[1]); v[c[0]] = t || c[2]; });
+  return Object.assign({ tipo:T.label, campos:T.campos.map(c=> ({ k:c[0], l:c[1], v:((st.v || {})[st.tipo + c[0]] || "").trim() })), faltan }, T.arma(v));
+}
+window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCalc, metaCalc, bindTip, preguntaActual };
 })();
