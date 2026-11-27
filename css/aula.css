@@ -268,6 +268,51 @@ input[aria-invalid="true"]{ border-color: var(--danger); }
 .nota-tab td:not(:first-child){ font-variant-numeric: tabular-nums; white-space:nowrap; }
 .callout-warn{ border-left-color: var(--accent); }
 
+/* ============================================================ ruta R1 y R2: herramientas */
+.pq-form, .desc-form, .ag-form{ display:grid; grid-template-columns: repeat(auto-fit, minmax(15em, 1fr)); gap:12px 16px; margin: 10px 0 14px; }
+.pq-form label, .desc-form label, .ag-form label{ display:flex; flex-direction:column; gap:6px; font-weight:600; }
+.desc-form .desc-datos{ grid-column: 1 / -1; }
+textarea{ font: inherit; color: var(--text); background: var(--surface); border:1.5px solid var(--border); border-radius:10px; padding:9px 12px; min-height:7em; resize: vertical; font-variant-numeric: tabular-nums; }
+.pq-out{ background: var(--surface); border:1px solid var(--border); border-left:6px solid var(--p1); border-radius: var(--radius); padding:14px 18px; margin: 0 0 12px; }
+.pq-b{ margin: 0 0 12px; } .pq-b p, .pq-b ol{ margin: 2px 0 0; }
+.pq-k{ display:block; font-size:.8rem; font-weight:800; text-transform: uppercase; letter-spacing:.05em; color: var(--text-muted); }
+.var-tab td{ min-width: 14em; } .desc-tab td:last-child{ font-family: Consolas, "Courier New", monospace; font-size:.88rem; overflow-wrap:anywhere; }
+.hist-b rect{ fill: var(--primary); opacity:.85; } .hist-b:hover rect, .hist-b:focus-visible rect{ opacity:1; fill: var(--primary-2); }
+.hist-media{ stroke: var(--accent); stroke-width:2.5; stroke-dasharray:6 4; } .hist-mediana{ stroke: var(--p3); stroke-width:2.5; }
+.hist-media-t{ fill: var(--accent); } .hist-mediana-t{ fill: var(--p3); }
+.surv-0{ fill:none; stroke: var(--p3); stroke-width:3; } .surv-1{ fill:none; stroke: var(--accent); stroke-width:3; }
+.surv-0-t{ fill: var(--p3); } .surv-1-t{ fill: var(--accent); }
+.surv-0-p{ fill: var(--surface); stroke: var(--p3); stroke-width:2.5; } .surv-1-p{ fill: var(--surface); stroke: var(--accent); stroke-width:2.5; }
+.surv-pt:hover circle, .surv-pt:focus-visible circle{ stroke-width:4; }
+.dx-tab td{ min-width: 11em; } .dx-tab input{ width: 7em; } .dx-k{ display:block; font-size:.8rem; color: var(--text-muted); margin-top:4px; }
+.dx-pre{ max-width: 720px; } .dx-pre .m-ctrl input{ flex:1 1 auto; accent-color: var(--primary); }
+.prob-eje{ stroke: var(--border); stroke-width:6; stroke-linecap: round; }
+.prob-flecha{ stroke-width:4; } .prob-flecha.pos{ stroke: var(--accent); } .prob-flecha.neg{ stroke: var(--p3); }
+.prob-m circle{ stroke: var(--surface); stroke-width:3; }
+.prob-m.pre circle{ fill: var(--text); } .prob-m.pos circle{ fill: var(--accent); } .prob-m.neg circle{ fill: var(--p3); }
+.prob-m.pos text{ fill: var(--accent); } .prob-m.neg text{ fill: var(--p3); }
+.ma-tab input{ width: 6.5em; } .ma-tab td:first-child input{ width: 9em; }
+.fo-sq{ fill: var(--text); } .fo-diam{ fill: var(--accent); stroke: var(--surface); stroke-width:1.5; }
+.fo-row:hover .fo-sq, .fo-row:focus-visible .fo-sq{ fill: var(--primary-2); }
+.ag-form .m-ctrl input{ flex:1 1 auto; accent-color: var(--primary); }
+.ag-bar{ fill: var(--primary); } .ag-row:hover .ag-bar, .ag-row:focus-visible .ag-bar{ fill: var(--primary-2); }
+.ce-grid{ display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap:16px; align-items:start; }
+.ce-kpis{ grid-template-columns: minmax(0,1fr); }
+@media (max-width:820px){ .ce-grid{ grid-template-columns: minmax(0,1fr); } }
+.pl-umbral{ stroke: var(--text-muted); stroke-width:2; stroke-dasharray:6 5; }
+.pl-pt circle{ fill: var(--accent); stroke: var(--surface); stroke-width:3; }
+.pl-dom{ fill: var(--success); } .pl-domd{ fill: var(--danger); }
+@media (max-width:640px){
+  .ma-tab thead{ display:none; }
+  .ma-tab, .ma-tab tbody, .ma-tab tr, .ma-tab td{ display:block; width:100%; }
+  .ma-tab tr{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:6px 10px; border:1px solid var(--border); border-radius:12px; padding:10px; margin:0 0 10px; }
+  .ma-tab td{ border:none !important; padding:0 !important; }
+  .ma-tab td:first-child{ grid-column: 1 / -1; }
+  .ma-tab td[data-label]::before{ content: attr(data-label); display:block; font-size:.78rem; font-weight:700; color: var(--text-muted); }
+  .ma-tab input, .ma-tab td:first-child input{ width:100%; }
+  .dx-tab input{ width: 5.5em; }
+}
+
 /* ============================================================ enlaces a las fuentes y su ficha */
 a.src-link{ color: var(--primary-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--primary-2) 55%, transparent); }
 a.src-link:hover, a.src-link:focus-visible{ text-decoration-color: currentColor; text-decoration-thickness: 2px; }

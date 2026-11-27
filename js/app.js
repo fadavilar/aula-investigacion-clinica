@@ -36,10 +36,16 @@ const SECCIONES = [
   { id:"rutas", part:"C", toc:"¿Qué te corresponde este año?", title:"¿Qué te corresponde en primer y segundo año?", sub:"Sesión conjunta, ruta R1 y ruta R2, bloque por bloque", open:false },
   { id:"evaluacion", part:"C", toc:"¿Cómo se evalúa?", title:"¿Cómo se evalúa y cuándo?", sub:"Cuatro evidencias, calendario y calculadora de la nota", open:false, subs:[{id:"evaluacion-criterios",label:"Las cuatro evidencias"},{id:"evaluacion-calendario",label:"Calendario"},{id:"evaluacion-calculadora",label:"Calculadora de la nota"}] },
   { id:"temas", part:"C", toc:"¿Qué vas a aprender?", title:"¿Qué vas a aprender en esta aula?", sub:"Temas, competencias y fuentes", open:false },
+  { id:"pregunta", part:"I", toc:"¿Cómo se formula la pregunta?", title:"¿Cómo se convierte una duda clínica en pregunta, título y objetivos?", sub:"Constructor de la pregunta PICO, de frecuencia o PCC", open:false },
   { id:"diseno", part:"I", toc:"¿Qué diseño tiene el estudio?", title:"¿Qué diseño tiene el estudio que lees?", sub:"Árbol de decisión, guía de reporte y herramienta de evaluación", open:false, subs:[{id:"diseno-arbol",label:"Árbol de decisión"},{id:"diseno-selector",label:"Guía y herramienta por diseño"},{id:"diseno-ficha",label:"Ficha de lectura crítica"}] },
   { id:"muestra", part:"I", toc:"¿Cuántos participantes?", title:"¿Cuántos participantes necesitas?", sub:"Las seis calculadoras de tamaño de muestra del Excel, paso a paso", open:false, subs:[{id:"muestra-calculadora",label:"Calculadora"},{id:"muestra-formula",label:"La fórmula, paso a paso"},{id:"muestra-curva",label:"¿Cómo cambia la muestra?"}] },
-  { id:"practica", part:"II", toc:"¿Reconoces el diseño?", title:"¿Reconoces el diseño y la herramienta?", sub:"Preguntas de práctica con retroalimentación", open:false },
+  { id:"variables", part:"I", toc:"¿Qué variables mides?", title:"¿Qué variables vas a medir y cómo se describen?", sub:"Tipo de variable, escala y estadística descriptiva en Excel", open:false, subs:[{id:"variables-tipo",label:"Tipo de variable"},{id:"variables-excel",label:"Estadística descriptiva en Excel"}] },
   { id:"efecto", part:"II", toc:"¿Qué tan grande es el efecto?", title:"¿Qué tan grande y qué tan preciso es el efecto?", sub:"Riesgos, RR, OR, reducción absoluta y NNT", open:false },
+  { id:"pronostico", part:"II", toc:"¿Cómo se lee un pronóstico?", title:"¿Cómo se lee un estudio de pronóstico?", sub:"Cohorte, hazard ratio y curvas de supervivencia", open:false, subs:[{id:"pronostico-lectura",label:"Cinco preguntas de lectura"}] },
+  { id:"diagnostica", part:"II", toc:"¿Qué tan buena es la prueba?", title:"¿Qué tan buena es una prueba diagnóstica?", sub:"Sensibilidad, especificidad, razones de verosimilitud y probabilidad postest", open:false },
+  { id:"metanalisis", part:"II", toc:"¿Cómo se lee un metanálisis?", title:"¿Cómo se lee un metanálisis?", sub:"Forest plot, efecto combinado y heterogeneidad", open:false },
+  { id:"guias", part:"II", toc:"¿Cuánto confiar en una guía?", title:"¿Cuánto confiar en una guía de práctica clínica y en un estudio económico?", sub:"AGREE II y razón de costo-efectividad incremental", open:false, subs:[{id:"guias-agree",label:"AGREE II"},{id:"guias-rcei",label:"Costo-efectividad"}] },
+  { id:"practica", part:"II", toc:"¿Reconoces el diseño?", title:"¿Reconoces el diseño, la herramienta y la medida?", sub:"Preguntas de práctica con retroalimentación", open:false },
   { id:"revision", part:"III", toc:"¿Cómo se hace una revisión con IA?", title:"¿Cómo se hace una revisión sistemática con apoyo de IA?", sub:"Diez fases, buenas prácticas y declaración de uso", open:false, subs:[{id:"revision-fases",label:"Las diez fases"},{id:"revision-practicas",label:"Buenas prácticas"},{id:"revision-declaracion",label:"Declaración de uso de IA"},{id:"revision-claude",label:"Qué necesitas en Claude"}] },
   { id:"citas", part:"III", toc:"¿Cómo se citan las referencias?", title:"¿Cómo se citan las referencias?", sub:"Mendeley y estilo Vancouver", open:false },
   { id:"formato", part:"III", toc:"¿Cómo se presenta el manuscrito?", title:"¿Cómo se presenta el manuscrito?", sub:"Listas de verificación para Word, Excel y PowerPoint", open:false },
@@ -50,6 +56,12 @@ const SECCIONES = [
 const IDEAS = {
   rutas:"Primer año condensa Metodología I y Lectura crítica; segundo año, Proyecto de investigación I y II. Cada bloque enlaza la sección del aula que lo apoya.",
   evaluacion:"La nota definitiva suma cuatro evidencias con pesos de 40, 30, 15 y 15 % y se expresa con un entero y un decimal.",
+  pregunta:"Una buena pregunta ya contiene el título, el objetivo general y el diseño probable del estudio.",
+  variables:"El tipo de variable decide cómo se resume: frecuencias para categorías; media o mediana para números, según la forma de la distribución.",
+  pronostico:"El hazard ratio compara el riesgo instantáneo del evento entre grupos, pero la decisión clínica también necesita el riesgo absoluto en el tiempo.",
+  diagnostica:"La sensibilidad y la especificidad describen la prueba; las razones de verosimilitud cambian la probabilidad de enfermedad de tu paciente.",
+  metanalisis:"El efecto combinado vale tanto como la comparabilidad de los estudios: antes del rombo, mira la heterogeneidad.",
+  guias:"Una guía se evalúa por cómo se hizo, dominio por dominio; un estudio económico, por su razón incremental y su incertidumbre.",
   temas:"El aula recorre el ciclo de un estudio, de la pregunta a la publicación, con una competencia concreta por tema.",
   diseno:"El diseño se identifica por lo que hicieron los investigadores, no por cómo lo nombra el título.",
   muestra:"La muestra depende de la confianza, la precisión y la variabilidad esperadas: pedir el doble de precisión casi cuadruplica el número de participantes.",
@@ -635,6 +647,408 @@ function recursos(){
   b.appendChild(el("div",{class:"grid3"}, A.recursos.map(r=> el("article",{class:"card rec"},[ el("h4",null,[ el("a",{href:r.u, target:"_blank", rel:"noopener"},[r.t]) ]), el("p",null,[r.d]) ]))));
 }
 
+/* ============================================================ RUTA R1 Y R2: PREGUNTA, TÍTULO Y OBJETIVOS */
+const PQ_KEY = "aula-ic-pregunta";
+const PQ = (function(){ try{ return JSON.parse(localStorage.getItem(PQ_KEY) || "null") || { tipo:"efecto", v:{} }; }catch(e){ return { tipo:"efecto", v:{} }; } })();
+const guardaPQ = ()=>{ try{ localStorage.setItem(PQ_KEY, JSON.stringify(PQ)); }catch(e){} };
+const TIPOS_PQ = {
+  efecto: { label:"Efecto de una intervención (PICO)", campos:[ ["P","Población","adultos con insuficiencia cardíaca"], ["I","Intervención o exposición","un iSGLT2"], ["C","Comparador","placebo"], ["O","Desenlace","la hospitalización por insuficiencia cardíaca"] ],
+    arma: v=> ({ pregunta:"En " + v.P + ", ¿" + v.I + ", comparado con " + v.C + ", modifica " + v.O + "?",
+      titulo:"Efecto de " + v.I + " frente a " + v.C + " sobre " + v.O + " en " + v.P,
+      general:"Comparar " + v.O + " en " + v.P + " tratados con " + v.I + " frente a " + v.C + ".",
+      especificos:["Describir las características clínicas y sociodemográficas de " + v.P + " incluidos en el estudio.", "Estimar la frecuencia de " + v.O + " en cada grupo.", "Estimar el efecto de " + v.I + " sobre " + v.O + " con su intervalo de confianza del 95 %."],
+      diseno:"Si los investigadores pueden asignar la intervención al azar, el diseño es un ensayo clínico aleatorizado (CONSORT 2025 y RoB 2). Si solo se observa quién la recibe, es una cohorte (STROBE).", seccion:"diseno" }) },
+  frecuencia: { label:"Frecuencia de una condición", campos:[ ["X","Condición","la enfermedad renal crónica"], ["P","Población","adultos con diabetes tipo 2"], ["L","Lugar","la consulta externa de medicina interna"], ["T","Periodo","2025"] ],
+    arma: v=> ({ pregunta:"¿Cuál es la prevalencia de " + v.X + " en " + v.P + " de " + v.L + " durante " + v.T + "?",
+      titulo:"Prevalencia de " + v.X + " en " + v.P + " de " + v.L + ", " + v.T,
+      general:"Estimar la prevalencia de " + v.X + " en " + v.P + " de " + v.L + " durante " + v.T + ".",
+      especificos:["Describir las características clínicas y sociodemográficas de " + v.P + ".", "Estimar la prevalencia de " + v.X + " por sexo y grupo de edad.", "Explorar los factores asociados con " + v.X + "."],
+      diseno:"Es un estudio transversal (STROBE). El tamaño de la muestra se calcula con la calculadora de estimación de frecuencias.", seccion:"muestra" }) },
+  alcance: { label:"Revisión de alcance (PCC)", campos:[ ["P","Población","adultos mayores hospitalizados"], ["K","Concepto","las intervenciones para reducir la polifarmacia"], ["X","Contexto","los servicios de medicina interna"] ],
+    arma: v=> ({ pregunta:"¿Qué evidencia existe sobre " + v.K + " en " + v.P + " en " + v.X + "?",
+      titulo:v.K.charAt(0).toUpperCase() + v.K.slice(1) + " en " + v.P + " en " + v.X + ": revisión de alcance",
+      general:"Mapear la evidencia disponible sobre " + v.K + " en " + v.P + " en " + v.X + ".",
+      especificos:["Identificar los tipos de estudio que abordan " + v.K + ".", "Describir las características de " + v.P + " incluidos en esos estudios.", "Identificar los vacíos de conocimiento que orienten investigaciones futuras."],
+      diseno:"Es una revisión de alcance con el esquema PCC de JBI; no lleva metanálisis.", seccion:"revision" }) }
+};
+function pregunta(){
+  const b = $("pregunta");
+  b.appendChild(el("p",null,["Escribe los elementos de tu pregunta y el aula arma la pregunta, un título y los objetivos. Es una plantilla para empezar: ajusta la redacción con tu tutor. Lo que escribes queda guardado solo en este navegador, así que sirve para la tarea del 4 de diciembre."]));
+  b.appendChild(M.chips(Object.keys(TIPOS_PQ).map(k=> ({ id:k, label:TIPOS_PQ[k].label })), PQ.tipo, id=>{ PQ.tipo = id; guardaPQ(); arma(); }, "Tipo de pregunta"));
+  const form = el("div",{class:"pq-form"}), out = el("div",{class:"pq-out", "aria-live":"polite"});
+  b.appendChild(form); b.appendChild(out);
+  b.appendChild(el("p",{class:"muted small"},["Los objetivos empiezan con un verbo en infinitivo que se pueda verificar: describir, estimar, comparar, determinar o evaluar. Evita «conocer» o «entender», que no se pueden medir. Plantilla del autor del aula."]));
+  function arma(){
+    const T = TIPOS_PQ[PQ.tipo]; form.innerHTML = "";
+    T.campos.forEach(c=>{ const id = "pq-" + PQ.tipo + "-" + c[0], i = el("input",{type:"text", id:id, placeholder:"Ej.: " + c[2], value:(PQ.v[PQ.tipo + c[0]] || "")});
+      i.addEventListener("input", ()=>{ PQ.v[PQ.tipo + c[0]] = i.value; guardaPQ(); resultado(); });
+      form.appendChild(el("label",{for:id},[ el("span",{class:"m-sym"},[c[0]]), " " + c[1], i ])); });
+    resultado();
+  }
+  function resultado(){
+    const T = TIPOS_PQ[PQ.tipo], v = {}, faltan = [];
+    T.campos.forEach(c=>{ const t = (PQ.v[PQ.tipo + c[0]] || "").trim(); if(!t) faltan.push(c[1].toLowerCase()); v[c[0]] = t || c[2]; });
+    const r = T.arma(v); out.innerHTML = "";
+    if(faltan.length) out.appendChild(el("p",{class:"muted"},[(faltan.length === T.campos.length ? "Así queda con el ejemplo. " : "Falta: " + faltan.join(", ") + ". Mientras tanto se usa el ejemplo. ")]));
+    const bloque = (k, t)=> out.appendChild(el("div",{class:"pq-b"},[ el("span",{class:"pq-k"},[k]), el("p",null,[t]) ]));
+    bloque("Pregunta", r.pregunta); bloque("Título", r.titulo); bloque("Objetivo general", r.general);
+    out.appendChild(el("div",{class:"pq-b"},[ el("span",{class:"pq-k"},["Objetivos específicos"]), el("ol",null, r.especificos.map(e=> el("li",null,[e]))) ]));
+    const ir = el("button",{type:"button", class:"btn btn-sm"},["Ir a la sección"]); ir.addEventListener("click", ()=> irA(r.seccion));
+    out.appendChild(el("div",{class:"pq-b"},[ el("span",{class:"pq-k"},["Diseño probable"]), el("p",null,[r.diseno + " "]), ir ]));
+    const copiar = el("button",{type:"button", class:"btn btn-primary"},["Copiar todo"]), msg = el("span",{class:"muted small", role:"status"});
+    copiar.addEventListener("click", ()=>{ const t = "Pregunta: " + r.pregunta + "\nTítulo: " + r.titulo + "\nObjetivo general: " + r.general + "\nObjetivos específicos:\n" + r.especificos.map((e,i)=> (i+1) + ". " + e).join("\n");
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=> msg.textContent = "Copiado.", ()=> msg.textContent = "Selecciona el texto y cópialo con Ctrl+C."); else msg.textContent = "Selecciona el texto y cópialo con Ctrl+C."; });
+    out.appendChild(el("div",{class:"tools-row"},[copiar, msg]));
+  }
+  arma();
+}
+
+/* ============================================================ RUTA R1: VARIABLES Y ESTADÍSTICA DESCRIPTIVA EN EXCEL */
+const TIPO_VAR = {
+  continua: { t:"Cuantitativa continua", escala:"De intervalo o de razón", ej:"Hemoglobina (g/dL), presión arterial sistólica, creatinina sérica.", describe:"Media y desviación estándar si la distribución es simétrica; mediana y rango intercuartílico si es asimétrica.", grafico:"Histograma o diagrama de caja.", excel:"=PROMEDIO(A2:A101), =DESVEST.M(A2:A101), =MEDIANA(A2:A101), =CUARTIL.INC(A2:A101;1) y =CUARTIL.INC(A2:A101;3)" },
+  discreta: { t:"Cuantitativa discreta", escala:"De razón", ej:"Número de hospitalizaciones en el año, número de fármacos que recibe.", describe:"Mediana y rango intercuartílico; media y desviación estándar si hay muchos valores posibles y la distribución es simétrica.", grafico:"Barras (pocos valores) o histograma (muchos valores).", excel:"=MEDIANA(A2:A101), =CUARTIL.INC(A2:A101;1), =CONTAR.SI(A2:A101;0)" },
+  ordinal: { t:"Cualitativa ordinal", escala:"Ordinal", ej:"Clase funcional NYHA I a IV, estadio de la enfermedad renal crónica.", describe:"Frecuencias y porcentajes de cada categoría, en su orden; puede agregarse la mediana.", grafico:"Barras con las categorías en su orden natural.", excel:"=CONTAR.SI(A2:A101;\"III\") y su porcentaje: =CONTAR.SI(A2:A101;\"III\")/CONTARA(A2:A101)" },
+  dicotomica: { t:"Cualitativa nominal dicotómica", escala:"Nominal", ej:"Diabetes (sí o no), muerte a 30 días, sexo.", describe:"Frecuencia y porcentaje; si interesa la proporción, con su intervalo de confianza.", grafico:"Barras (o el porcentaje escrito, si es un solo dato).", excel:"=CONTAR.SI(A2:A101;\"Sí\")/CONTARA(A2:A101)" },
+  nominal: { t:"Cualitativa nominal", escala:"Nominal", ej:"Grupo sanguíneo, régimen de afiliación, servicio de ingreso.", describe:"Frecuencias y porcentajes de cada categoría.", grafico:"Barras ordenadas de mayor a menor; evita el gráfico de pastel cuando hay muchas categorías.", excel:"=CONTAR.SI(A2:A101;\"O+\") o una tabla dinámica" }
+};
+const ARBOL_VAR = {
+  q1: { p:"¿Los valores son números que resultan de contar o de medir?", o:[["Sí","q2"],["No, son categorías","q3"]] },
+  q2: { p:"¿Puede tomar valores intermedios, con decimales?", o:[["Sí","continua"],["No, solo enteros","discreta"]] },
+  q3: { p:"¿Las categorías tienen un orden natural?", o:[["Sí","ordinal"],["No","q4"]] },
+  q4: { p:"¿Tiene solo dos categorías?", o:[["Sí","dicotomica"],["No, tres o más","nominal"]] }
+};
+const VA = { nodo:"q1", ruta:[], datos:"34\n41\n45\n47\n52\n53\n55\n58\n59\n61\n62\n63\n65\n66\n68\n70\n72\n75\n79\n88", nombre:"Edad", unidad:"años" };
+function cuartilInc(s, p){ const h = (s.length - 1)*p, lo = Math.floor(h); return lo + 1 < s.length ? s[lo] + (h - lo)*(s[lo + 1] - s[lo]) : s[lo]; }
+function descriptiva(xs){
+  const s = xs.slice().sort((a,b)=> a - b), n = s.length, media = s.reduce((a,b)=> a + b, 0)/n;
+  const de = n > 1 ? Math.sqrt(s.reduce((a,x)=> a + (x - media)*(x - media), 0)/(n - 1)) : 0;
+  return { n, media, de, mediana:cuartilInc(s, 0.5), q1:cuartilInc(s, 0.25), q3:cuartilInc(s, 0.75), min:s[0], max:s[n-1], s };
+}
+function leeNumeros(t){ return String(t).split(/[\s;]+/).map(x=> x.trim()).filter(Boolean).map(x=> Number(x.replace(",", "."))); }
+function histogramaSVG(d, nombre, unidad){
+  const W = VW(780, 344), H = VW(300, 280), L = VW(52, 40), R = 14, T = 30, B = 56;
+  const k = Math.max(1, Math.ceil(Math.log2(d.n) + 1)), ancho = (d.max - d.min)/k || 1, cuentas = new Array(k).fill(0);
+  d.s.forEach(x=>{ let i = Math.floor((x - d.min)/ancho); if(i >= k) i = k - 1; cuentas[i]++; });
+  const ymax = M.niceMax(Math.max(...cuentas)), sx = x=> L + (W - L - R)*(x - d.min)/(ancho*k), sy = y=> T + (H - T - B)*(1 - y/ymax);
+  const s = svgEl(W, H, "hist-svg", "Histograma de " + nombre);
+  M.ticks(ymax).forEach(t=>{ sv("line",{x1:L, x2:W-R, y1:sy(t), y2:sy(t), class:"grid-l"}, s); tx(s, L - 8, sy(t) + 4, fmt(t), "ax-s", "end"); });
+  cuentas.forEach((c,i)=>{ const a = d.min + i*ancho, b2 = a + ancho, g = sv("g",{class:"hist-b"}, s);
+    sv("rect",{x:sx(a) + 1, y:sy(c), width:Math.max(1, sx(b2) - sx(a) - 2), height:sy(0) - sy(c)}, g);
+    const lab = fN(a) + " a " + fN(b2) + (i === k - 1 ? " (incluido)" : "");
+    activable(g, lab + ": " + c + " datos"); bindTip(g, ()=> "<h5>" + esc(lab) + " " + esc(unidad) + "</h5><p><strong>" + c + "</strong> de " + d.n + " datos (" + pct(c/d.n) + ")</p>"); });
+  for(let i=0;i<=k;i+= (MOB() && k > 5 ? 2 : 1)) tx(s, sx(d.min + i*ancho), H - B + 18, fN(d.min + i*ancho), "ax-s", "middle");
+  tx(s, (L + W - R)/2, H - 10, nombre + (unidad ? " (" + unidad + ")" : ""), "ax-s ax-b", "middle");
+  tx(s, 4, 16, "Número de datos", "ax-s ax-b");
+  sv("line",{x1:L, x2:W-R, y1:sy(0), y2:sy(0), class:"axis-l"}, s);
+  [["Media", d.media, "hist-media", -1], ["Mediana", d.mediana, "hist-mediana", 1]].forEach(m=>{
+    const x = sx(m[1]); sv("line",{x1:x, x2:x, y1:T - 4, y2:sy(0), class:m[2]}, s);
+    tx(s, x + 5*m[3], T + (m[3] < 0 ? 4 : 18), m[0] + " " + fN(m[1]), "ax-s ax-b " + m[2] + "-t", m[3] < 0 ? "end" : "start"); });
+  return s;
+}
+function variables(){
+  const b = $("variables");
+  b.appendChild(el("p",null,["Una variable es una característica que cambia de un participante a otro. Su tipo decide cómo se resume y cómo se grafica. Clasifica la tuya con tres preguntas y después calcula su estadística descriptiva con las mismas fórmulas de Excel."]));
+  M.sub(b, "variables-tipo", "¿Qué tipo de variable es?");
+  const box = el("div",{class:"tree-q", "aria-live":"polite"}); b.appendChild(box);
+  const pinta = ()=>{
+    box.innerHTML = "";
+    if(VA.ruta.length) box.appendChild(el("p",{class:"trail"},["Tus respuestas: " + VA.ruta.map(r=> r[1]).join(" → ")]));
+    const R = TIPO_VAR[VA.nodo];
+    if(R){
+      box.appendChild(el("p",{class:"q"},["Es una variable " + R.t.toLowerCase() + "."]));
+      box.appendChild(M.tabla(["Aspecto","Qué hacer"], [["Escala de medición", R.escala], ["Ejemplos", R.ej], ["Cómo se describe", R.describe], ["Gráfico", R.grafico], ["En Excel", R.excel]], "var-tab"));
+    } else {
+      const n = ARBOL_VAR[VA.nodo]; box.appendChild(el("p",{class:"q"},[n.p]));
+      const ops = el("div",{class:"opts"});
+      n.o.forEach(o=>{ const bt = el("button",{type:"button", class:"opt"},[o[0]]); bt.addEventListener("click", ()=>{ VA.ruta.push([VA.nodo, o[0]]); VA.nodo = o[1]; pinta(); }); ops.appendChild(bt); });
+      box.appendChild(ops);
+    }
+    if(VA.ruta.length){ const at = el("button",{type:"button", class:"btn"},["Volver atrás"]), re = el("button",{type:"button", class:"btn"},["Clasificar otra variable"]);
+      at.addEventListener("click", ()=>{ VA.nodo = VA.ruta.pop()[0]; pinta(); }); re.addEventListener("click", ()=>{ VA.nodo = "q1"; VA.ruta = []; pinta(); });
+      box.appendChild(el("div",{class:"tools-row"},[at, re])); }
+  };
+  pinta();
+  b.appendChild(el("p",{class:"muted small"},["Síntesis docente del autor del aula. Los nombres de las funciones son los de Excel en español; ver las funciones de Excel por categoría en el soporte de Microsoft."]));
+
+  M.sub(b, "variables-excel", "Estadística descriptiva, como en Excel", "Pega una columna de números (desde Excel, uno por fila) y obtén el resumen, la fórmula de Excel de cada medida y el histograma.");
+  const f = el("div",{class:"desc-form"});
+  const nom = el("input",{type:"text", id:"va-nombre", value:VA.nombre}), uni = el("input",{type:"text", id:"va-unidad", value:VA.unidad});
+  const ta = el("textarea",{id:"va-datos", rows:"6", spellcheck:"false"}); ta.value = VA.datos;
+  f.appendChild(el("label",{for:"va-nombre"},["Nombre de la variable", nom])); f.appendChild(el("label",{for:"va-unidad"},["Unidad", uni]));
+  f.appendChild(el("label",{for:"va-datos", class:"desc-datos"},["Datos (separados por salto de línea, espacio o punto y coma; decimales con coma o punto)", ta]));
+  b.appendChild(f);
+  b.appendChild(el("p",{class:"muted small"},["Los datos que trae son de ejemplo, inventados para practicar: la edad de 20 pacientes."]));
+  const res = el("div",{"aria-live":"polite"}), how = M.howTo("cada barra cuenta cuántos datos caen en el intervalo; la línea discontinua marca la media y la continua, la mediana. Los intervalos siguen la regla de Sturges."), box2 = el("div",{class:"chart-box"}), lec = M.reading();
+  b.appendChild(res); b.appendChild(how); b.appendChild(box2); b.appendChild(lec);
+  b.appendChild(M.sourceLine("Cálculo propio con las mismas definiciones de Excel: DESVEST.M divide por n − 1 y CUARTIL.INC interpola entre los datos ordenados."));
+  const calc = ()=>{
+    VA.nombre = nom.value.trim() || "Variable"; VA.unidad = uni.value.trim(); VA.datos = ta.value;
+    const xs = leeNumeros(ta.value), malos = xs.filter(x=> !isFinite(x)).length;
+    res.innerHTML = ""; box2.innerHTML = "";
+    if(malos){ res.appendChild(el("p",{class:"m-err"},[malos + " valor(es) no son números. Revisa que no haya texto ni celdas con símbolos."])); M.setReading(lec, "Corrige los datos para ver el resumen."); return; }
+    if(xs.length < 3){ res.appendChild(el("p",{class:"m-err"},["Escribe al menos tres datos."])); M.setReading(lec, "Faltan datos."); return; }
+    const d = descriptiva(xs), r = "A2:A" + (d.n + 1), u = VA.unidad ? " " + VA.unidad : "";
+    res.appendChild(M.tabla(["Medida","Valor","Fórmula en Excel (datos en " + r + ")"], [
+      ["Número de datos (n)", fmt(d.n), "=CONTAR(" + r + ")"], ["Media", fN(d.media) + u, "=PROMEDIO(" + r + ")"], ["Desviación estándar", fN(d.de) + u, "=DESVEST.M(" + r + ")"],
+      ["Mediana", fN(d.mediana) + u, "=MEDIANA(" + r + ")"], ["Primer cuartil (Q1)", fN(d.q1) + u, "=CUARTIL.INC(" + r + ";1)"], ["Tercer cuartil (Q3)", fN(d.q3) + u, "=CUARTIL.INC(" + r + ";3)"],
+      ["Rango intercuartílico", fN(d.q3 - d.q1) + u, "=CUARTIL.INC(" + r + ";3)-CUARTIL.INC(" + r + ";1)"], ["Mínimo y máximo", fN(d.min) + " y " + fN(d.max) + u, "=MIN(" + r + ") y =MAX(" + r + ")"] ], "desc-tab"));
+    box2.appendChild(histogramaSVG(d, VA.nombre, VA.unidad));
+    const asim = d.de > 0 ? 3*(d.media - d.mediana)/d.de : 0;
+    const guia = asim > 0.5 ? "La media supera claramente a la mediana: hay asimetría hacia los valores altos, así que conviene reportar mediana y rango intercuartílico." : asim < -0.5 ? "La media queda claramente por debajo de la mediana: hay asimetría hacia los valores bajos, así que conviene reportar mediana y rango intercuartílico." : "La media y la mediana están cerca: la distribución es aproximadamente simétrica y puedes reportar media y desviación estándar.";
+    M.setReading(lec, "<strong>" + esc(VA.nombre) + "</strong>: mediana " + fN(d.mediana) + u + " (RIC " + fN(d.q1) + " a " + fN(d.q3) + ") y media " + fN(d.media) + u + " (DE " + fN(d.de) + "), con " + fmt(d.n) + " datos. " + guia + " Es una orientación: revisa también la forma del histograma.");
+  };
+  [nom, uni, ta].forEach(i=> i.addEventListener("input", calc)); calc();
+}
+
+/* ============================================================ RUTA R1: PRONÓSTICO */
+const PR = { hr:0.7, s12:0.7 };
+function supervivenciaSVG(){
+  const W = VW(780, 344), H = VW(320, 290), L = VW(56, 44), R = VW(30, 16), T = 24, B = 54, meses = 24;
+  const lam = -Math.log(PR.s12)/12, S0 = t=> Math.exp(-lam*t), S1 = t=> Math.pow(S0(t), PR.hr);
+  const sx = t=> L + (W - L - R)*t/meses, sy = p=> T + (H - T - B)*(1 - p);
+  const s = svgEl(W, H, "surv-svg", "Curvas de supervivencia ilustrativas con el hazard ratio elegido");
+  [0, 0.25, 0.5, 0.75, 1].forEach(p=>{ sv("line",{x1:L, x2:W-R, y1:sy(p), y2:sy(p), class:"grid-l"}, s); tx(s, L - 8, sy(p) + 4, fmt(p*100, 0) + " %", "ax-s", "end"); });
+  [0, 6, 12, 18, 24].forEach(t=> tx(s, sx(t), H - B + 18, String(t), "ax-s", "middle"));
+  tx(s, (L + W - R)/2, H - 10, "Meses de seguimiento", "ax-s ax-b", "middle"); tx(s, 4, 14, "Sin el evento", "ax-s ax-b");
+  const path = f=>{ let d = ""; for(let i=0;i<=48;i++){ const t = meses*i/48; d += (i ? "L" : "M") + sx(t).toFixed(1) + " " + sy(f(t)).toFixed(1); } return d; };
+  sv("path",{d:path(S0), class:"surv-0"}, s); sv("path",{d:path(S1), class:"surv-1"}, s);
+  [[S0, "Sin el factor", "surv-0-t"], [S1, "Con el factor (HR " + fmt(PR.hr, 2) + ")", "surv-1-t"]].forEach((c,i)=>{ const y = sy(c[0](meses)); tx(s, W - R - 4, y + (c[0](meses) >= (i ? S0 : S1)(meses) ? -8 : 16), c[1], "ax-s ax-b " + c[2], "end"); });
+  [12, 24].forEach(t=>{ [S0, S1].forEach((f,i)=>{ const g = sv("g",{class:"surv-pt"}, s); sv("circle",{cx:sx(t), cy:sy(f(t)), r:6, class:i ? "surv-1-p" : "surv-0-p"}, g);
+    const txt = (i ? "Con el factor" : "Sin el factor") + " a los " + t + " meses: " + pct(f(t));
+    activable(g, txt); bindTip(g, ()=> "<h5>" + t + " meses</h5><p>" + esc(txt) + "</p>"); }); });
+  return s;
+}
+function pronostico(){
+  const b = $("pronostico");
+  b.appendChild(el("p",null,["Un estudio de pronóstico sigue a una cohorte desde un punto común (el diagnóstico, el ingreso o el inicio de un tratamiento) para estimar qué tan probable es un desenlace y qué factores lo modifican. Su medida típica es el hazard ratio (HR): compara el riesgo instantáneo del evento entre quienes tienen el factor y quienes no, en cualquier momento del seguimiento."]));
+  const f = el("div",{class:"nota-form"});
+  const mk = (id, l, min, max, step, k)=>{ const r = el("input",{type:"range", id:id, min:min, max:max, step:step, value:String(PR[k])}), o = el("output",{for:id, class:"m-unit"},[k === "hr" ? fmt(PR[k], 2) : pct(PR[k], 0)]);
+    r.addEventListener("input", ()=>{ PR[k] = Number(r.value); o.textContent = k === "hr" ? fmt(PR[k], 2) : pct(PR[k], 0); pinta(); }); f.appendChild(el("label",{for:id},[l, el("span",{class:"m-ctrl"},[r, o])])); };
+  mk("pr-hr", "Hazard ratio del factor", 0.3, 3, 0.05, "hr"); mk("pr-s12", "Supervivencia sin el factor a los 12 meses", 0.3, 0.95, 0.05, "s12");
+  b.appendChild(f);
+  const box = el("div",{class:"chart-box"}), lec = M.reading();
+  b.appendChild(M.howTo("cada curva es la proporción que sigue sin el evento a lo largo del tiempo. Mueve el HR y mira cómo se separan; toca los puntos para ver los porcentajes a los 12 y 24 meses.")); b.appendChild(box); b.appendChild(lec);
+  b.appendChild(M.sourceLine("Curvas ilustrativas, no de un estudio real: suponen un riesgo constante en el tiempo y riesgos proporcionales (la curva con el factor es la otra elevada al HR). En un artículo se leen las curvas de Kaplan-Meier."));
+  function pinta(){
+    box.innerHTML = ""; box.appendChild(supervivenciaSVG());
+    const lam = -Math.log(PR.s12)/12, s0 = t=> Math.exp(-lam*t), s1 = t=> Math.pow(s0(t), PR.hr), dif = Math.abs(1 - PR.hr);
+    M.setReading(lec, "Con un HR de <strong>" + fmt(PR.hr, 2) + "</strong>, en cualquier momento del seguimiento el riesgo instantáneo del evento es " + (PR.hr < 1 ? fmt(dif*100, 0) + " % menor" : PR.hr > 1 ? fmt(dif*100, 0) + " % mayor" : "igual") + " con el factor. A los 12 meses siguen sin el evento " + pct(s0(12)) + " sin el factor y " + pct(s1(12)) + " con él; a los 24 meses, " + pct(s0(24)) + " y " + pct(s1(24)) + ". El HR no es una diferencia de porcentajes: para el paciente importa también el riesgo absoluto en el tiempo que interesa.");
+  }
+  pinta();
+  M.sub(b, "pronostico-lectura", "Cinco preguntas para leer un estudio de pronóstico");
+  b.appendChild(el("ol",{class:"steps"},[
+    el("li",null,[ el("strong",null,["Cohorte. "]), "¿Los pacientes representan a los que verás y entraron en un momento parecido de la enfermedad?" ]),
+    el("li",null,[ el("strong",null,["Seguimiento. "]), "¿Fue suficientemente largo y completo? ¿Cuántos se perdieron y por qué?" ]),
+    el("li",null,[ el("strong",null,["Desenlace. "]), "¿Se definió con criterios objetivos y se midió sin conocer el factor pronóstico?" ]),
+    el("li",null,[ el("strong",null,["Confusión. "]), "¿Ajustaron por los factores que podrían explicar la asociación?" ]),
+    el("li",null,[ el("strong",null,["Precisión. "]), "¿Qué tan estrecho es el intervalo de confianza del HR y cuántos eventos hubo?" ])
+  ]));
+  b.appendChild(el("p",null,["Para evaluar el riesgo de sesgo de un estudio de factores pronósticos existe QUIPS, con seis dominios: participación en el estudio, pérdidas en el seguimiento, medición del factor pronóstico, medición del desenlace, confusión, y análisis estadístico y reporte. Se reporta con STROBE, porque es una cohorte."]));
+}
+
+/* ============================================================ RUTA R1: PRUEBAS DIAGNÓSTICAS */
+const DX = { vp:90, fp:30, fn:10, vn:170, pre:0.2 };
+function dxCalc(v){
+  const enf = v.vp + v.fn, sanos = v.fp + v.vn, n = enf + sanos;
+  if([v.vp, v.fp, v.fn, v.vn].some(x=> !Number.isInteger(x) || x < 0) || !enf || !sanos) return null;
+  const se = v.vp/enf, es = v.vn/sanos, lrp = es < 1 ? se/(1 - es) : Infinity, lrn = es > 0 ? (1 - se)/es : Infinity;
+  const odds = v.pre/(1 - v.pre), post = lr=> lr === Infinity ? 1 : (odds*lr)/(1 + odds*lr);
+  return { se, es, vpp: (v.vp + v.fp) ? v.vp/(v.vp + v.fp) : NaN, vpn: (v.fn + v.vn) ? v.vn/(v.fn + v.vn) : NaN, lrp, lrn, prev: enf/n, n, postPos:post(lrp), postNeg:post(lrn) };
+}
+function probSVG(r){
+  const W = VW(780, 344), H = VW(170, 200), L = 16, R = 16, sx = p=> L + (W - L - R)*p, y = VW(84, 100);
+  const s = svgEl(W, H, "prob-svg", "Probabilidad antes y después de la prueba");
+  sv("line",{x1:sx(0), x2:sx(1), y1:y, y2:y, class:"prob-eje"}, s);
+  [0, 0.25, 0.5, 0.75, 1].forEach(p=>{ sv("line",{x1:sx(p), x2:sx(p), y1:y - 6, y2:y + 6, class:"axis-l"}, s); tx(s, sx(p), y + 26, fmt(p*100, 0) + " %", "ax-s", "middle"); });
+  const marca = (p, cls, lab, arriba)=>{ const g = sv("g",{class:"prob-m " + cls}, s); sv("circle",{cx:sx(p), cy:y, r:VW(10, 9)}, g);
+    tx(g, Math.min(Math.max(sx(p), 60), W - 60), arriba ? y - 22 : y + 50, lab + ": " + pct(p), "ax-s ax-b", "middle");
+    activable(g, lab + " " + pct(p)); bindTip(g, ()=> "<h5>" + esc(lab) + "</h5><p><strong>" + pct(p) + "</strong></p>"); };
+  sv("line",{x1:sx(DX.pre), x2:sx(r.postPos), y1:y - 2, y2:y - 2, class:"prob-flecha pos"}, s); sv("line",{x1:sx(DX.pre), x2:sx(r.postNeg), y1:y + 2, y2:y + 2, class:"prob-flecha neg"}, s);
+  marca(r.postNeg, "neg", "Si la prueba es negativa", false); marca(r.postPos, "pos", "Si es positiva", true); marca(DX.pre, "pre", "Antes de la prueba", r.postPos - DX.pre < 0.18 ? false : true);
+  return s;
+}
+function diagnostica(){
+  const b = $("diagnostica");
+  b.appendChild(el("p",null,["La exactitud de una prueba se resume en una tabla de 2 × 2 que la compara con el estándar de referencia. La sensibilidad y la especificidad describen la prueba; los valores predictivos dependen además de cuántos enfermos hay. Las razones de verosimilitud (LR) llevan la probabilidad que tenías antes de la prueba (pretest) a la probabilidad después (postest). Se reporta con STARD 2015 y se evalúa con QUADAS-2."]));
+  const t = el("table",{class:"cmp-table dx-tab"}), inp = (k, l)=>{ const i = el("input",{type:"number", min:"0", step:"1", value:String(DX[k]), "aria-label":l, id:"dx-" + k}); i.addEventListener("input", ()=>{ DX[k] = Number(i.value); calc(); }); return i; };
+  t.appendChild(el("thead",null,[ el("tr",null,[ el("th",{scope:"col"},[""]), el("th",{scope:"col"},["Con la enfermedad (estándar)"]), el("th",{scope:"col"},["Sin la enfermedad"]) ]) ]));
+  t.appendChild(el("tbody",null,[
+    el("tr",null,[ el("th",{scope:"row"},["Prueba positiva"]), el("td",null,[inp("vp","Verdaderos positivos"), el("span",{class:"dx-k"},["Verdaderos positivos"])]), el("td",null,[inp("fp","Falsos positivos"), el("span",{class:"dx-k"},["Falsos positivos"])]) ]),
+    el("tr",null,[ el("th",{scope:"row"},["Prueba negativa"]), el("td",null,[inp("fn","Falsos negativos"), el("span",{class:"dx-k"},["Falsos negativos"])]), el("td",null,[inp("vn","Verdaderos negativos"), el("span",{class:"dx-k"},["Verdaderos negativos"])]) ]) ]));
+  b.appendChild(el("div",{class:"table-wrap"},[t]));
+  b.appendChild(el("p",{class:"muted small"},["Los números de partida son de ejemplo, inventados para practicar."]));
+  const pr = el("input",{type:"range", id:"dx-pre", min:"0.01", max:"0.99", step:"0.01", value:String(DX.pre)}), po = el("output",{for:"dx-pre", class:"m-unit"},[pct(DX.pre, 0)]);
+  const usaPrev = el("button",{type:"button", class:"btn btn-sm"},["Usar la prevalencia de la tabla"]);
+  pr.addEventListener("input", ()=>{ DX.pre = Number(pr.value); po.textContent = pct(DX.pre, 0); calc(); });
+  usaPrev.addEventListener("click", ()=>{ const r = dxCalc(DX); if(r){ DX.pre = Math.min(0.99, Math.max(0.01, Math.round(r.prev*100)/100)); pr.value = String(DX.pre); po.textContent = pct(DX.pre, 0); calc(); } });
+  b.appendChild(el("label",{for:"dx-pre", class:"field dx-pre"},["Probabilidad pretest: qué tan probable te parece la enfermedad en tu paciente antes de la prueba", el("span",{class:"m-ctrl"},[pr, po]), usaPrev]));
+  const kp = el("div",{class:"kpis", "aria-live":"polite"}), box = el("div",{class:"chart-box"}), lec = M.reading();
+  b.appendChild(kp); b.appendChild(M.howTo("el punto del centro es tu probabilidad antes de la prueba; las flechas muestran a dónde llega si la prueba sale positiva o negativa.")); b.appendChild(box); b.appendChild(lec);
+  b.appendChild(M.sourceLine("Cálculo propio: odds postest = odds pretest × LR. Definiciones según Deeks y Altman (BMJ 2004) y el manual Cochrane de revisiones de exactitud diagnóstica."));
+  function calc(){
+    const r = dxCalc(DX); kp.innerHTML = ""; box.innerHTML = "";
+    if(!r){ M.setReading(lec, "Revisa la tabla: deben ser números enteros, con al menos un enfermo y un sano."); return; }
+    const k = (t2, v, s2)=> kp.appendChild(el("div",{class:"kpi"},[ el("small",null,[t2]), el("strong",null,[v]), el("span",null,[s2||""]) ]));
+    const lr = x=> x === Infinity ? "∞" : fmt(x, 2);
+    k("Sensibilidad", pct(r.se), "VP ÷ enfermos"); k("Especificidad", pct(r.es), "VN ÷ sanos"); k("LR positiva", lr(r.lrp), "Sensibilidad ÷ (1 − especificidad)"); k("LR negativa", lr(r.lrn), "(1 − sensibilidad) ÷ especificidad");
+    k("Valor predictivo positivo", isFinite(r.vpp) ? pct(r.vpp) : "—", "Con la prevalencia de la tabla: " + pct(r.prev)); k("Valor predictivo negativo", isFinite(r.vpn) ? pct(r.vpn) : "—", "Con la prevalencia de la tabla");
+    box.appendChild(probSVG(r));
+    const fuerza = r.lrp >= 10 ? "una LR positiva de 10 o más, que suele cambiar mucho la probabilidad" : r.lrp >= 5 ? "una LR positiva moderada" : "una LR positiva baja: la prueba positiva mueve poco la probabilidad";
+    M.setReading(lec, "Si antes de la prueba la probabilidad es <strong>" + pct(DX.pre) + "</strong>, un resultado positivo la lleva a <strong>" + pct(r.postPos) + "</strong> y uno negativo a <strong>" + pct(r.postNeg) + "</strong>. La prueba tiene " + fuerza + ". Los valores predictivos de la tabla (" + (isFinite(r.vpp) ? pct(r.vpp) : "—") + " y " + (isFinite(r.vpn) ? pct(r.vpn) : "—") + ") solo valen para una prevalencia de " + pct(r.prev) + "; con otra probabilidad pretest, usa las LR.");
+  }
+  calc();
+}
+
+/* ============================================================ RUTA R1: METANÁLISIS */
+const MA = { modelo:"fijo", filas:[ ["Estudio A",12,100,24,100], ["Estudio B",30,250,45,250], ["Estudio C",9,80,8,80], ["Estudio D",25,300,50,300], ["Estudio E",22,120,15,120] ] };
+function metaCalc(filas, modelo){
+  const est = filas.map(f=>{ let [n, a, n1, c, n2] = f; if([a,n1,c,n2].some(x=> !Number.isInteger(x) || x < 0) || a > n1 || c > n2 || !n1 || !n2) return null;
+    let A = a, B = n1 - a, Cc = c, D = n2 - c; if(!A || !Cc || !B || !D){ A += 0.5; B += 0.5; Cc += 0.5; D += 0.5; }
+    const y = Math.log((A/(A + B))/(Cc/(Cc + D))), v = 1/A - 1/(A + B) + 1/Cc - 1/(Cc + D); return { n, y, v, se:Math.sqrt(v) }; });
+  if(est.some(e=> !e) || est.length < 2) return null;
+  const w = est.map(e=> 1/e.v), sw = w.reduce((a,b)=> a + b, 0), yf = est.reduce((a,e,i)=> a + w[i]*e.y, 0)/sw;
+  const Q = est.reduce((a,e,i)=> a + w[i]*(e.y - yf)*(e.y - yf), 0), df = est.length - 1, I2 = Q > 0 ? Math.max(0, (Q - df)/Q) : 0;
+  const tau2 = Math.max(0, (Q - df)/(sw - w.reduce((a,x)=> a + x*x, 0)/sw));
+  const wr = est.map(e=> 1/(e.v + (modelo === "aleatorio" ? tau2 : 0))), swr = wr.reduce((a,b)=> a + b, 0), y = est.reduce((a,e,i)=> a + wr[i]*e.y, 0)/swr, se = Math.sqrt(1/swr);
+  return { est:est.map((e,i)=> Object.assign(e, { peso:wr[i]/swr })), y, se, Q, df, I2, tau2, rr:Math.exp(y), lo:Math.exp(y - 1.96*se), hi:Math.exp(y + 1.96*se) };
+}
+function forestSVG(r){
+  const mob = MOB(), W = VW(820, 344), fila = VW(34, 40), lab = VW(150, 92), der = VW(210, 0), T = 34, n = r.est.length, H = T + (n + 1)*fila + 70;
+  const all = r.est.flatMap(e=> [Math.exp(e.y - 1.96*e.se), Math.exp(e.y + 1.96*e.se)]).concat([r.lo, r.hi]);
+  const lo = Math.min(0.2, Math.min(...all)*0.9), hi = Math.max(2, Math.max(...all)*1.1), x0 = lab, x1 = W - der - 10;
+  const lx = x=> x0 + (x1 - x0)*(Math.log(Math.min(hi, Math.max(lo, x))) - Math.log(lo))/(Math.log(hi) - Math.log(lo));
+  const s = svgEl(W, H, "forest-svg", "Forest plot del metanálisis");
+  tx(s, 0, 18, "Estudio", "ax-s ax-b"); if(!mob) tx(s, W, 18, "RR (IC 95 %) · peso", "ax-s ax-b", "end");
+  const ty = T + (n + 1)*fila + 6;
+  [0.25, 0.5, 1, 2, 4].filter(t=> t >= lo && t <= hi).forEach(t=>{ sv("line",{x1:lx(t), x2:lx(t), y1:T - 6, y2:ty, class:t === 1 ? "ef-uno" : "grid-l"}, s); tx(s, lx(t), ty + 18, fmt(t, t < 1 ? 2 : 0), "ax-s", "middle"); });
+  tx(s, lx(1) - 8, ty + 38, mob ? "← Intervención" : "← Favorece la intervención", "ax-s ax-muted", "end"); tx(s, lx(1) + 8, ty + 38, mob ? "Control →" : "Favorece el control →", "ax-s ax-muted", "start");
+  const maxP = Math.max(...r.est.map(e=> e.peso));
+  r.est.forEach((e,i)=>{ const y = T + i*fila + fila/2, g = sv("g",{class:"fo-row"}, s), l = Math.exp(e.y - 1.96*e.se), h = Math.exp(e.y + 1.96*e.se), lado = 6 + 14*Math.sqrt(e.peso/maxP);
+    tx(g, 0, y + 5, e.n, "ax-t"); sv("line",{x1:lx(l), x2:lx(h), y1:y, y2:y, class:"ef-ci-l"}, g); sv("rect",{x:lx(Math.exp(e.y)) - lado/2, y:y - lado/2, width:lado, height:lado, class:"fo-sq"}, g);
+    const txt = fmt(Math.exp(e.y), 2) + " (" + fmt(l, 2) + " a " + fmt(h, 2) + ") · " + fmt(e.peso*100, 1) + " %";
+    if(!mob) tx(g, W, y + 5, txt, "ax-s", "end");
+    activable(g, e.n + ": RR " + txt); bindTip(g, ()=> "<h5>" + esc(e.n) + "</h5><p>RR <strong>" + fmt(Math.exp(e.y), 2) + "</strong>, IC 95 %: " + fmt(l, 2) + " a " + fmt(h, 2) + "</p><p>Peso en el combinado: " + fmt(e.peso*100, 1) + " %</p>"); });
+  const yd = T + n*fila + fila/2, g = sv("g",{class:"fo-comb"}, s);
+  sv("polygon",{points:[lx(r.lo) + "," + yd, lx(r.rr) + "," + (yd - 9), lx(r.hi) + "," + yd, lx(r.rr) + "," + (yd + 9)].join(" "), class:"fo-diam"}, g);
+  tx(g, 0, yd + 5, "Combinado", "ax-t ax-b"); if(!mob) tx(g, W, yd + 5, fmt(r.rr, 2) + " (" + fmt(r.lo, 2) + " a " + fmt(r.hi, 2) + ")", "ax-s ax-b", "end");
+  activable(g, "Combinado: RR " + fmt(r.rr, 2)); bindTip(g, ()=> "<h5>Efecto combinado</h5><p>RR <strong>" + fmt(r.rr, 2) + "</strong>, IC 95 %: " + fmt(r.lo, 2) + " a " + fmt(r.hi, 2) + "</p><p>I² = " + fmt(r.I2*100, 0) + " %</p>");
+  return s;
+}
+function metanalisis(){
+  const b = $("metanalisis");
+  b.appendChild(el("p",null,["Un metanálisis combina los resultados de varios estudios comparables en un solo efecto, dando más peso a los más precisos. El forest plot muestra cada estudio (un cuadrado, más grande cuanto más pesa, con su intervalo) y el efecto combinado (el rombo). La heterogeneidad (I²) dice qué parte de la variación entre estudios no se explica por el azar."]));
+  b.appendChild(M.chips([{id:"fijo", label:"Efecto fijo (inverso de la varianza)"},{id:"aleatorio", label:"Efectos aleatorios (DerSimonian-Laird)"}], MA.modelo, id=>{ MA.modelo = id; calc(); }, "Modelo"));
+  const tabla = el("div"), add = el("button",{type:"button", class:"btn"},["Agregar estudio"]), reset = el("button",{type:"button", class:"btn"},["Volver al ejemplo"]);
+  b.appendChild(tabla); b.appendChild(el("div",{class:"tools-row"},[add, reset]));
+  b.appendChild(el("p",{class:"muted small"},["Los cinco estudios de partida son ficticios, para practicar. El desenlace se supone indeseable (un RR menor de 1 favorece la intervención)."]));
+  const how = M.howTo("cada fila es un estudio; si su línea cruza el 1, ese estudio solo no demuestra diferencia. El rombo es el efecto combinado y su ancho, el intervalo."), box = el("div",{class:"chart-box"}), lec = M.reading();
+  b.appendChild(how); b.appendChild(box); b.appendChild(lec);
+  b.appendChild(M.sourceLine("Cálculo propio sobre el logaritmo del RR, con corrección de 0,5 si una celda vale cero. Métodos: DerSimonian y Laird (1986); I² según Higgins y colaboradores (2003); interpretación según el Cochrane Handbook, capítulo 10."));
+  const ejemplo = MA.filas.map(f=> f.slice());
+  function pintaTabla(){
+    tabla.innerHTML = "";
+    const t = el("table",{class:"cmp-table ma-tab"}), tb = el("tbody");
+    t.appendChild(el("thead",null,[ el("tr",null, ["Estudio","Eventos intervención","Total intervención","Eventos control","Total control",""].map(x=> el("th",{scope:"col"},[x]))) ]));
+    MA.filas.forEach((f,i)=>{ const tr = el("tr");
+      f.forEach((v,j)=>{ const inp = el("input",{type:j ? "number" : "text", min:"0", step:"1", value:String(v), "aria-label":["Estudio","Eventos intervención","Total intervención","Eventos control","Total control"][j] + " " + (i + 1)});
+        inp.addEventListener("input", ()=>{ MA.filas[i][j] = j ? Number(inp.value) : inp.value; calc(); }); tr.appendChild(el("td",{"data-label":["Estudio","Eventos I","Total I","Eventos C","Total C"][j]},[inp])); });
+      const del = el("button",{type:"button", class:"btn btn-sm", "aria-label":"Quitar " + f[0]},["Quitar"]); del.addEventListener("click", ()=>{ MA.filas.splice(i, 1); pintaTabla(); calc(); });
+      tr.appendChild(el("td",null,[MA.filas.length > 2 ? del : null])); tb.appendChild(tr); });
+    t.appendChild(tb); tabla.appendChild(el("div",{class:"table-wrap"},[t]));
+  }
+  add.addEventListener("click", ()=>{ MA.filas.push(["Estudio " + String.fromCharCode(65 + MA.filas.length % 26), 10, 100, 12, 100]); pintaTabla(); calc(); });
+  reset.addEventListener("click", ()=>{ MA.filas = ejemplo.map(f=> f.slice()); pintaTabla(); calc(); });
+  function calc(){
+    const r = metaCalc(MA.filas, MA.modelo); box.innerHTML = "";
+    if(!r){ M.setReading(lec, "Revisa la tabla: al menos dos estudios, con números enteros y eventos que no superen el total."); return; }
+    box.appendChild(forestSVG(r));
+    const i2 = r.I2*100, het = i2 < 30 ? "baja (de 0 a 40 % podría no ser importante)" : i2 < 50 ? "moderada" : i2 < 75 ? "sustancial" : "considerable";
+    const cruza = r.lo <= 1 && r.hi >= 1;
+    M.setReading(lec, "El RR combinado es <strong>" + fmt(r.rr, 2) + "</strong> (IC 95 %: " + fmt(r.lo, 2) + " a " + fmt(r.hi, 2) + ") con el modelo de " + (MA.modelo === "aleatorio" ? "efectos aleatorios" : "efecto fijo") + ". " + (cruza ? "El intervalo incluye 1: el conjunto no demuestra diferencia." : "El intervalo no incluye 1: el conjunto muestra una diferencia estadísticamente significativa.") + " La heterogeneidad es " + het + ": I² = " + fmt(i2, 0) + " % (Q = " + fmt(r.Q, 2) + " con " + r.df + " grados de libertad" + (MA.modelo === "aleatorio" ? "; τ² = " + fmt(r.tau2, 3) : "") + "). Con pocos estudios, I² es impreciso; y el sesgo de publicación se explora con un gráfico de embudo, útil desde unos diez estudios.");
+  }
+  pintaTabla(); calc();
+}
+
+/* ============================================================ RUTA R1: GUÍAS DE PRÁCTICA CLÍNICA Y COSTO-EFECTIVIDAD */
+const AGREE = [ ["Alcance y objetivo", 3], ["Participación de los implicados", 3], ["Rigor en la elaboración", 8], ["Claridad de la presentación", 3], ["Aplicabilidad", 4], ["Independencia editorial", 2] ];
+const AG = { evaluadores:2, prom:AGREE.map(()=> 4) };
+const CE = { cn:"12.000.000", cc:"8.000.000", en:"6,2", ec:"5,8", umbral:"" };
+function agreeSVG(sc){
+  const W = VW(780, 344), fila = VW(36, 52), L = VW(230, 8), R = 60, H = 20 + AGREE.length*fila + 30, s = svgEl(W, H, "agree-svg", "Puntaje escalado de cada dominio de AGREE II");
+  const sx = p=> L + (W - L - R)*p;
+  [0, 0.25, 0.5, 0.75, 1].forEach(p=>{ sv("line",{x1:sx(p), x2:sx(p), y1:10, y2:H - 28, class:"grid-l"}, s); tx(s, sx(p), H - 10, fmt(p*100, 0) + " %", "ax-s", "middle"); });
+  AGREE.forEach((d,i)=>{ const y = 14 + i*fila, g = sv("g",{class:"ag-row"}, s), p = sc[i];
+    if(MOB()){ tx(g, L, y + 14, (i + 1) + ". " + d[0], "ax-s ax-b"); sv("rect",{x:L, y:y + 22, width:Math.max(2, sx(p) - L), height:18, rx:3, class:"ag-bar"}, g); tx(g, sx(p) + 6, y + 36, fmt(p*100, 0) + " %", "ax-s ax-b"); }
+    else { tx(g, L - 10, y + 18, (i + 1) + ". " + d[0], "ax-s", "end"); sv("rect",{x:L, y:y + 4, width:Math.max(2, sx(p) - L), height:fila - 12, rx:3, class:"ag-bar"}, g); tx(g, sx(p) + 6, y + 18, fmt(p*100, 0) + " %", "ax-s ax-b"); }
+    activable(g, d[0] + ": " + fmt(p*100, 0) + " %"); bindTip(g, ()=> "<h5>Dominio " + (i + 1) + ". " + esc(d[0]) + "</h5><p>" + d[1] + " ítems · puntaje escalado <strong>" + fmt(p*100, 1) + " %</strong></p>"); });
+  return s;
+}
+function planoSVG(dc, de, umbral){
+  const W = VW(520, 344), H = VW(360, 330), cx = W/2, cy = H/2, m = 30, s = svgEl(W, H, "plano-svg", "Plano de costo-efectividad");
+  sv("line",{x1:m, x2:W - m, y1:cy, y2:cy, class:"axis-l"}, s); sv("line",{x1:cx, x2:cx, y1:m, y2:H - m, class:"axis-l"}, s);
+  tx(s, W - m, cy - 8, "Más efectiva →", "ax-s", "end"); tx(s, m, cy + 18, "← Menos efectiva", "ax-s"); tx(s, cx + 8, m + 4, "Más costosa", "ax-s"); tx(s, cx + 8, H - m, "Menos costosa", "ax-s");
+  tx(s, W - m, m + 4, "Más efectiva y más costosa", "ax-s ax-muted", "end"); tx(s, W - m, H - m - 18, "Dominante", "ax-s ax-b pl-dom", "end"); tx(s, m, m + 4, "Dominada", "ax-s ax-b pl-domd");
+  const kx = (W/2 - m - 20)/Math.max(Math.abs(de), 1e-9), ky = (H/2 - m - 20)/Math.max(Math.abs(dc), 1e-9);
+  if(umbral > 0){ /* recta costo = umbral × efecto, desde el origen hasta el borde del cuadrante superior derecho */
+    let X = (W/2 - m)/kx, y2 = cy - umbral*X*ky; if(y2 < m){ X = (cy - m)/(umbral*ky); y2 = m; }
+    const x2 = cx + X*kx; sv("line",{x1:cx, y1:cy, x2:x2, y2:y2, class:"pl-umbral"}, s); tx(s, x2 - 4, y2 + 16, "Umbral", "ax-s", "end"); }
+  const px = cx + de*kx, py = cy - dc*ky, g = sv("g",{class:"pl-pt"}, s); sv("circle",{cx:px, cy:py, r:9}, g);
+  activable(g, "Nueva frente al comparador"); bindTip(g, ()=> "<h5>Nueva frente al comparador</h5><p>Δ costo: " + fmt(dc) + "</p><p>Δ efecto: " + fmt(de, 2) + " AVAC</p>");
+  return s;
+}
+function guias(){
+  const b = $("guias");
+  b.appendChild(el("p",null,["Una guía de práctica clínica convierte la evidencia en recomendaciones. Antes de seguirla, conviene evaluar cómo se hizo: el instrumento internacional es AGREE II. En Colombia, las guías del Ministerio de Salud se elaboran con un manual metodológico que incluye la evaluación económica; las guías publicadas están en el portal de guías de práctica clínica del Ministerio y los manuales metodológicos en el IETS."]));
+  M.sub(b, "guias-agree", "AGREE II: puntaje de cada dominio", "23 ítems en seis dominios; cada ítem se califica de 1 (muy en desacuerdo) a 7 (muy de acuerdo). Se recomienda que evalúen al menos dos personas, idealmente cuatro.");
+  b.appendChild(M.chips([1,2,3,4].map(n=> ({ id:String(n), label:n + (n === 1 ? " evaluador" : " evaluadores") })), String(AG.evaluadores), id=>{ AG.evaluadores = Number(id); calcAg(); }, "Número de evaluadores"));
+  const f = el("div",{class:"ag-form"});
+  AGREE.forEach((d,i)=>{ const id = "ag-" + i, r = el("input",{type:"range", id:id, min:"1", max:"7", step:"0.25", value:String(AG.prom[i])}), o = el("output",{for:id, class:"m-unit"},[fmt(AG.prom[i], 2)]);
+    r.addEventListener("input", ()=>{ AG.prom[i] = Number(r.value); o.textContent = fmt(AG.prom[i], 2); calcAg(); });
+    f.appendChild(el("label",{for:id},[(i + 1) + ". " + d[0] + " (" + d[1] + " ítems): promedio de los ítems", el("span",{class:"m-ctrl"},[r, o])])); });
+  b.appendChild(f);
+  const agBox = el("div",{class:"chart-box"}), agTab = el("div"), agLec = M.reading();
+  b.appendChild(M.howTo("cada barra es el puntaje escalado de un dominio, de 0 a 100 %. Los dominios se interpretan por separado: no se suman en un puntaje total.")); b.appendChild(agBox); b.appendChild(agTab); b.appendChild(agLec);
+  b.appendChild(M.sourceLine("Puntaje escalado = (obtenido − mínimo posible) ÷ (máximo posible − mínimo posible), según el manual de AGREE II. Valores de partida neutros: muévelos con tu evaluación."));
+  function calcAg(){
+    const e = AG.evaluadores, sc = AGREE.map((d,i)=>{ const min = 1*d[1]*e, max = 7*d[1]*e, ob = AG.prom[i]*d[1]*e; return (ob - min)/(max - min); });
+    agBox.innerHTML = ""; agBox.appendChild(agreeSVG(sc));
+    agTab.innerHTML = ""; agTab.appendChild(M.tabla(["Dominio","Obtenido","Mínimo","Máximo","Escalado"], AGREE.map((d,i)=> [(i + 1) + ". " + d[0], fmt(AG.prom[i]*d[1]*e, 1), fmt(d[1]*e), fmt(7*d[1]*e), fmt(sc[i]*100, 1) + " %"]), "ag-tab"));
+    const iMax = sc.indexOf(Math.max(...sc)), iMin = sc.indexOf(Math.min(...sc));
+    const primera = Math.abs(sc[iMax] - sc[iMin]) < 1e-9 ? "Todos los dominios tienen el mismo puntaje (" + fmt(sc[iMax]*100, 0) + " %): mueve los deslizadores con tu evaluación." : "El dominio más fuerte es <strong>" + AGREE[iMax][0].toLowerCase() + "</strong> (" + fmt(sc[iMax]*100, 0) + " %) y el más débil, <strong>" + AGREE[iMin][0].toLowerCase() + "</strong> (" + fmt(sc[iMin]*100, 0) + " %).";
+    M.setReading(agLec, primera + " AGREE II no fija un umbral universal de calidad: cada grupo lo acuerda; por ejemplo, exigir más de 70 % en rigor en la elaboración. Con " + e + (e === 1 ? " evaluador" : " evaluadores") + (e < 2 ? ", el manual recomienda sumar al menos otra persona." : "."));
+  }
+  calcAg();
+
+  M.sub(b, "guias-rcei", "Costo-efectividad: la razón incremental", "La razón de costo-efectividad incremental (RCEI) divide la diferencia de costos por la diferencia de efectos entre dos alternativas.");
+  const cf = el("div",{class:"nota-form"});
+  [["cn","Costo de la alternativa nueva (pesos)"],["cc","Costo del comparador (pesos)"],["en","Efecto de la nueva (AVAC)"],["ec","Efecto del comparador (AVAC)"],["umbral","Umbral de disposición a pagar por AVAC (opcional)"]].forEach(c=>{
+    const i = el("input",{type:"text", inputmode:"decimal", id:"ce-" + c[0], value:CE[c[0]]}); i.addEventListener("input", ()=>{ CE[c[0]] = i.value; calcCe(); }); cf.appendChild(el("label",{for:"ce-" + c[0]},[c[1], i])); });
+  b.appendChild(cf);
+  b.appendChild(el("p",{class:"muted small"},["Los valores de partida son ficticios. AVAC: año de vida ajustado por calidad. El aula no propone un umbral: escríbelo si tu análisis usa uno."]));
+  const ceOut = el("div",{class:"ce-grid"}), ceLec = M.reading();
+  b.appendChild(ceOut); b.appendChild(ceLec);
+  b.appendChild(M.sourceLine("RCEI = (costo nueva − costo comparador) ÷ (efecto nueva − efecto comparador). Los estudios económicos se reportan con CHEERS 2022."));
+  /* pesos: el punto separa miles; AVAC: la coma o el punto separan decimales */
+  const pesos = x=>{ const t = String(x).replace(/[\s$.]/g, "").replace(",", "."); return t === "" ? NaN : Number(t); };
+  const decimal = x=>{ const t = String(x).replace(/\s/g, "").replace(",", "."); return t === "" ? NaN : Number(t); };
+  function calcCe(){
+    const cn = pesos(CE.cn), cc = pesos(CE.cc), en = decimal(CE.en), ec = decimal(CE.ec), um = pesos(CE.umbral);
+    ceOut.innerHTML = "";
+    if([cn, cc, en, ec].some(x=> !isFinite(x))){ M.setReading(ceLec, "Escribe los cuatro valores de costo y efecto."); return; }
+    const dc = cn - cc, de = en - ec, rcei = de !== 0 ? dc/de : Infinity;
+    const box = el("div",{class:"chart-box"}); box.appendChild(planoSVG(dc, de, isFinite(um) ? um : 0)); ceOut.appendChild(box);
+    const k = el("div",{class:"kpis ce-kpis"}); [["Δ costo", fmt(dc) + " pesos"],["Δ efecto", fmt(de, 2) + " AVAC"],["RCEI", isFinite(rcei) ? fmt(rcei) + " pesos por AVAC" : "No se calcula (Δ efecto = 0)"]].forEach(x=> k.appendChild(el("div",{class:"kpi"},[ el("small",null,[x[0]]), el("strong",null,[x[1]]) ]))); ceOut.appendChild(k);
+    let t;
+    if(de > 0 && dc <= 0) t = "La alternativa nueva es <strong>dominante</strong>: más efectiva y no más costosa.";
+    else if(de < 0 && dc >= 0) t = "La alternativa nueva está <strong>dominada</strong>: menos efectiva y no más barata.";
+    else if(de > 0) t = "La nueva es más efectiva y más costosa: cada AVAC adicional cuesta <strong>" + fmt(rcei) + " pesos</strong>. " + (isFinite(um) ? (rcei <= um ? "Queda por debajo del umbral que escribiste, así que sería costo-efectiva con ese criterio." : "Supera el umbral que escribiste, así que no sería costo-efectiva con ese criterio.") : "Para decidir hace falta un umbral de disposición a pagar.");
+    else if(de < 0) t = "La nueva es menos efectiva y más barata: se ahorran " + fmt(Math.abs(rcei)) + " pesos por cada AVAC que se pierde; la decisión depende del umbral y de la ética de renunciar a salud.";
+    else t = "No hay diferencia de efecto: la comparación se reduce a los costos.";
+    M.setReading(ceLec, t + " Lee también el análisis de sensibilidad: una RCEI sin incertidumbre dice poco.");
+  }
+  calcCe();
+}
+
 /* ============================================================ TU CURSO: RUTAS Y EVALUACIÓN */
 const ANIO_KEY = "aula-ic-anio";
 const anioGuardado = ()=>{ try{ return localStorage.getItem(ANIO_KEY) || "conjunta"; }catch(e){ return "conjunta"; } };
@@ -913,7 +1327,7 @@ if(C.enlaces && C.fuentes){ const ya = new Set(); C.fuentes.forEach(g=> g.items.
 M.iniciar({
   contenido: C, secciones: SECCIONES, partes: PARTES, ideas: IDEAS,
   entidad: { nombre:"diseño", inicial:null, valida: cod=> !!disCod(cod) },
-  render(){ resumen(); rutas(); evaluacion(); temas(); diseno(); muestra(); practica(); efecto(); revision(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
+  render(){ resumen(); rutas(); evaluacion(); temas(); pregunta(); diseno(); muestra(); variables(); practica(); efecto(); pronostico(); diagnostica(); metanalisis(); guias(); revision(); citas(); formato(); recursos(); enlazar(document.getElementById("accordion")); },
   indice(){
     return DIS.map(d=> ({ type:"Diseño", label:d.nombre, detail:d.guia + " · " + d.herramienta, sec:"diseno", anchor:"diseno-selector", cod:d.cod }))
       .concat(MU.calculadoras.map(h=> ({ type:"Tamaño de muestra", label:h.t, detail:"Hoja " + h.hoja + " del Excel", sec:"muestra", anchor:"muestra-calculadora" })))
@@ -921,5 +1335,5 @@ M.iniciar({
       .concat(A.contenidos.map(c=> ({ type:"Tema", label:c.tema, detail:c.competencia, sec:"temas", anchor:"sec-temas" })));
   }
 });
-window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva };
+window.AULA = { normInv, calcular, efectoCalc, notaDefinitiva, descriptiva, dxCalc, metaCalc };
 })();
