@@ -456,7 +456,7 @@ window.APP = {
       { t: 'Retraction Watch', u: 'https://retractionwatch.com/', d: 'Noticias y contexto de las retractaciones.' },
       { t: 'Publicaciones retractadas en PubMed', u: 'https://pubmed.ncbi.nlm.nih.gov/?term=retracted+publication%5Bpt%5D', d: 'En la ficha de PubMed, una retractación aparece como aviso en rojo y con el tipo «Retracted Publication».' }
     ],
-    conversor: { t: 'MarkItDown', u: 'https://github.com/microsoft/markitdown', d: 'Conversor libre de PDF, Word y otros formatos a Markdown; funciona en tu computador.' }
+    conversor: { t: 'Transcriptor Local', u: 'https://fadavilar.github.io/transcripcion/', d: 'Convierte PDF y documentos a Markdown (con OCR si el PDF es escaneado) en tu propio navegador, sin enviar los archivos a ningún servidor.' }
   },
   vancouver: {
     estilos: 'En medicina se usa Vancouver: numérico, en orden de primera mención. APA (autor y año) es frecuente en psicología y ciencias sociales. Usa el estilo que pida la revista o la institución y no los mezcles en un mismo documento.',
