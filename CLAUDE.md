@@ -8,7 +8,7 @@ App estática en español, sin dependencias, construida con el motor de la skill
 - Cada cambio publicado sube `?v=N` en todos los enlaces de `index.html`.
 - No nombres ninguna institución en el código, los textos ni los commits: el material debe poder reutilizarse en cualquier curso.
 - No pongas datos de estudiantes, listas ni notas en el repositorio. Los nombres solo existen en el navegador de cada estudiante, en los archivos que descarga y en el consolidador del docente; nada se envía a un servidor. Para los grupos escribe «primer año (R1)» o «segundo año (R2)»: el control de privacidad del repositorio (`grep` de términos institucionales) debe salir vacío.
-- Las preguntas de `practica` y de `data/evaluacion.js` son públicas, con su respuesta. El taller de 20 preguntas de la rúbrica y cualquier pregunta de examen nunca van en este repositorio.
+- Las preguntas de `practica` y de `data/evaluacion.js` son públicas, con su respuesta. El taller de la rúbrica se toma de estas preguntas (intentos ilimitados, cuenta la mejor nota); cualquier pregunta de examen nunca va en este repositorio.
 - Cada pregunta del banco lleva su resultado de aprendizaje (`ra`, definido en `EVAL.ras`) y sus rutas (`rutas: 'R1 R2'`). Una pregunta compartida se cuenta en el resultado equivalente del otro año según `EQUIV` en `js/formularios.js`.
 - Las preguntas de los artículos solo afirman lo que dice el resumen en PubMed; si agregas un artículo, verifica PMID, DOI y cita con PubMed o Crossref.
 - Cada pregunta tiene un alcance (`C` sesión conjunta, `R1`, `R2`): en `practicaMeta`, en el campo `rutas` del banco, en `alcance` de cada artículo (con `raC` para la sesión conjunta) y en el arreglo `conjunta`.

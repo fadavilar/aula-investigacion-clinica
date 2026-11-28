@@ -81,7 +81,7 @@ const SECCIONES = [
   { id:"evaluacion", part:"N", toc:"¿Cómo se evalúa?", title:"¿Cómo se evalúa y cuándo?", sub:"Cuatro evidencias, calendario y calculadora de la nota", open:false, subs:[{id:"evaluacion-criterios",label:"Las cuatro evidencias"},{id:"evaluacion-calendario",label:"Calendario"},{id:"evaluacion-calculadora",label:"Calculadora de la nota"}] },
   { id:"docente", part:"N", toc:"Consolidar las notas (docente)", title:"¿Cómo se consolidan las notas? (para el docente)", sub:"Archivos y códigos de entrega de los estudiantes, tabla de notas", open:false },
   { id:"pregunta", part:"I", toc:"¿Cómo se formula la pregunta?", title:"¿Cómo se convierte una duda clínica en pregunta, título y objetivos?", sub:"Constructor de la pregunta PICO, de frecuencia o PCC", open:false },
-  { id:"diseno", part:"I", toc:"¿Qué diseño tiene el estudio?", title:"¿Qué diseño tiene el estudio que lees?", sub:"Árbol de decisión, guía de reporte y herramienta de evaluación", open:false, subs:[{id:"diseno-arbol",label:"Árbol de decisión"},{id:"diseno-selector",label:"Guía y herramienta por diseño"},{id:"diseno-ficha",label:"Ficha de lectura crítica"}] },
+  { id:"diseno", part:"I", toc:"¿Qué diseño tiene el estudio?", title:"¿Qué diseño tiene el estudio que lees?", sub:"Árbol de decisión, guía de reporte, herramienta de evaluación y lectura asistida por IA", open:false, subs:[{id:"diseno-arbol",label:"Árbol de decisión"},{id:"diseno-selector",label:"Guía y herramienta por diseño"},{id:"diseno-ficha",label:"Ficha de lectura crítica"},{id:"diseno-ia",label:"Lectura crítica asistida por IA"}] },
   { id:"muestra", part:"I", toc:"¿Cuántos participantes?", title:"¿Cuántos participantes necesitas?", sub:"Las seis calculadoras de tamaño de muestra del Excel, paso a paso", open:false, subs:[{id:"muestra-calculadora",label:"Calculadora"},{id:"muestra-formula",label:"La fórmula, paso a paso"},{id:"muestra-curva",label:"¿Cómo cambia la muestra?"}] },
   { id:"variables", part:"I", toc:"¿Qué variables mides?", title:"¿Qué variables vas a medir y cómo se describen?", sub:"Tipo de variable, escala y estadística descriptiva en Excel", open:false, subs:[{id:"variables-tipo",label:"Tipo de variable"},{id:"variables-excel",label:"Estadística descriptiva en Excel"}] },
   { id:"protocolo", part:"I", toc:"¿Qué debe tener tu protocolo?", title:"¿Qué debe tener tu protocolo de investigación?", sub:"Lista de Proyecto I y categoría de riesgo ético", open:false, subs:[{id:"protocolo-riesgo",label:"Categoría de riesgo"}] },
@@ -372,7 +372,7 @@ function layoutArbol(){
   (function lay(id, col, fila){
     P[id] = { col:col, fila:fila };
     let r = fila;
-    const abajo = o=> AR[o.a] && /^No/.test(o.t);
+    const abajo = o=> AR[o.a] && (o.abajo || /^No/.test(o.t));
     AR[id].o.filter(o=> !abajo(o)).forEach(o=>{
       if(AR[o.a]){ E.push({ de:id, a:o.a, t:cortoOp(o), dir:"der" }); r = lay(o.a, col + 1, r); }
       else { const k = "hoja:" + o.a; P[k] = { col:col + 1, fila:r, hoja:true, nombre:o.a }; E.push({ de:id, a:k, t:cortoOp(o), dir:"der" }); r++; }
@@ -409,7 +409,7 @@ function arbolSVG(ruta, fin){
     const lab = p.hoja ? p.nombre : AR[k].c, ls = M.wrapText(lab, 22).slice(0,2);
     txs(g, X(p) + bw/2, Y(p) + (ls.length > 1 ? 19 : 28), ls, "tree-t", "middle", 16);
     if(p.hoja){ const d = disPor(p.nombre); g.setAttribute("data-cod", d.cod); activable(g, d.nombre + ": " + d.guia + " y " + d.herramienta, ()=> M.select(d.cod));
-      bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía de reporte: <strong>" + esc(d.guia) + "</strong></p><p>Herramienta: <strong>" + esc(d.herramienta) + "</strong></p>" + enlacesDiseno(d)); }
+      bindTip(g, ()=> "<h5>" + esc(d.nombre) + "</h5><p>Guía de reporte: <strong>" + esc(d.guia) + "</strong></p><p>Herramienta: <strong>" + esc(d.herramienta) + "</strong></p>" + enlacesDiseno(d) + "<p class='muted small'>Descarga siempre la versión vigente desde la página oficial.</p>"); }
     else { activable(g, AR[k].p); bindTip(g, ()=> "<h5>" + esc(AR[k].c) + "</h5><p>" + esc(AR[k].p) + "</p>"); }
   });
   const marca = cod=> s.querySelectorAll("[data-cod]").forEach(n=> n.classList.toggle("sel", n.getAttribute("data-cod") === cod));
@@ -419,7 +419,8 @@ function arbolSVG(ruta, fin){
 function fichaDiseno(d){
   return el("div",{class:"grid2"},[
     el("article",{class:"card"},[ el("h4",null,["Guía de reporte"]), el("p",null,[ el("strong",null,[d.guia]) ]), el("p",null,[ el("a",{href:d.guiaUrl, target:"_blank", rel:"noopener"},["Abrir la guía"]) ]),
-      el("h4",null,["Herramienta de evaluación crítica"]), el("p",null,[ el("strong",null,[d.herramienta]) ]), el("p",null,[ el("a",{href:d.herrUrl, target:"_blank", rel:"noopener"},["Abrir la herramienta"]) ]) ]),
+      el("h4",null,["Herramienta de evaluación crítica"]), el("p",null,[ el("strong",null,[d.herramienta]) ]), el("p",null,[ el("a",{href:d.herrUrl, target:"_blank", rel:"noopener"},["Abrir la herramienta"]) ]),
+      el("p",{class:"muted small"},["Descarga siempre la versión vigente desde la página oficial: las herramientas se actualizan."]) ]),
     el("article",{class:"card"},[ el("h4",null,["Preguntas clave"]), el("ul",null, d.preguntas.map(p=> el("li",null,[p]))) ])
   ]);
 }
@@ -429,6 +430,10 @@ function diseno(){
   b.appendChild(el("p",null,["Cada diseño tiene su guía de reporte y su herramienta de evaluación. La guía dice qué debe contar el artículo; la herramienta dice cuánto confiar en lo que cuenta."]));
   M.sub(b, "diseno-arbol", "Árbol de decisión: clasifica tu estudio", "Responde sobre el artículo que tienes delante. El diagrama marca tu camino y al final verás su diseño, su guía y su herramienta.");
   const box = el("div",{class:"tree-q", "aria-live":"polite"}), dia = el("div",{class:"diagram-wrap tree-wrap"});
+  const linkA = el("button",{type:"button", class:"btn btn-sm"},["Copiar enlace directo al árbol"]), linkMsg = el("span",{class:"muted small", role:"status"});
+  linkA.addEventListener("click", ()=>{ const u = location.href.split("#")[0] + "#arbol";
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(()=> linkMsg.textContent = "Enlace copiado: " + u, ()=> linkMsg.textContent = u); else linkMsg.textContent = u; });
+  b.appendChild(el("div",{class:"tools-row"},[linkA, linkMsg]));
   b.appendChild(box);
   b.appendChild(M.howTo("cada recuadro es una pregunta y cada óvalo, un diseño. Las líneas marcadas son tus respuestas; toca un óvalo para ver su guía y su herramienta."));
   b.appendChild(dia);
@@ -481,6 +486,41 @@ function diseno(){
     el("li",null,[ el("strong",null,["Resultados. "]), "¿Qué tan grande y qué tan preciso es el efecto?" ]),
     el("li",null,[ el("strong",null,["Aplicabilidad. "]), "¿Mi paciente se parece a los del estudio y el beneficio supera el daño?" ])
   ]));
+  M.sub(b, "diseno-ia", "Lectura crítica asistida por IA", "La IA lee rápido; tú decides. Así se usó en la primera sesión.");
+  const LI = A.lecturaIA;
+  b.appendChild(el("p",{class:"callout callout-warn"},[ el("strong",null,["Usa siempre la versión vigente. "]), "Descarga la herramienta y la guía desde su página oficial (EQUATOR Network, Cochrane, JBI, CASP o AGREE) cada vez que evalúes. Las herramientas cambian: RoB 2 reemplazó a la primera versión de RoB y CONSORT 2025 reemplazó a la versión de 2010." ]));
+  b.appendChild(el("div",{class:"grid2"},[
+    el("article",{class:"card"},[ el("h4",null,["Paso a paso"]), el("ol",{class:"steps small"}, LI.pasos.map(t=> el("li",null,[t]))),
+      el("p",{class:"muted small"},["Para convertir a Markdown: ", el("a",{href:LI.conversor.u, target:"_blank", rel:"noopener"},[LI.conversor.t]), ". " + LI.conversor.d]) ]),
+    el("article",{class:"card"},[ el("h4",null,["Reglas para el uso de la IA"]), el("ul",{class:"small"}, LI.reglas.map(t=> el("li",null,[t]))),
+      el("h4",null,["¿Está retractado?"]), el("ul",{class:"small"}, LI.retracciones.map(r=> el("li",null,[ el("a",{href:r.u, target:"_blank", rel:"noopener"},[r.t]), ". " + r.d ]))) ])
+  ]));
+  b.appendChild(el("p",{class:"callout"},[ el("strong",null,["Más allá de la herramienta. "]), LI.leccion ]));
+  /* generador de la instrucción para la IA según el diseño */
+  const KIA = "aula-ic-ia", gIA = store.get(KIA) || {};
+  const selIA = el("select",{id:"sel-ia"}, DIS.map(d=> el("option",{value:d.cod},[d.nombre])));
+  const titIA = el("input",{type:"text", id:"tit-ia", placeholder:"Título o DOI del artículo", value:gIA.t || ""});
+  const outIA = el("pre",{class:"prompt-out", tabindex:"0", "aria-live":"polite"}), msgIA = el("span",{class:"muted small", role:"status"});
+  const eca = DIS.find(d=> /aleatorizado/i.test(d.nombre)); selIA.value = gIA.d && disCod(gIA.d) ? gIA.d : (eca || DIS[0]).cod;
+  const armaIA = ()=>{
+    const d = disCod(selIA.value) || DIS[0], art = titIA.value.trim() ? " «" + titIA.value.trim() + "»" : "";
+    store.set(KIA, { d:selIA.value, t:titIA.value });
+    outIA.textContent = "Actúa como evaluador metodológico. Te adjunto en Markdown (1) el artículo" + art + " y (2) la herramienta " + d.herramienta + " en su versión vigente, descargada de su página oficial. La guía de reporte que corresponde es " + d.guia + ".\n\n" +
+      "1. Confirma el diseño según lo que hicieron los investigadores, no según cómo se nombra el estudio. Si no es " + d.nombre.toLowerCase() + ", dilo y detente.\n" +
+      "2. Aplica cada dominio o ítem de " + d.herramienta + " en el orden de la herramienta. Para cada uno da el juicio, la cita textual del artículo que lo sustenta (con la sección) y una explicación breve.\n" +
+      "3. Si el artículo no informa lo que pide un ítem, responde «no evaluable». No supongas.\n" +
+      "4. Señala qué ítems de " + d.guia + " no informa el artículo.\n" +
+      "5. Responde también: " + d.preguntas.join(" ") + "\n" +
+      "6. Da el juicio global con la regla de la herramienta y lista las dudas que debo verificar yo.\n\n" +
+      "No inventes datos, cifras ni referencias que no estén en los archivos. Responde en español.";
+  };
+  selIA.addEventListener("change", armaIA); titIA.addEventListener("input", armaIA);
+  const copIA = el("button",{type:"button", class:"btn btn-primary"},["Copiar la instrucción"]);
+  copIA.addEventListener("click", ()=>{ const t = outIA.textContent;
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=> msgIA.textContent = "Copiada.", ()=> msgIA.textContent = "Selecciona el texto y cópialo con Ctrl+C."); else msgIA.textContent = "Selecciona el texto y cópialo con Ctrl+C."; });
+  b.appendChild(el("h4",null,["Generador de la instrucción para la IA"]));
+  b.appendChild(el("div",{class:"pq-form"},[ el("label",{for:"sel-ia"},["Diseño del estudio", selIA]), el("label",{for:"tit-ia"},["Artículo (opcional)", titIA]) ]));
+  b.appendChild(outIA); b.appendChild(el("div",{class:"tools-row"},[copIA, msgIA])); armaIA();
 }
 
 /* ============================================================ PRÁCTICA */
@@ -668,9 +708,15 @@ function citas(){
       el("li",null,["Importa el artículo con su DOI, su PDF o el Web Importer."]),
       el("li",null,["Crea una carpeta por trabajo."]),
       el("li",null,["En Word, abre Referencias, Mendeley Cite, inserta la cita y elige el estilo Vancouver."]) ]),
-      el("p",{class:"muted small"},["Para páginas web sin DOI puedes usar ", el("a",{href:"https://chromewebstore.google.com/detail/mybib-free-citation-gener/phidhnmbkbkbkbknhldmpmnacgicphkf", target:"_blank", rel:"noopener"},["MyBib"]), "; revisa autor, fecha y URL antes de aceptar la cita."]) ]),
+      el("p",{class:"muted small"},["Para páginas web sin DOI puedes usar MyBib (abajo); revisa autor, fecha y URL antes de aceptar la cita."]) ]),
     el("article",{class:"card"},[ el("h4",null,["Estilo Vancouver"]), el("ul",null, A.vancouver.reglas.map(t=> el("li",null,[t]))),
       el("p",{class:"ex"},[A.vancouver.ejemplo]), el("h5",null,["Errores frecuentes"]), el("ul",null, A.vancouver.errores.map(t=> el("li",null,[t]))) ])
+  ]));
+  const V = A.vancouver;
+  b.appendChild(el("div",{class:"grid2"},[
+    el("article",{class:"card"},[ el("h4",null,["MyBib en Chrome"]), el("ol",{class:"steps small"}, V.mybib.map((t,i)=> el("li",null, i === 0 ? ["Agrega la extensión ", el("a",{href:"https://chromewebstore.google.com/detail/mybib-free-citation-gener/phidhnmbkbkbkbknhldmpmnacgicphkf", target:"_blank", rel:"noopener"},["MyBib"]), " a Chrome desde la tienda de Chrome."] : [t]))) ]),
+    el("article",{class:"card"},[ el("h4",null,["¿Con qué identificador cito?"]), M.tabla(["Identificador","Cuándo usarlo"], V.identificadores),
+      el("p",{class:"small"},["Lo importante es que cualquier lector pueda encontrar la fuente."]), el("h5",null,["Vancouver o APA"]), el("p",{class:"small"},[V.estilos]) ])
   ]));
 }
 function formato(){
@@ -724,7 +770,7 @@ const TIPOS_PQ = {
       general:"Estimar la prevalencia de " + v.X + " en " + v.P + " de " + v.L + " durante " + v.T + ".",
       especificos:["Describir las características clínicas y sociodemográficas de " + v.P + ".", "Estimar la prevalencia de " + v.X + " por sexo y grupo de edad.", "Explorar los factores asociados con " + v.X + "."],
       diseno:"Es un estudio transversal (STROBE). El tamaño de la muestra se calcula con la calculadora de estimación de frecuencias.", seccion:"muestra" }) },
-  alcance: { label:"Revisión de alcance (PCC)", campos:[ ["P","Población","adultos mayores hospitalizados"], ["K","Concepto","las intervenciones para reducir la polifarmacia"], ["X","Contexto","los servicios de medicina interna"] ],
+  alcance: { label:"Revisión de alcance (PCC)", campos:[ ["P","Población","adultos con insuficiencia cardíaca"], ["K","Concepto","los factores sociodemográficos asociados con la rehospitalización"], ["X","Contexto","una ciudad de Colombia"] ],
     arma: v=> ({ pregunta:"¿Qué evidencia existe sobre " + v.K + " en " + v.P + " en " + v.X + "?",
       titulo:v.K.charAt(0).toUpperCase() + v.K.slice(1) + " en " + v.P + " en " + v.X + ": revisión de alcance",
       general:"Mapear la evidencia disponible sobre " + v.K + " en " + v.P + " en " + v.X + ".",
@@ -737,6 +783,7 @@ function pregunta(){
   b.appendChild(M.chips(Object.keys(TIPOS_PQ).map(k=> ({ id:k, label:TIPOS_PQ[k].label })), PQ.tipo, id=>{ PQ.tipo = id; guardaPQ(); arma(); }, "Tipo de pregunta"));
   const form = el("div",{class:"pq-form"}), out = el("div",{class:"pq-out", "aria-live":"polite"});
   b.appendChild(form); b.appendChild(out);
+  b.appendChild(el("p",{class:"callout"},[ el("strong",null,["El problema del «ya que». "]), "Al presentar un proyecto es común oír «y ya que va a hacer esto, mida también aquello». Cada «ya que» amplía el alcance, y la lista de lo que se quiere saber no tiene fin. PICO y PCC sirven para delimitar: lo que no responde a la pregunta queda para otro estudio. PICO se usa para preguntas de efecto (con intervención y comparador); PCC, para revisiones de alcance que mapean lo que se sabe de un concepto en una población y un contexto, sin comparar intervenciones." ]));
   b.appendChild(el("p",{class:"muted small"},["Los objetivos empiezan con un verbo en infinitivo que se pueda verificar: describir, estimar, comparar, determinar o evaluar. Evita «conocer» o «entender», que no se pueden medir. Plantilla del autor del aula."]));
   function arma(){
     const T = TIPOS_PQ[PQ.tipo]; form.innerHTML = "";
@@ -1241,7 +1288,7 @@ function notaDefinitiva(v){ /* v: { taller, ficha1, ficha2, practica, particip }
 const EV = { anio:"r1", vals:{} };
 function evaluacion(){
   const b = $("evaluacion"), E = A.evaluacion;
-  b.appendChild(el("p",null,["La escala va de " + fmt(E.escala.min, 1) + " a " + fmt(E.escala.max, 1) + " y toda nota se expresa con un entero y un decimal. Los pesos son los mismos para primer y segundo año; en segundo año cambia qué se entrega en la segunda evidencia."]));
+  b.appendChild(el("p",null,["La escala va de " + fmt(E.escala.min, 1) + " a " + fmt(E.escala.max, 1) + " y toda nota se expresa con un entero y un decimal. Las cuatro evidencias y sus pesos son los mismos para primer y segundo año; en segundo año la nota se registra por duplicado para Proyecto de investigación I y II."]));
   const anioRow = M.chips([{id:"r1", label:"Primer año (R1)"},{id:"r2", label:"Segundo año (R2)"}], EV.anio, id=>{ EV.anio = id; pintaCriterios(); armaCalc(); }, "Año");
   b.appendChild(anioRow);
   M.sub(b, "evaluacion-criterios", "Las cuatro evidencias");
@@ -1279,8 +1326,8 @@ function evaluacion(){
   b.appendChild(el("p",{class:"muted small"},["El ejemplo usa notas inventadas, solo para mostrar la cuenta."]));
   const campos = ()=> [
     { k:"taller", l:"Taller de preguntas (40 %)" },
-    { k:"ficha1", l: EV.anio === "r2" ? "Síntesis de Proyecto I (15 %)" : "Ficha de lectura crítica 1 (15 %)" },
-    { k:"ficha2", l: EV.anio === "r2" ? "Avance de Proyecto II (15 %)" : "Ficha de lectura crítica 2 (15 %)" },
+    { k:"ficha1", l:"Ficha de lectura crítica 1 (15 %)" },
+    { k:"ficha2", l:"Ficha de lectura crítica 2 (15 %)" },
     { k:"practica", l:"Práctica con árbol y Mendeley (15 %)" },
     { k:"particip", l:"Participación y coevaluación (15 %)" } ];
   function armaCalc(){
@@ -1303,7 +1350,7 @@ function evaluacion(){
     const r = notaDefinitiva(vals);
     const filas = [
       [cs[0].l.replace(/ \(.*/,""), fmt(vals.taller, 1), "40 %", fmt(r.aportes.taller, 3)],
-      [(EV.anio === "r2" ? "Entregables del proyecto" : "Fichas 1 y 2") + " (promedio)", fmt(r.fichas, 2), "30 %", fmt(r.aportes.fichas, 3)],
+      ["Fichas 1 y 2 (promedio)", fmt(r.fichas, 2), "30 %", fmt(r.aportes.fichas, 3)],
       [cs[3].l.replace(/ \(.*/,""), fmt(vals.practica, 1), "15 %", fmt(r.aportes.practica, 3)],
       [cs[4].l.replace(/ \(.*/,""), fmt(vals.particip, 1), "15 %", fmt(r.aportes.particip, 3)] ];
     out.appendChild(M.tabla(["Evidencia","Nota","Peso","Aporte"], filas, "nota-tab"));
@@ -1332,11 +1379,12 @@ function picoSVG(){
   return s;
 }
 function familiasSVG(){
-  const fam = [ { t:"Prueba diagnóstica", d:["Prueba diagnóstica"] }, { t:"Síntesis de estudios", d:["Revisión sistemática o metanálisis"] },
+  const fam = [ { t:"Prueba diagnóstica", d:["Prueba diagnóstica"] }, { t:"Revisiones de la literatura", d:["Revisión sistemática o metanálisis","Revisión de alcance","Revisión narrativa"] },
     { t:"Experimentales: los investigadores asignan", d:["Ensayo clínico aleatorizado","Cuasiexperimental"] },
     { t:"Observacionales analíticos: comparan grupos", d:["Casos y controles","Cohorte","Estudio transversal analítico"] },
-    { t:"Descriptivos: describen casos", d:["Reporte de caso","Serie de casos"] } ];
-  const W = VW(560, 340), fila = 32, H = 10 + fam.reduce((a,f)=> a + 24 + f.d.length*fila + 6, 0), s = svgEl(W, H, "fam-svg story-svg", "Los nueve diseños agrupados por familia");
+    { t:"Descriptivos: describen casos", d:["Reporte de caso","Serie de casos"] },
+    { t:"Guías y evaluaciones económicas", d:["Guía de práctica clínica","Evaluación económica"] } ];
+  const W = VW(560, 340), fila = 30, H = 10 + fam.reduce((a,f)=> a + 24 + f.d.length*fila + 6, 0), s = svgEl(W, H, "fam-svg story-svg", "Los " + DIS.length + " diseños del aula agrupados por familia");
   let y = 4;
   fam.forEach((f,j)=>{
     tx(s, 0, y + 16, f.t, "ax-s ax-b fam-k fam-" + j); y += 24;
@@ -1379,7 +1427,7 @@ function resumen(){
   M.sub(b, "resumen-relato", "El recorrido, paso a paso", MOB() ? "Cada paso trae su gráfico; tócalo para ver el detalle." : "Desplázate: el gráfico de la derecha cambia con cada paso.");
   M.story(b, [
     { t:"Todo empieza con una pregunta bien formulada", d:"Una pregunta de efecto se arma con PICO: población, intervención, comparador y desenlace. Una revisión de alcance usa PCC: población, concepto y contexto.", cap:"Dos esquemas para dos tipos de pregunta", draw:picoSVG, note:"Fuentes: Cochrane Handbook y JBI.", sec:"temas" },
-    { t:"El método define el diseño, no el título", d:"El aula distingue nueve diseños según quién asignó la intervención, si hubo azar y cómo se formaron los grupos. El árbol de decisión llega a cada uno con una a cinco preguntas.", cap:"Los nueve diseños del árbol, por familia", draw:familiasSVG, note:"Agrupación según las ramas del árbol de decisión del aula.", sec:"diseno" },
+    { t:"El método define el diseño, no el título", d:"El aula distingue " + DIS.length + " diseños: en los estudios primarios, según quién asignó la intervención, si hubo azar y cómo se formaron los grupos; en las revisiones, según cómo se buscó la evidencia. El árbol de decisión llega a cada uno con una a cinco preguntas.", cap:"Los " + DIS.length + " diseños del árbol, por familia", draw:familiasSVG, note:"Agrupación según las ramas del árbol de decisión del aula.", sec:"diseno" },
     { t:"Cuántos participantes: la precisión manda", d:"Para estimar una prevalencia de 50 % con ±5 puntos y 95 % de confianza se necesitan " + fmt(n0) + " personas; con ±2,5 puntos, " + fmt(nMitad) + ". Pedir el doble de precisión casi cuadruplica la muestra.", cap:"Tamaño de la muestra según la precisión (marco desconocido)", draw:()=> curvaSVG(HOJA.CAIN, v0, true), note:"Hoja CAIN del Excel de muestreo; n redondeado al entero superior.", sec:"muestra" },
     { t:"Cada diseño tiene su guía de reporte y su herramienta", d:"La guía dice qué debe contar el artículo; la herramienta, cuánto confiar en lo que cuenta. Un ensayo aleatorizado se reporta con CONSORT 2025 y se evalúa con RoB 2.", cap:"Guía de reporte y herramienta de evaluación por diseño", draw:matrizSVG, note:"Fuentes: red EQUATOR, riskofbias.info, JBI y QUADAS.", sec:"diseno" },
     { t:"Un efecto se lee con su tamaño y su precisión", d:"Con 15 de 100 eventos en el grupo tratado y 20 de 100 en el control, el RR es " + fmt(r.rr, 2) + ", pero su IC 95 % va de " + fmt(r.rrLo, 2) + " a " + fmt(r.rrHi, 2) + " e incluye 1: el estudio no demuestra diferencia. La reducción absoluta es de " + fmt(r.rar*100, 0) + " puntos y el NNT, " + fmt(Math.ceil(r.nnt - 1e-9)) + ".", cap:"Riesgos por grupo y efecto relativo con su intervalo", draw:()=> efectoSVG(r, true), note:"Ejemplo de la calculadora de efecto; IC por el método logarítmico.", sec:"efecto" },
@@ -1466,6 +1514,16 @@ M.iniciar({
       .concat(A.contenidos.map(c=> ({ type:"Tema", label:c.tema, detail:c.competencia, sec:"temas", anchor:"sec-temas" })));
   }
 });
+/* Enlace directo: #arbol, #ia o el id de una sección o subsección abre la sección y baja hasta el punto */
+function vaAlHash(){
+  const h = decodeURIComponent((location.hash || "").slice(1)); if(!h) return;
+  const id = ({ arbol:"diseno-arbol", ia:"diseno-ia" })[h] || h, t = document.getElementById(id) || document.getElementById("sec-" + id); if(!t) return;
+  const item = t.closest(".acc-item"); if(item) M.openSection(item.id.replace(/^sec-/, ""));
+  M.scrollSoon(t.id);
+  /* si la carga de la página interrumpe el desplazamiento suave, se completa sin animación */
+  setTimeout(()=>{ const r = t.getBoundingClientRect().top; if(Math.abs(r - 86) > 40) window.scrollTo({ top: r + window.scrollY - 86 }); }, 900);
+}
+if(document.readyState === "complete") setTimeout(vaAlHash, 200); else window.addEventListener("load", ()=> setTimeout(vaAlHash, 200)); window.addEventListener("hashchange", vaAlHash);
 /* Lo que el estudiante escribió en el constructor de la pregunta (para la entrega de la pregunta, el título y los objetivos) */
 function preguntaActual(){
   let st; try{ st = JSON.parse(localStorage.getItem(PQ_KEY) || "null"); }catch(e){} st = st || PQ;

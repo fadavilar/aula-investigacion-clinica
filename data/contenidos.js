@@ -3,7 +3,7 @@ window.APP = {
   meta: {
     titulo: 'Aula de investigación clínica',
     subtitulo: 'Lectura crítica, revisiones sistemáticas con apoyo de IA, gestores de referencias y normas ofimáticas',
-    version: '0.4.0',
+    version: '0.5.0',
     actualizado: '2026-11-27',
     autor: 'Fabian Antonio Dávila Ramírez'
   },
@@ -16,21 +16,20 @@ window.APP = {
     /* Correo que recibe las entregas. Mientras sea null, el botón de correo pide descargar el archivo y enviarlo por el canal del curso. */
     correoDocente: 'fa.davila@uninavarra.edu.co',
     criterios: [
-      { id: 'taller', nombre: 'Taller de preguntas de selección múltiple (20 preguntas)', peso: 0.40,
-        evalua: 'Precisión conceptual, justificación de las respuestas y capacidad de identificar el diseño del estudio y la guía de reporte correspondiente.' },
-      { id: 'fichas', nombre: 'Fichas de lectura crítica 1 y 2', peso: 0.30, nombreR2: 'Entregables del proyecto: síntesis de Proyecto I y avance de Proyecto II',
-        evalua: 'Identificación de la pregunta de investigación, el diseño, la calidad metodológica y la aplicabilidad clínica (15 % cada ficha).',
-        evaluaR2: 'Propuesta adaptada para segundo año, por confirmar: reemplaza las fichas por los entregables del proyecto.' },
+      { id: 'taller', nombre: 'Taller de preguntas de selección múltiple (intentos ilimitados)', peso: 0.40,
+        evalua: 'Precisión conceptual, justificación de las respuestas y capacidad de identificar el diseño del estudio y la guía de reporte correspondiente. Los intentos son ilimitados y cuenta la mejor nota: la idea es revisar por qué falló una respuesta y corregirla.' },
+      { id: 'fichas', nombre: 'Fichas de lectura crítica 1 y 2', peso: 0.30,
+        evalua: 'Identificación de la pregunta de investigación, el diseño, la calidad metodológica y la aplicabilidad clínica (15 % cada ficha).', },
       { id: 'practica', nombre: 'Práctica con árbol de decisión y biblioteca en Mendeley', peso: 0.15,
         evalua: 'Uso correcto del árbol para clasificar diseños y organización de referencias en Mendeley.' },
       { id: 'particip', nombre: 'Participación y coevaluación en plenarias', peso: 0.15,
-        evalua: 'Intervención argumentada y retroalimentación constructiva a los compañeros.' }
+        evalua: 'Intervención argumentada y retroalimentación constructiva a los compañeros. Se toma de las intervenciones en cada sesión (preséntate con tu nombre y tu año) y de la coevaluación de la plenaria.' }
     ],
     calendario: [
-      { fecha: '2026-11-27', texto: 'Viernes 27 de noviembre de 2026', que: 'Sesión conjunta de primer y segundo año: árbol de decisión, ficha 1 en grupos y Mendeley', evidencia: 'Práctica, ficha 1 y participación' },
+      { fecha: '2026-11-27', texto: 'Viernes 27 de noviembre de 2026', que: 'Sesión conjunta de primer y segundo año: árbol de decisión, ficha 1 en grupos y Mendeley. Quien no asistió diligencia la ficha 1 durante la misma semana', evidencia: 'Práctica, ficha 1 y participación' },
       { fecha: '2026-12-04', texto: 'Viernes 4 de diciembre de 2026', que: 'Sesión por grupo (primer y segundo año por separado)', evidencia: 'Ficha 2 y práctica' },
       { fecha: '2026-12-11', texto: 'Viernes 11 de diciembre de 2026', que: 'Sesión por grupo y cierre de la práctica', evidencia: 'Ficha 2, Mendeley y participación' },
-      { fecha: null, texto: 'Por acordar con el grupo', que: 'Taller de 20 preguntas de selección múltiple', evidencia: 'Taller (40 %)' },
+      { fecha: null, texto: 'Por acordar con el grupo', que: 'Cierre del taller de preguntas de selección múltiple (intentos ilimitados; cuenta la mejor nota)', evidencia: 'Taller (40 %)' },
       { fecha: '2027-01-31', texto: '31 de enero de 2027', que: 'Plazo para reportar las notas', evidencia: 'Nota definitiva' }
     ],
     ejemplo: { taller: 4.0, ficha1: 3.5, ficha2: 3.5, practica: 4.5, particip: 4.0 }
@@ -45,9 +44,10 @@ window.APP = {
       contenidos: [
         { t: 'Todo artículo responde una pregunta', d: 'PICO (población, intervención, comparador y desenlace) para preguntas de efecto o de pronóstico; PCC (población, concepto y contexto) para revisiones de alcance (JBI).', seccion: 'pregunta' },
         { t: 'Método y tipo de publicación no son lo mismo', d: 'El método se clasifica por la intervención (experimental, observacional o cuasiexperimental), el tiempo y el análisis; el tipo de publicación, por su formato. El diseño se identifica por lo que hicieron los investigadores.', seccion: 'diseno' },
-        { t: 'Cada diseño tiene su guía y su herramienta', d: 'Reporte de caso: CARE. Serie de casos: PROCESS. Casos y controles y cohortes: STROBE. Cuasiexperimentales: TREND. Ensayos: CONSORT 2025 y RoB 2. Pruebas diagnósticas: STARD 2015 y QUADAS-2. Revisiones: PRISMA 2020 y AMSTAR 2.', seccion: 'diseno' },
+        { t: 'Cada diseño tiene su guía y su herramienta', d: 'Reporte de caso: CARE. Serie de casos: PROCESS. Casos y controles y cohortes: STROBE. Cuasiexperimentales: TREND. Ensayos: CONSORT 2025 y RoB 2. Pruebas diagnósticas: STARD 2015 y QUADAS-2. Revisiones sistemáticas: PRISMA 2020 y AMSTAR 2. Revisiones de alcance: PRISMA-ScR. Revisiones narrativas: SANRA. Guías: AGREE II. Evaluaciones económicas: CHEERS 2022.', seccion: 'diseno' },
         { t: 'Efecto, precisión y relevancia clínica', d: 'RR, OR y HR iguales a 1: sin efecto. Si el IC 95 % cruza 1 (o 0 en las diferencias), no es significativo. Reducción absoluta = riesgo del control menos riesgo del tratado; NNT = 1 ÷ reducción absoluta.', seccion: 'efecto' },
-        { t: 'Árbol de decisión', d: 'Cuatro preguntas para clasificar el estudio y encontrar su guía y su herramienta.', seccion: 'diseno' },
+        { t: 'Árbol de decisión', d: 'Primero, el tipo de documento: estudio primario, revisión, guía o evaluación económica. Luego, unas pocas preguntas para clasificarlo y encontrar su guía y su herramienta.', seccion: 'diseno' },
+        { t: 'Más allá de la herramienta', d: 'Usa la versión vigente de cada herramienta, verifica si el artículo fue retractado y apóyate en la IA para leer más rápido, con el juicio final en tus manos.', seccion: 'diseno' },
         { t: 'Cinco dominios para juzgar un ensayo (RoB 2)', d: 'Aleatorización, desviaciones de la intervención, datos faltantes, medición del desenlace y selección del resultado reportado; juicio de bajo riesgo, algunas dudas o alto riesgo.', seccion: 'diseno' },
         { t: 'En las cohortes, el enemigo es la confusión', d: 'Newcastle-Ottawa: selección, comparabilidad y desenlace, hasta nueve estrellas. ROBINS-E: siete dominios, empezando por la confusión.', seccion: 'articulos' },
         { t: 'Tres familias de sesgo', d: 'Selección, información y confusión. Regla de oro: si el artículo no lo dice, no lo des por hecho.', seccion: 'articulos' },
@@ -101,8 +101,8 @@ window.APP = {
           { min: '120–130', bloque: 'Descanso', descanso: true },
           { min: '130–180', bloque: 'Presentación de avances', actividad: 'Cada estudiante presenta su avance; coevaluación en claridad, justificación y aplicabilidad', entregable: 'Presentación y coevaluación' } ] }
       ],
-      independiente: 'Hasta el 31 de enero de 2027: síntesis de Proyecto I y avance de Proyecto II, práctica del árbol y biblioteca de Mendeley.',
-      nota: 'Por confirmar: si segundo año se califica por Proyecto de investigación I y II o por Metodología I y Lectura crítica como primer año. Mientras tanto, la rúbrica conserva los pesos y reemplaza las fichas por los entregables del proyecto.' }
+      independiente: 'Hasta el 31 de enero de 2027: ficha 2 (igual que primer año), síntesis de Proyecto I y avance de Proyecto II, práctica del árbol y biblioteca de Mendeley.',
+      nota: 'Segundo año se califica con la misma rúbrica de cuatro evidencias, incluidas las fichas de lectura crítica 1 y 2. Como este ejercicio condensado cubre los contenidos de las dos asignaturas, la nota se registra por duplicado para Proyecto de investigación I y II. Los entregables del proyecto acompañan las fichas como soporte.' }
   },
 
   /* Cada tema: competencia que desarrolla y fuentes. Verifica los enlaces al actualizar. */
@@ -177,18 +177,35 @@ window.APP = {
     { nombre: 'Prueba diagnóstica', guia: 'STARD 2015', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/stard/', herramienta: 'QUADAS-2', herrUrl: 'https://www.bristol.ac.uk/population-health-sciences/projects/quadas/',
       preguntas: ['¿El espectro de pacientes es el de la práctica real?', '¿El estándar de referencia es adecuado?', '¿Se aplicó a todos los pacientes?'] },
     { nombre: 'Revisión sistemática o metanálisis', guia: 'PRISMA 2020', guiaUrl: 'https://www.prisma-statement.org/', herramienta: 'AMSTAR 2', herrUrl: 'https://amstar.ca',
-      preguntas: ['¿Hubo protocolo previo?', '¿La búsqueda fue exhaustiva y reproducible?', '¿Se evaluó el riesgo de sesgo de los estudios incluidos?', '¿Se explica la heterogeneidad?'] }
+      preguntas: ['¿Hubo protocolo previo?', '¿La búsqueda fue exhaustiva y reproducible?', '¿Se evaluó el riesgo de sesgo de los estudios incluidos?', '¿Se explica la heterogeneidad?'] },
+    /* Agregados tras la sesión conjunta (27-11-2026): el árbol debe llegar también a revisiones narrativas y de alcance, guías y evaluaciones económicas */
+    { nombre: 'Revisión de alcance', guia: 'PRISMA-ScR', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/prisma-scr/', herramienta: 'Manual de JBI para revisiones de alcance', herrUrl: 'https://jbi-global-wiki.refined.site/space/MANUAL',
+      preguntas: ['¿Declara un marco PCC (población, concepto y contexto) explícito?', '¿Hubo protocolo previo y una búsqueda amplia y documentada?', '¿Presenta un mapa de la evidencia que responde a la pregunta, sin forzar un metanálisis?'] },
+    { nombre: 'Revisión narrativa', guia: 'SANRA (criterios de calidad)', guiaUrl: 'https://doi.org/10.1186/s41073-019-0064-8', herramienta: 'SANRA', herrUrl: 'https://doi.org/10.1186/s41073-019-0064-8',
+      preguntas: ['¿Justifica la importancia del tema para los lectores?', '¿Declara los objetivos y describe cómo buscó la literatura?', '¿Las afirmaciones clave están respaldadas por referencias y por evidencia adecuada?'] },
+    { nombre: 'Guía de práctica clínica', guia: 'RIGHT o la lista de reporte de AGREE', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/right-statement/', herramienta: 'AGREE II', herrUrl: 'https://www.agreetrust.org/resource-centre/agree-ii/',
+      preguntas: ['¿Describe el alcance, las preguntas clínicas y la población a la que aplica?', '¿Busca y evalúa la evidencia de forma sistemática y la vincula con cada recomendación?', '¿Declara la financiación y los conflictos de interés de quienes la elaboraron?'] },
+    { nombre: 'Evaluación económica', guia: 'CHEERS 2022', guiaUrl: 'https://www.equator-network.org/reporting-guidelines/cheers/', herramienta: 'Lista de CASP para evaluaciones económicas', herrUrl: 'https://casp-uk.net/casp-tools-checklists/economic-evaluation-checklist/',
+      preguntas: ['¿Compara alternativas relevantes desde una perspectiva declarada?', '¿Mide costos y efectos (por ejemplo, AVAC) con fuentes claras y presenta la razón incremental?', '¿Analiza la incertidumbre con análisis de sensibilidad?'] }
   ],
 
   /* Árbol de decisión: cada nodo es una pregunta o una hoja que apunta a un diseño por su nombre. */
   arbol: {
-    inicio: 'q1',
+    inicio: 'q0',
     nodos: {
       /* c: rótulo corto para el diagrama del árbol */
+      /* abajo: la respuesta continúa en la misma columna del diagrama */
+      q0: { c: '¿Qué tipo de documento es?', p: '¿Qué tipo de documento tienes delante?',
+            o: [{ t: 'Un estudio con pacientes o con sus datos (estudio primario)', c: 'Estudio primario', a: 'q1', abajo: true },
+                { t: 'Una revisión de la literatura', c: 'Revisión', a: 'qR' },
+                { t: 'Una guía de práctica clínica o un consenso', c: 'Guía', a: 'Guía de práctica clínica' },
+                { t: 'Una evaluación económica (costos y efectos)', c: 'Evaluación económica', a: 'Evaluación económica' }] },
+      qR: { c: '¿Cómo buscaron los estudios?', p: '¿Cómo se buscaron y eligieron los estudios de la revisión?',
+            o: [{ t: 'Con búsqueda sistemática para una pregunta PICO, con o sin metanálisis', c: 'Sistemática (PICO)', a: 'Revisión sistemática o metanálisis' },
+                { t: 'Con búsqueda sistemática para mapear un concepto (PCC)', c: 'Sistemática (PCC)', a: 'Revisión de alcance' },
+                { t: 'Sin un método de búsqueda sistemático: los autores eligen lo que describen', c: 'Sin método sistemático', a: 'Revisión narrativa' }] },
       q1: { c: '¿Valida una prueba?', p: '¿El estudio mide qué tan bien una prueba detecta una enfermedad, comparándola con un estándar de referencia?',
-            o: [{ t: 'Sí', a: 'Prueba diagnóstica' }, { t: 'No', a: 'q2' }] },
-      q2: { c: '¿Reúne varios estudios?', p: '¿Reúne e integra los resultados de varios estudios con una búsqueda sistemática?',
-            o: [{ t: 'Sí', a: 'Revisión sistemática o metanálisis' }, { t: 'No', a: 'q3' }] },
+            o: [{ t: 'Sí', a: 'Prueba diagnóstica' }, { t: 'No', a: 'q3' }] },
       q3: { c: '¿Asignaron la intervención?', p: '¿Los investigadores asignaron la intervención a los participantes?',
             o: [{ t: 'Sí', a: 'q3a' }, { t: 'No, solo observaron', a: 'q4' }] },
       q3a: { c: '¿Al azar?', p: '¿La asignación fue al azar?',
@@ -417,7 +434,38 @@ window.APP = {
     PowerPoint: ['Una idea por diapositiva y un título que diga la conclusión.', 'Texto legible desde el fondo de la sala.', 'Cada figura o tabla lleva su fuente.', 'Cierra con las referencias en el mismo estilo del manuscrito.']
   },
 
+  /* Lectura crítica asistida por IA (clase del 27 de noviembre de 2026) */
+  lecturaIA: {
+    pasos: [
+      'Clasifica el artículo con el árbol de decisión: el diseño define la guía de reporte y la herramienta.',
+      'Verifica que el artículo no esté retractado antes de leerlo a fondo.',
+      'Descarga la herramienta y la guía en su versión vigente, desde su página oficial.',
+      'Convierte los PDF a Markdown: la IA lee el texto plano con muchos menos tokens que el PDF.',
+      'Sube a la IA el artículo y la herramienta en Markdown, con la instrucción del generador de abajo.',
+      'Revisa cada juicio contra el texto del artículo: el juicio final es tuyo, no de la IA.'
+    ],
+    reglas: [
+      'Si el artículo no informa lo que pide un ítem, el ítem es «no evaluable»: no se supone.',
+      'Cada juicio de la IA debe venir con la cita textual del artículo que lo sustenta.',
+      'No subas a una IA en línea documentos con datos de pacientes; prefiere conversores que funcionen en tu computador.',
+      'Pide a la IA que no invente datos, cifras ni referencias que no estén en los archivos.'
+    ],
+    leccion: 'En la clase se evaluó con RoB 2 un ensayo retractado, y el juicio global fue «bajo riesgo de sesgo». La herramienta juzga lo que el artículo cuenta, no si lo que cuenta es cierto. Por eso, además de la herramienta, cuentan la verificación de retractaciones y el olfato: la experiencia que convierte señales objetivas (resultados demasiado buenos, tamaños de muestra inverosímiles, métodos poco claros) en sospecha.',
+    retracciones: [
+      { t: 'Base de datos de Retraction Watch', u: 'https://retractiondatabase.org/', d: 'Busca por DOI, título o autor.' },
+      { t: 'Retraction Watch', u: 'https://retractionwatch.com/', d: 'Noticias y contexto de las retractaciones.' },
+      { t: 'Publicaciones retractadas en PubMed', u: 'https://pubmed.ncbi.nlm.nih.gov/?term=retracted+publication%5Bpt%5D', d: 'En la ficha de PubMed, una retractación aparece como aviso en rojo y con el tipo «Retracted Publication».' }
+    ],
+    conversor: { t: 'MarkItDown', u: 'https://github.com/microsoft/markitdown', d: 'Conversor libre de PDF, Word y otros formatos a Markdown; funciona en tu computador.' }
+  },
   vancouver: {
+    estilos: 'En medicina se usa Vancouver: numérico, en orden de primera mención. APA (autor y año) es frecuente en psicología y ciencias sociales. Usa el estilo que pida la revista o la institución y no los mezcles en un mismo documento.',
+    identificadores: [
+      ['PMID', 'Solo existe si el artículo está indexado en PubMed. Es el identificador más útil en medicina.'],
+      ['DOI', 'Identificador permanente que asigna la editorial. Úsalo cuando no hay PMID.'],
+      ['Enlace (URL)', 'Si no hay PMID ni DOI, usa el enlace estable y la fecha de consulta.']
+    ],
+    mybib: ['Agrega la extensión MyBib a Chrome desde la tienda de Chrome.', 'Abre el artículo o la página que vas a citar.', 'Toca el ícono de MyBib y elige el estilo Vancouver.', 'Revisa autor, año, título y DOI o URL, y corrige lo que falte.', 'Agrégala a tu proyecto y exporta la lista al final.'],
     reglas: ['En el texto, un número entre paréntesis o en superíndice, en orden de primera mención.', 'En la lista, las referencias se ordenan por ese número.', 'Las revistas se abrevian según la Biblioteca Nacional de Medicina de EE. UU.'],
     ejemplo: 'Hopewell S, Chan AW, Collins GS, et al. CONSORT 2025 statement: updated guideline for reporting randomised trials. BMJ. 2025;389:e081123. doi:10.1136/bmj-2024-081123',
     errores: ['Referencias sin DOI o sin año.', 'Autores duplicados con nombres distintos.', 'Títulos en mayúsculas sostenidas.', 'Estilo equivocado (por ejemplo APA en vez de Vancouver).', 'Citas escritas a mano y no insertadas con el complemento.', 'Referencias en la lista que nadie cita en el texto.']

@@ -221,8 +221,8 @@ function formularios(b, ids, numFicha, alcance){
 }
 /* Entregas de cada alcance: conjunta (diagnóstico, ficha 1, árbol y Mendeley, coevaluación), R1 (ficha 2) y R2 (entregables del proyecto) */
 function entregas(b, alcance){
-  const ids = { C:["diagnostico","ficha","practica","coevaluacion","pregunta"], R1:["ficha","pregunta","entregable"], R2:["pregunta","proyecto"] }[alcance];
-  formularios(b, ids, alcance === "R1" ? "2" : alcance === "R2" ? "P" : "1", alcance);
+  const ids = { C:["diagnostico","ficha","practica","coevaluacion","pregunta"], R1:["ficha","pregunta","entregable"], R2:["ficha","pregunta","proyecto"] }[alcance];
+  formularios(b, ids, alcance === "C" ? "1" : "2", alcance);
 }
 function botonDescarga(texto, fn){ const bt = el("button",{type:"button", class:"btn btn-primary"},[texto]); bt.addEventListener("click", fn); return bt; }
 function campoTexto(l, valor, onInput, area, ph){ const i = area ? el("textarea",{rows:"3", placeholder:ph || ""}) : el("input",{type:"text", placeholder:ph || ""}); i.value = valor || ""; i.addEventListener("input", ()=> onInput(i.value)); return el("label",{class:area ? "fx-area" : null},[l, i]); }
@@ -397,7 +397,7 @@ function fEntregable(p, idf){
 /* ============================================================ CONSOLIDADOR DE NOTAS (DOCENTE) */
 const DOC_KEY = "aula-ic-docente";
 function docente(b){
-  b.appendChild(el("p",null,["Para el docente. Carga los archivos que te entregaron los estudiantes (puedes elegir muchos a la vez). El consolidador los agrupa por estudiante, propone para el taller la mejor nota de la evaluación con intentos ilimitados (si aplicas el taller de 20 preguntas, escribe esa nota encima), sugiere la de la práctica y la de participación (promedio de las coevaluaciones recibidas) y te deja calificar cada ficha con la rúbrica. Todo queda en este navegador; nada se envía."]));
+  b.appendChild(el("p",null,["Para el docente. Carga los archivos que te entregaron los estudiantes (puedes elegir muchos a la vez). El consolidador los agrupa por estudiante, propone para el taller la mejor nota de la evaluación con intentos ilimitados (los intentos son ilimitados y cuenta la mejor nota), sugiere la de la práctica y la de participación (promedio de las coevaluaciones recibidas; ajústala con el registro de intervenciones de cada sesión) y te deja calificar cada ficha con la rúbrica. Todo queda en este navegador; nada se envía."]));
   const D = store.get(DOC_KEY) || { est:{}, archivos:[] }; const guarda = ()=> store.set(DOC_KEY, D);
   const inp = el("input",{type:"file", accept:".json,application/json", multiple:"", id:"doc-archivos"});
   b.appendChild(el("label",{class:"field", for:"doc-archivos"},["Archivos de los estudiantes (.json)", inp]));
@@ -443,7 +443,7 @@ function docente(b){
     tabla.innerHTML = ""; const ests = Object.values(D.est).sort((a,b)=> a.nombre.localeCompare(b.nombre, "es"));
     if(!ests.length){ tabla.appendChild(el("p",{class:"muted"},["Aún no hay archivos cargados."])); return; }
     const t = el("table",{class:"cmp-table doc-tab"}), tb = el("tbody");
-    t.appendChild(el("thead",null,[ el("tr",null, ["Estudiante","Grupo","Taller (40 %)","Ficha 1 o síntesis (15 %)","Ficha 2 o avance (15 %)","Práctica (15 %)","Participación (15 %)","Definitiva",""].map(x=> el("th",{scope:"col"},[x]))) ]));
+    t.appendChild(el("thead",null,[ el("tr",null, ["Estudiante","Grupo","Taller (40 %)","Ficha 1 (15 %)","Ficha 2 (15 %)","Práctica (15 %)","Participación (15 %)","Definitiva",""].map(x=> el("th",{scope:"col"},[x]))) ]));
     ests.forEach(s=>{
       const celda = (k, sug)=>{ const i = el("input",{type:"text", inputmode:"decimal", value:s.notas[k] === undefined ? "" : String(s.notas[k]).replace(".", ","), "aria-label":k + " de " + s.nombre, placeholder:sug || "—"});
         i.addEventListener("change", ()=>{ const x = i.value.trim() === "" ? undefined : parseFloat(i.value.replace(",", ".")); if(x !== undefined && (!isFinite(x) || x < 0 || x > 5)){ i.setAttribute("aria-invalid","true"); return; } i.removeAttribute("aria-invalid"); if(x === undefined) delete s.notas[k]; else s.notas[k] = x; s.manual = Object.assign(s.manual || {}, { [k]: x !== undefined }); guarda(); pinta(); });
@@ -463,7 +463,7 @@ function docente(b){
     detalle.appendChild(el("h4",null,[s.nombre + " · " + s.grupo]));
     if(s.diagnostico) detalle.appendChild(el("p",null,["Diagnóstico: " + s.diagnostico.aciertos + " de " + s.diagnostico.n + " (sin nota)."]));
     Object.keys(s.evals || {}).forEach(a=> detalle.appendChild(el("p",null,["Preguntas · " + (ALC[a] || a) + ": " + s.evals[a].intentos + " intentos; mejor nota " + fmt(s.evals[a].mejor, 1) + "."])));
-    if(s.evals) detalle.appendChild(el("p",{class:"muted small"},["El taller sugerido es el promedio de las mejores notas de la sesión conjunta y del año del estudiante. Si aplicas el taller de 20 preguntas, escribe esa nota en la tabla."]));
+    if(s.evals) detalle.appendChild(el("p",{class:"muted small"},["El taller sugerido es el promedio de las mejores notas de la sesión conjunta y del año del estudiante. Puedes escribir otra nota en la tabla; se respeta aunque lleguen archivos nuevos."]));
     Object.keys(s.preguntas || {}).forEach(a=>{ const q = s.preguntas[a]; detalle.appendChild(el("article",{class:"card"},[ el("h5",null,["Pregunta, título y objetivos · " + (ALC[a] || a)]), el("p",null,["Pregunta: " + q.pregunta]), el("p",null,["Título: " + q.titulo]), el("p",null,["Objetivo general: " + q.general]), el("ol",null, (q.especificos || []).map(e=> el("li",null,[e]))), q.faltan && q.faltan.length ? el("p",{class:"muted small"},["Incompleta: faltaban " + q.faltan.join(", ").toLowerCase() + "."]) : null ])); });
     if(s.entregable){ const d = s.entregable; detalle.appendChild(el("article",{class:"card"},[ el("h5",null,["Base de datos con histograma"]), d.enlace ? el("p",null,[ el("a",{href:d.enlace, target:"_blank", rel:"noopener noreferrer"},["Abrir el archivo"]) ]) : null, el("p",null,["Variable: " + (d.variable || "—") + ". " + (d.lectura || "")]), el("p",{class:"muted small"},["Lista: " + (d.checks || []).filter(Boolean).length + " de " + (d.items || []).length + " puntos marcados."]) ])); }
     ["1","2"].forEach(n=>{ const fi = s.fichas[n]; if(!fi) return; const d = fi.datos;
@@ -485,11 +485,11 @@ function docente(b){
     if(s.proyecto){ const d = s.proyecto; detalle.appendChild(el("article",{class:"card"},[ el("h5",null,["Entregables de segundo año: " + (d.titulo || "")]),
       el("p",null,["Protocolo: " + d.protocolo.hechos + " de " + d.protocolo.total + ". Avance: " + d.avance.hechos + " de " + d.avance.total + "."]),
       d.enlace1 ? el("p",null,[ el("a",{href:d.enlace1, target:"_blank", rel:"noopener noreferrer"},["Síntesis de Proyecto I"]) ]) : null, d.enlace2 ? el("p",null,[ el("a",{href:d.enlace2, target:"_blank", rel:"noopener noreferrer"},["Avance de Proyecto II"]) ]) : null,
-      el("p",{class:"muted small"},["En segundo año, escribe la nota de la síntesis en la columna «Ficha 1 o síntesis» y la del avance en «Ficha 2 o avance»."]) ])); }
+      el("p",{class:"muted small"},["Los entregables del proyecto acompañan las fichas como soporte; la nota de segundo año se registra por duplicado para Proyecto de investigación I y II."]) ])); }
     detalle.scrollIntoView({ behavior:"smooth", block:"start" });
   }
   exp.addEventListener("click", ()=>{ const ests = Object.values(D.est); if(!ests.length) return alert("No hay notas para descargar.");
-    M.downloadCSV("notas_lectura_critica_" + new Date().toISOString().slice(0,10) + ".csv", ["Estudiante","Código","Grupo","Taller","Ficha 1 o síntesis","Ficha 2 o avance","Práctica","Participación","Nota definitiva"],
+    M.downloadCSV("notas_lectura_critica_" + new Date().toISOString().slice(0,10) + ".csv", ["Estudiante","Código","Grupo","Taller","Ficha 1","Ficha 2","Práctica","Participación","Nota definitiva"],
       ests.map(s=>{ const d = definitiva(s); return [s.nombre, s.codigo, s.grupo, s.notas.taller, s.notas.ficha1, s.notas.ficha2, s.notas.practica, s.notas.particip, d === null ? "" : d].map(v=> v === undefined ? "" : v); })); });
   resp.addEventListener("click", ()=> descargar({ app:"aula-ic-docente", fecha:new Date().toISOString(), datos:D }, "respaldo_consolidador_" + new Date().toISOString().slice(0,10) + ".json"));
   borra.addEventListener("click", ()=>{ if(confirm("Se borrarán todos los archivos cargados y las notas de este navegador. Descarga antes un respaldo si lo necesitas. ¿Continuar?")){ store.del(DOC_KEY); D.est = {}; D.archivos = []; D.coev = []; detalle.innerHTML = ""; avisos.innerHTML = ""; pinta(); } });

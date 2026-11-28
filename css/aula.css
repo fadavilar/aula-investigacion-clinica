@@ -45,7 +45,7 @@ body{ background: var(--bg); }
 
 /* cuatro partes, cuatro colores; el hilo de la portada en cuatro columnas */
 @media (min-width:1000px){ .thread{ grid-template-columns: repeat(5, minmax(0,1fr)); column-gap:20px; } }
-.part-C{ --part: var(--chip-e); } .part-I{ --part: var(--p1); } .part-II{ --part: var(--p2); } .part-III{ --part: var(--p3); } .part-IV{ --part: var(--p4); }
+.part-C{ --part: var(--chip-e); } .part-S{ --part: var(--chip-e); } .part-A1{ --part: var(--chip-c); } .part-A2{ --part: var(--chip-d); } .part-N{ --part: var(--chip-b); } .part-I{ --part: var(--p1); } .part-II{ --part: var(--p2); } .part-III{ --part: var(--p3); } .part-IV{ --part: var(--p4); }
 
 /* ============================================================ texto de los SVG propios (obedece al control de tamaño) */
 .ax-t{ fill: var(--text); font-size: calc(14px * var(--svg-scale,1) * var(--svg-m,1)); }
@@ -214,6 +214,7 @@ input[aria-invalid="true"]{ border-color: var(--danger); }
 .fam-d.hov rect, .fam-d:focus-visible rect{ stroke: var(--accent); stroke-width:2.5; }
 .fam-k.fam-0{ fill: var(--chip-c); } .fam-k.fam-1{ fill: var(--p3); } .fam-k.fam-2{ fill: var(--p1); } .fam-k.fam-3{ fill: var(--p2); } .fam-k.fam-4{ fill: var(--chip-e); }
 .fam-d.fam-0 rect{ stroke: var(--chip-c); } .fam-d.fam-1 rect{ stroke: var(--p3); } .fam-d.fam-2 rect{ stroke: var(--p1); } .fam-d.fam-3 rect{ stroke: var(--p2); } .fam-d.fam-4 rect{ stroke: var(--chip-e); }
+.fam-k.fam-5{ fill: var(--p4); } .fam-d.fam-5 rect{ stroke: var(--p4); }
 .mat-bg{ fill: var(--surface); }
 .mat-r:nth-child(even) .mat-bg{ fill: transparent; }
 .mat-r.hov .mat-bg, .mat-r:focus-visible .mat-bg{ fill: var(--primary-tint); }
@@ -379,3 +380,6 @@ a.src-link::after{ content:"↗"; font-size:.72em; margin-left:2px; vertical-ali
 
 /* impresión: sin controles interactivos sobrantes */
 @media print{ .m-ctrl input[type="range"], .tools-row, .link-row{ display:none !important; } .m-out{ position:static; } }
+
+/* Instrucción generada para la IA */
+.prompt-out{ white-space: pre-wrap; word-break: break-word; font: inherit; font-size: .95em; line-height: 1.55; background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 8px; padding: 14px 16px; margin: 8px 0 10px; max-height: 26em; overflow:auto; }
